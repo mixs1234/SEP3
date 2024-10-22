@@ -1,0 +1,16 @@
+﻿services:
+  sep3.orders:
+    image: ${REGISTRY:-sep3}/orders:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: orders/Dockerfile
+  sep3.warehouse:
+    image: ${REGISTRY:-sep3}/warehouse:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: warehouse/Dockerfile
+  sep3.web:
+    image: ${REGISTRY:-sep3}/web:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: web/Dockerfile
