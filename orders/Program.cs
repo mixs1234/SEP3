@@ -1,25 +1,29 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Http;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using sep3.orders.Infrastructure;
+using sep3.orders.Services;
 
-namespace orders;
+namespace sep3.orders;
 
 public class Program
 {
+    static IConfiguration configuration = GetConfiguration();
+    
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddAuthorization();
 
+        builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddDbContext<OrdersContext>(options =>
+            options.UseNpgsql(configuration.GetConnectionString("OrderContext")));
+        OrdersContext.GetInstance(configuration);
+        builder.Services.AddTransient<IOrderRepository, OrderEFRepository>();
 
         var app = builder.Build();
 
@@ -30,30 +34,23 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
-        app.UseAuthorization();
+        //app.UseAuthorization();
 
-        var summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
-        app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-            {
-                var forecast = Enumerable.Range(1, 5).Select(index =>
-                        new WeatherForecast
-                        {
-                            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                            TemperatureC = Random.Shared.Next(-20, 55),
-                            Summary = summaries[Random.Shared.Next(summaries.Length)]
-                        })
-                    .ToArray();
-                return forecast;
-            })
-            .WithName("GetWeatherForecast")
-            .WithOpenApi();
+        app.MapControllers();
 
         app.Run();
+    }
+
+    private static IConfiguration GetConfiguration()
+    {
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddEnvironmentVariables();
+        var config = builder.Build();
+        return builder.Build();
     }
 }
