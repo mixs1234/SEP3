@@ -14,3 +14,9 @@
     build:
       context: .
       dockerfile: web/Dockerfile
+
+  sep3orders:
+    image: ${REGISTRY:-sep3}/orders:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: orders/Dockerfile

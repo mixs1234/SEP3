@@ -1,0 +1,5 @@
+is_global = true
+build_property.RootNamespace = WebHostCustomization
+build_property.ProjectDir = /home/pingu/Dokumenter/VIA/SEP3/Repo/WebHostCustomization/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

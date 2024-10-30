@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "/home/pingu/.dotnet/store/|arch|/|tfm|",
+      "/home/pingu/.nuget/packages"
+    ]
+  }
+}
