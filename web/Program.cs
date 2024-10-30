@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,9 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using sep3web.Services;
 using web.Components;
 using web.Components.Account;
 using web.Data;
+using web.Services;
 
 namespace web;
 
@@ -24,10 +27,16 @@ public class Program
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
 
+        builder.Services.AddScoped(sp => new HttpClient
+        {
+            BaseAddress = new Uri("http://localhost:5110")
+        });
+        
         builder.Services.AddCascadingAuthenticationState();
         builder.Services.AddScoped<IdentityUserAccessor>();
         builder.Services.AddScoped<IdentityRedirectManager>();
         builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+        builder.Services.AddScoped<IOrderService, HttpOrderClient>();
 
         builder.Services.AddAuthentication(options =>
             {
