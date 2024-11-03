@@ -1,0 +1,91 @@
+﻿@page "/orders"
+@using sep3.web.Models
+@using web.Services
+@inject IOrderService OrderService
+
+<PageTitle>Orders</PageTitle>
+<h1>Orders:</h1>
+
+
+@if (orders == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>OrderID</th>
+            <th>CreatedAt</th>
+            <th>CustomerID</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var order in orders)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.CreatedAt</td>
+                <td>@order.CustomerId</td>
+                <td>@order.Price</td>
+                <td>
+                    <!--  <button class="btn btn-danger" @onclick="() => RemoveOrder(order.Id)">Remove</button> -->
+                    <button class="btn btn-danger">Remove</button>
+                    <button class="btn btn-warning">Update</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code
+{
+
+    private List<Order>? orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            orders = await OrderService.GetOrdersAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        
+    }
+    
+    /*
+    private async Task RemoveOrder(int orderId)
+    {
+        try
+        {
+            await OrderService.RemoveOrderAsync(orderId);
+            orders = await OrderService.GetOrdersAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+    */
+    
+    
+}
+
+<h2>Create new order</h2>
+<form>
+    <div class="form-group">
+        <label for="CustomerID"> CustomerID</label>
+        <input type="text" class="form-control" id="CustomerID" placeholder="Enter CustomerID">
+        <label for="Price"> Price</label>
+        <input type="text" class="form-control" id="Price" placeholder="Enter Price">
+    </div>
+    <button type="Create" class="btn btn-success">Create</button>
+</form>
+
