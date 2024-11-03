@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/pingu/Dokumenter/VIA/SEP3/Repo/orders/orders.csproj": {}
+    "C:\\Users\\GamingPC\\RiderProjects\\SEP3\\orders\\orders.csproj": {}
   },
   "projects": {
-    "/home/pingu/Dokumenter/VIA/SEP3/Repo/orders/orders.csproj": {
+    "C:\\Users\\GamingPC\\RiderProjects\\SEP3\\orders\\orders.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/pingu/Dokumenter/VIA/SEP3/Repo/orders/orders.csproj",
+        "projectUniqueName": "C:\\Users\\GamingPC\\RiderProjects\\SEP3\\orders\\orders.csproj",
         "projectName": "orders",
-        "projectPath": "/home/pingu/Dokumenter/VIA/SEP3/Repo/orders/orders.csproj",
-        "packagesPath": "/home/pingu/.nuget/packages/",
-        "outputPath": "/home/pingu/Dokumenter/VIA/SEP3/Repo/orders/obj/",
+        "projectPath": "C:\\Users\\GamingPC\\RiderProjects\\SEP3\\orders\\orders.csproj",
+        "packagesPath": "C:\\Users\\GamingPC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\GamingPC\\RiderProjects\\SEP3\\orders\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/pingu/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\GamingPC\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -76,7 +81,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/8.0.110/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
