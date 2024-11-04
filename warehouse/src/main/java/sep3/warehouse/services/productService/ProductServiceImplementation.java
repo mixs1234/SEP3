@@ -1,4 +1,4 @@
-package sep3.warehouse.services;
+package sep3.warehouse.services.productService;
 
 import org.springframework.stereotype.Service;
 import sep3.warehouse.models.Product;

@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 @Table(name = "product" )
 public class Product {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,8 +18,6 @@ public class Product {
 
     @Column(nullable = false, length = 255)
     private String productPrice;
-
-
 
     public String getProductName() {
         return productName;
