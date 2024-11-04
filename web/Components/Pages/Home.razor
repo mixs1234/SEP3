@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using sep3.web.Models
 @using web.Services
 @inject IOrderService OrderService
@@ -20,7 +21,6 @@ else
     @foreach (var order in orders)
     {
         <p>@order.Id</p>
-        <p>@order.Price</p>
     }
 }
 @code
@@ -38,6 +38,11 @@ else
         {
             Console.WriteLine(e);
         }
+        
+    }
+    
+    private async Task CreateOrder()
+    {
         
     }
     

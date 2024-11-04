@@ -15,9 +15,8 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
             .ValueGeneratedOnAdd();
         builder.Property(o => o.CreatedAt)
             .IsRequired();
-        builder.Property(o => o.CustomerId)
-            .IsRequired();
-        builder.Property(o => o.Price)
-            .IsRequired();
+        builder.HasOne(o => o.Customer)
+            .WithMany(c => c.Orders)
+            .HasForeignKey(o => o.CustomerId);
     }
 }

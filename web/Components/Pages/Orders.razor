@@ -31,9 +31,9 @@ else
         {
             <tr>
                 <td>@order.Id</td>
+                <td>@order.Customer.Name</td>
                 <td>@order.CreatedAt</td>
-                <td>@order.CustomerId</td>
-                <td>@order.Price</td>
+                <td>@order.Payment.Amount</td>
                 <td>    
                     <button type="button" class="btn btn-danger" @onclick="() => RemoveOrder(order.Id)">Remove</button>
                     <button class="btn btn-warning">Update</button>
@@ -118,7 +118,7 @@ else
     {
         DateTimeOffset createdAt = DateTimeOffset.UtcNow;
 
-        await OrderService.AddOrderAsync(createdAt, newOrder.CustomerId, newOrder.Price);
+        //await OrderService.AddOrderAsync(createdAt, newOrder.CustomerId, newOrder.Price);
         
         newOrder = new OrderModel();
         await OnInitializedAsync();
