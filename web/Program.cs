@@ -37,6 +37,7 @@ public class Program
         builder.Services.AddScoped<IdentityRedirectManager>();
         builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
         builder.Services.AddScoped<IOrderService, HttpOrderClient>();
+        
 
         builder.Services.AddAuthentication(options =>
             {

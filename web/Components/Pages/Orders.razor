@@ -1,10 +1,13 @@
 ﻿@page "/orders"
+@using System.ComponentModel.DataAnnotations
 @using sep3.web.Models
 @using web.Services
 @inject IOrderService OrderService
 
 <PageTitle>Orders</PageTitle>
 <h1>Orders:</h1>
+
+<button type="button" class="btn btn-primary" @onclick="OnInitializedAsync">Refresh</button>
 
 
 @if (orders == null)
@@ -31,9 +34,8 @@ else
                 <td>@order.CreatedAt</td>
                 <td>@order.CustomerId</td>
                 <td>@order.Price</td>
-                <td>
-                    <!--  <button class="btn btn-danger" @onclick="() => RemoveOrder(order.Id)">Remove</button> -->
-                    <button class="btn btn-danger">Remove</button>
+                <td>    
+                    <button type="button" class="btn btn-danger" @onclick="() => RemoveOrder(order.Id)">Remove</button>
                     <button class="btn btn-warning">Update</button>
                 </td>
             </tr>
@@ -42,9 +44,30 @@ else
     </table>
 }
 
+<h2>Create New Order</h2>
+
+<EditForm Model="newOrder" OnValidSubmit="CreateOrder" FormName="CreateOrderForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="CustomerID">Customer ID</label>
+        <InputNumber @bind-Value="newOrder.CustomerId" class="form-control" id="CustomerID" placeholder="Enter Customer ID" />
+    </div>
+
+    <div class="form-group">
+        <label for="Price">Price</label>
+        <InputNumber @bind-Value="newOrder.Price" class="form-control" id="Price" placeholder="Enter Price" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+</EditForm>
+
+
 @code
 {
-
+    
+    //Load Orders
     private List<Order>? orders;
 
     protected override async Task OnInitializedAsync()
@@ -57,35 +80,50 @@ else
         {
             Console.WriteLine(e);
         }
-        
+        Console.WriteLine("Orders loaded successfully.");
+        StateHasChanged();
     }
     
-    /*
+    //Remove Orders
     private async Task RemoveOrder(int orderId)
     {
+        Console.WriteLine($"Attempting to remove order with ID: {orderId}");
         try
         {
             await OrderService.RemoveOrderAsync(orderId);
             orders = await OrderService.GetOrdersAsync();
+            Console.WriteLine("Order removed successfully.");
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine($"Error removing order: {e.Message}");
         }
     }
-    */
+
+    
+    //Create Orders
+    private OrderModel newOrder = new OrderModel();
+    
+    public class OrderModel
+    {
+        [Required(ErrorMessage = "Customer ID is required.")]
+        public int CustomerId { get; set; }
+
+        [Required(ErrorMessage = "Price is required.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
+        public double? Price { get; set; }
+    }
+    
+    private async Task CreateOrder()
+    {
+        DateTimeOffset createdAt = DateTimeOffset.UtcNow;
+
+        await OrderService.AddOrderAsync(createdAt, newOrder.CustomerId, newOrder.Price);
+        
+        newOrder = new OrderModel();
+        await OnInitializedAsync();
+    }
     
     
 }
-
-<h2>Create new order</h2>
-<form>
-    <div class="form-group">
-        <label for="CustomerID"> CustomerID</label>
-        <input type="text" class="form-control" id="CustomerID" placeholder="Enter CustomerID">
-        <label for="Price"> Price</label>
-        <input type="text" class="form-control" id="Price" placeholder="Enter Price">
-    </div>
-    <button type="Create" class="btn btn-success">Create</button>
-</form>
 
