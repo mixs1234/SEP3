@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02A83975
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "orders", "orders\orders.csproj", "{A011B4A5-77D0-408A-9C21-2B1AB9B24331}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{C5567DC2-0CAF-43D0-A197-23CAC4AFF8D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebHostCustomization", "WebHostCustomization\WebHostCustomization.csproj", "{A011B4A5-77D0-408A-9C21-2B1BA9B24331}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,9 +33,14 @@ Global
 		{A011B4A5-77D0-408A-9C21-2B1AB9B24331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A011B4A5-77D0-408A-9C21-2B1AB9B24331}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A011B4A5-77D0-408A-9C21-2B1AB9B24331}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A011B4A5-77D0-408A-9C21-2B1BA9B24331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A011B4A5-77D0-408A-9C21-2B1BA9B24331}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A011B4A5-77D0-408A-9C21-2B1BA9B24331}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A011B4A5-77D0-408A-9C21-2B1BA9B24331}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AC0421C8-3346-4F4A-9A7A-1265AFE352DC} = {5FC7944A-4683-449F-B7A6-D9E1D5FEA9BF}
 		{A011B4A5-77D0-408A-9C21-2B1AB9B24331} = {5FDF835D-0569-4BDF-B80A-0E7AD11FACA4}
+		{A011B4A5-77D0-408A-9C21-2B1BA9B24331} = {C5567DC2-0CAF-43D0-A197-23CAC4AFF8D4}
 	EndGlobalSection
 EndGlobal
