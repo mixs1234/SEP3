@@ -26,4 +26,12 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\orders\orders.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\css\" />
+    </ItemGroup>
+
 </Project>

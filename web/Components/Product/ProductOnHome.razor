@@ -1,0 +1,17 @@
+﻿<div class="single-products-catagory clearfix">
+    <a href="">
+        <img src="@ImageUrl" alt="">
+        <!-- Hover Content -->
+        <div class="hover-content">
+            <div class="line"></div>
+            <p>@Price kr.</p>
+            <h4>@ProductName</h4>
+        </div>
+    </a>
+</div>
+
+@code {
+    [Parameter] public string ImageUrl { get; set; }
+    [Parameter] public string ProductName { get; set; }
+    [Parameter] public string Price { get; set; }
+}

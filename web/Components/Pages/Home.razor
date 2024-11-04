@@ -1,44 +1,37 @@
 ﻿@page "/"
-@using sep3.web.Models
+@using sep3.web.Model
+@using web.Components.Product
 @using web.Services
-@inject IOrderService OrderService
+@inject IProductService ProductService
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="products-catagories-area clearfix">
+    <div class="amado-pro-catagory clearfix">
+        
+        @if (products == null)
+        {
+            <p>Loading products...</p>
+        }
+        else if (products.Count == 0)
+        {
+            <p>No products found</p>
+        }
+        else
+        {
+            @foreach (var product in products)
+            {
+                <ProductOnHome ImageUrl="@product.ImagePath" ProductName="@product.Name" Price="@product.Price" />
+            }
+        }
+    </div>
+</div>
 
-Welcome to your new app.
-
-<h1>This is a list of all orders</h1>
-
-@if (orders == null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    @foreach (var order in orders)
-    {
-        <p>@order.Id</p>
-        <p>@order.Price</p>
-    }
-}
-@code
-{
-
-    private List<Order>? orders;
+@code {
+    private List<Product> products;
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            orders = await OrderService.GetOrdersAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-        
+        products = await ProductService.GetProductsAsync();
     }
-    
 }
