@@ -21,7 +21,11 @@ public class FakeOrderClient : IOrderService
     
     private void PlaceOrder(Order order)
     {
-        Console.WriteLine("Order placed: " + order);
+        Console.WriteLine("Order placed:");
+        Console.WriteLine($"Order ID: {order.Id}");
+        Console.WriteLine($"Created at: {order.CreatedAt}");
+        Console.WriteLine($"Customer ID: {order.CustomerId}");
+        Console.WriteLine($"Price: {order.Price}");
     }
     
 }
