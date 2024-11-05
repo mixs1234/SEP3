@@ -7,5 +7,7 @@ namespace web.Services;
 public interface IOrderService
 {
     Task<List<Order>?> GetOrdersAsync();
+    Task<Order?> CreateOrderAsync(Order order);
+    
     
 }

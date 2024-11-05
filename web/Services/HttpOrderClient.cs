@@ -24,4 +24,9 @@ public class HttpOrderClient : IOrderService
         var orders = JsonConvert.DeserializeObject<List<Order>>(content.Result);
         return Task.FromResult(orders);
     }
+
+    public Task<Order?> CreateOrderAsync(Order order)
+    {
+        throw new System.NotImplementedException();
+    }
 }

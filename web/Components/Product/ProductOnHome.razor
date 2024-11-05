@@ -1,5 +1,5 @@
 ﻿<div class="single-products-catagory clearfix">
-    <a href="">
+    <a href="product/@ProductId">
         <img src="@ImageUrl" alt="">
         <!-- Hover Content -->
         <div class="hover-content">
@@ -14,4 +14,5 @@
     [Parameter] public string ImageUrl { get; set; }
     [Parameter] public string ProductName { get; set; }
     [Parameter] public string Price { get; set; }
+    [Parameter] public int ProductId { get; set; }
 }

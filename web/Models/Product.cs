@@ -1,4 +1,4 @@
-﻿namespace sep3.web.Model;
+﻿namespace sep3.web.Models;
 
 public class Product
 {
