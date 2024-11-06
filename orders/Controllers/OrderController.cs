@@ -63,12 +63,12 @@ public class OrderController : Controller
 
     [HttpPost]
     [Route("Orders")]
-    public async Task<IActionResult> CreateOrder(DateTimeOffset? createDate, int? customerId, double? price)
+    public async Task<IActionResult> CreateOrder(DateTimeOffset? createDate, int? customerId, [FromBody] List<LineItem> lineItems, int? paymentId)
     {
         createDate = DateTimeOffset.UtcNow;
         try
         {
-            Order order = await _orderRepository.CreateOrderAsync(createDate, customerId, price);
+            Order order = await _orderRepository.CreateOrderAsync(createDate, customerId, lineItems, paymentId);
             return Content(order.Id.ToString());
         }
         catch (Exception ex)
@@ -80,11 +80,11 @@ public class OrderController : Controller
 
     [HttpPatch]
     [Route("Orders")]
-    public async Task<IActionResult> UpdateOrder(int? id, DateTimeOffset? createdAt, int? customerId, double? price)
+    public async Task<IActionResult> UpdateOrder(int? id, DateTimeOffset? createdAt, int? customerId, [FromBody] List<LineItem> lineItems, int? paymentId)
     {
         try
         {
-            await _orderRepository.UpdateOrderAsync(id, createdAt, customerId, price);
+            await _orderRepository.UpdateOrderAsync(id, createdAt, customerId, lineItems, paymentId);
             return Ok();
         }
         catch (Exception ex)
@@ -107,5 +107,4 @@ public class OrderController : Controller
             return StatusCode(410, ex.Message);
         }
     }
-    
 }

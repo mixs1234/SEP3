@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using sep3.web.Models
 @using web.Services
 @using web.Components.Product
@@ -34,4 +35,5 @@
     {
         products = await ProductService.GetProductsAsync();
     }
+
 }

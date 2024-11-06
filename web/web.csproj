@@ -24,6 +24,11 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+      <Content Update="Components\Layout\Admin\bootstrap.min.css">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <DependentUpon>AdminNavMenu.razor</DependentUpon>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

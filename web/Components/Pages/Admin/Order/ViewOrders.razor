@@ -1,0 +1,139 @@
+﻿@page "/admin/orders/view"
+@using sep3.orders.Model
+@using sep3.web.Models
+@using web.Components.Layout.Admin
+@using web.Services
+@layout AdminNavMenu
+@inject IOrderService OrderService
+
+<PageTitle>View Orders</PageTitle>
+
+<div class="container">
+    <button type="button" class="btn btn-primary" @onclick="OnInitializedAsync">Refresh</button>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Customer Name</th>
+            <th scope="col">Created At</th>
+            <th scope="col">Total price</th>
+        </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        @foreach(var order in orders)
+        {
+            <tr>
+                <th scope="row">@order.Id</th>
+                <td>@order.Customer.Name</td>
+                <td>@order.CreatedAt</td>
+                <td>@order.Payment.Amount</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    <h2>Create New Order</h2>
+    <form>
+        <div class="mb-3">
+            <label @bind="newOrder.CustomerId" for="CustomerID" class="form-label">CustomerID</label>
+            <input class="form-control" id="CustomerID">
+        </div>
+        <div class="mb-3">
+            <label for="Product" class="form-label">Products</label>
+            <div id="productList">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="Product" placeholder="Enter product ID">
+                    <input type="number" class="form-control" placeholder="Quantity" min="1">
+                    <input type="number" class="form-control" placeholder="Price" min="1" disabled>
+                    
+                </div>
+            </div>
+            <!-- Add and remove product buttons -->
+            <button type="button" class="btn btn-primary mt-2" onclick="addProduct()">Add More Products</button>
+            <button type="button" class="btn btn-danger mt-2" onclick="removeProduct(this)">Remove</button>
+        </div>
+        <button type="submit" class="btn btn-primary" @onclick="CreateOrder">Submit</button>
+    </form>
+    
+</div>
+
+<script>
+    function addProduct() {
+        const productList = document.getElementById('productList');
+        const newProduct = document.createElement('div');
+        newProduct.className = 'input-group mb-2';
+        newProduct.innerHTML = `
+            <input type="text" class="form-control" placeholder="Enter product ID">
+            <input type="number" class="form-control" placeholder="Quantity" min="1">
+            <input type="number" class="form-control" placeholder="Price" min="1" disabled>
+        `;
+        productList.appendChild(newProduct);
+    }
+
+    function removeProduct(button) {
+        button.parentElement.remove();
+    }
+</script>
+
+@code
+{
+    
+    
+    //Load Orders
+    private List<Order>? orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            orders = await OrderService.GetOrdersAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+    
+    
+    
+    //Create Order
+    private Order newOrder = new Order();
+
+    private async Task CreateOrder()
+    {
+        try
+        {
+            Customer customer = new Customer
+            {
+                Id = 1, 
+            };
+            
+            List<LineItem> lineItems = new List<LineItem>
+            {
+                new LineItem
+                {
+                    ProductId = 3,
+                    Quantity = 1,
+                    Price = 19.99
+                }
+            };
+            
+            Payment payment = null; 
+
+     
+            await OrderService.AddOrderAsync(customer, lineItems, payment);
+            
+            await OnInitializedAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+
+
+    
+    
+    
+}
