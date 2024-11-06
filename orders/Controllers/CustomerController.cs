@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace sep3.orders.Controllers;
 
-[Route("[controller]")]
 [ApiController]
 public class CustomerController : Controller
 {
