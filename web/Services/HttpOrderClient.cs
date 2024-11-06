@@ -4,8 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using sep3.orders.Model;
-using sep3.web.Models;
+using web.Models;
 using web.Services;
 
 namespace sep3web.Services;
@@ -71,6 +70,7 @@ public class HttpOrderClient : IOrderService
             // Log the error response if needed
             throw new HttpRequestException($"Failed to add order. Status Code: {httpResponse.StatusCode}, Response: {responseContent}");
         }
+        return JsonConvert.DeserializeObject<Order>(await httpResponse.Content.ReadAsStringAsync());
     }
 
 }

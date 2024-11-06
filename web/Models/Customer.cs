@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using sep3.web.Models;
 
-namespace sep3.orders.Model;
+namespace web.Models;
 
 public class Customer
 {

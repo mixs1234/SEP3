@@ -1,6 +1,6 @@
 ﻿@page "/product/{ProductId:int}"
 
-@using sep3.web.Models
+@using web.Models
 @using web.Services
 @inject IProductService ProductService
 @inject IOrderService OrderService
@@ -162,13 +162,7 @@
 
         if (product != null)
         {
-            await OrderService.CreateOrderAsync(new Order()
-            {
-                CustomerId = 1,
-                Id = 1,
-                CreatedAt = DateTimeOffset.UtcNow,
-                Price = Convert.ToDouble(product?.Price) * quantity
-            });
+            Console.WriteLine("Seb er glad for mænd");
         }
     }
 

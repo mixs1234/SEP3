@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using sep3.orders.Model;
 
-namespace sep3.web.Models;
+namespace web.Models;
 
 public class Order
 {
@@ -11,7 +9,6 @@ public class Order
     public DateTimeOffset CreatedAt { get; set; }
     public Customer Customer { get; set; }
     public int CustomerId { get; set; }
-    
     public List<LineItem> LineItems { get; set; }
     public Payment Payment { get; set; }
 

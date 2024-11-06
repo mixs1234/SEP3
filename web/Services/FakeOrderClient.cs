@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using sep3.web.Models;
+using web.Models;
+
 
 namespace web.Services;
 
 public class FakeOrderClient : IOrderService
 {
-    public Task<List<Order>?> GetOrdersAsync()
+    public Task<List<Order?>> GetOrdersAsync()
     {
         throw new System.NotImplementedException();
     }
 
-    public Task<Order?> CreateOrderAsync(Order order)
+    public Task RemoveOrderAsync(int id)
     {
-        PlaceOrder(order);
-        
-        return Task.FromResult(order)!;
+        throw new NotImplementedException();
+    }
+
+    public Task<Order?> CreateOrderAsync(Customer customer, List<LineItem> lineItems, Payment payment)
+    {
+        throw new NotImplementedException();
     }
     
     private void PlaceOrder(Order order)
@@ -25,7 +29,7 @@ public class FakeOrderClient : IOrderService
         Console.WriteLine($"Order ID: {order.Id}");
         Console.WriteLine($"Created at: {order.CreatedAt}");
         Console.WriteLine($"Customer ID: {order.CustomerId}");
-        Console.WriteLine($"Price: {order.Price}");
+        Console.WriteLine($"Price: {order.Payment.Amount}");
     }
-    
+
 }

@@ -1,13 +1,11 @@
 using System;
-using sep3.web.Models;
 
-namespace sep3.orders.Model;
+namespace web.Models;
 
 public class Payment
 {
     public int Id { get; set; }
     public Order Order { get; set; }
-    public int OrderId { get; set; }
     public string PaymentMethod { get; set; }
     public DateTimeOffset Timestamp { get; set; }
     public string PaymentIdentifier { get; set; }

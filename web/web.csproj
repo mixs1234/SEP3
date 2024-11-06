@@ -39,4 +39,9 @@
       <Folder Include="wwwroot\css\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Components\Pages\Admin\Order\Orders.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\Admin\Order\ViewOrders.razor" />
+    </ItemGroup>
+
 </Project>

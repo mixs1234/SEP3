@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using sep3.web.Models;
+using web.Models;
 
 namespace web.Services;
 
@@ -12,7 +12,7 @@ public class FakeProductClient : IProductService
         new Product()
         {
             Name = "T-shirt",
-            Price = "20",
+            Price = 20,
             Description = "A simple t-shirt",
             ImagePath = "img/product-img/Basic-White-T-Shirt.png",
             Category = "Clothing",
@@ -27,7 +27,7 @@ public class FakeProductClient : IProductService
         new Product()
         {
             Name = "Sweatshirt",
-            Price = "40",
+            Price = 20,
             Description = "A simple sweatshirt",
             ImagePath = "img/product-img/Basic-Black-Sweatshirt.png",
             Category = "Clothing",
@@ -42,7 +42,7 @@ public class FakeProductClient : IProductService
         new Product()
         {
             Name = "Sneakers",
-            Price = "60",
+            Price = 20,
             Description = "A simple pair of sneakers",
             ImagePath = "img/product-img/Basic-Red-Sneakers.png",
             Category = "Footwear",

@@ -23,11 +23,7 @@ public class Program
         builder.Services.AddDbContext<OrdersContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("OrderContext")));
         OrdersContext.GetInstance(configuration);
-        builder.Services.AddTransient<IOrderRepository, OrderEFRepository>();
-        builder.Services.AddTransient<ICustomerRepository, CustomerEFRepository>();
-        builder.Services.AddTransient<IProductRepository, ProductEFRepository>();
-        builder.Services.AddTransient<IPaymentRepository, PaymentEFRepository>();
-        builder.Services.AddTransient<ILineItemRepository, LineItemEFRepository>();
+        
 
         var app = builder.Build();
 
