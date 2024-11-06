@@ -160,9 +160,46 @@
     private async void BuyProduct()
     {
 
+        var custormer = new Customer
+        {
+            Id = 1,
+            Name = "Seb",
+            Email = "sebwe@live.dk",
+            Phone = "401231231",
+            Orders = new List<Order>()
+        };
+
+        var payment = new Payment()
+        {
+            Id = 1,
+            Order = null,
+            PaymentMethod = "Credit card",
+            Timestamp = DateTime.UtcNow,
+            PaymentIdentifier = "IDK",
+            PaymentConfirmation = "IDK",
+            Amount = product.Price * quantity
+        };
+        
+        var LineItem = new LineItem()
+        {
+            Id = 1,
+            Product = product,
+            Quantity = quantity,
+            Price = product.Price,
+            Order = null,
+            OrderId = 1,
+            ProductId = product.Id
+        };
+        
+        var lineItems = new List<LineItem>()
+        {
+            LineItem
+        };
+        
+        
         if (product != null)
         {
-            Console.WriteLine("Seb er glad for mænd");
+            await OrderService.CreateOrderAsync(custormer, lineItems, payment);
         }
     }
 

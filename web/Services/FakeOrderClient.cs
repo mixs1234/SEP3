@@ -20,7 +20,17 @@ public class FakeOrderClient : IOrderService
 
     public Task<Order?> CreateOrderAsync(Customer customer, List<LineItem> lineItems, Payment payment)
     {
-        throw new NotImplementedException();
+        var order = new Order()
+        {
+            Id = 1,
+            CreatedAt = DateTimeOffset.Now,
+            Customer = customer,
+            CustomerId = customer.Id,
+            LineItems = lineItems,
+            Payment = payment
+        };
+        PlaceOrder(order);
+        return new Task<Order?>(() => order);
     }
     
     private void PlaceOrder(Order order)
