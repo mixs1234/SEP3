@@ -1,0 +1,206 @@
+﻿@page "/product/{ProductId:int}"
+
+@using web.Models
+@using web.Services
+@inject IProductService ProductService
+@inject IOrderService OrderService
+@rendermode InteractiveServer
+
+<div class="single-product-area section-padding-100 clearfix">
+    @if (product == null)
+    {
+        <div class="loading-indicator">
+            <p>Loading...</p>
+        </div>
+    }
+    else
+    {
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mt-50">
+                            <li class="breadcrumb-item">
+                                <a href="#">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="#">@product?.Category</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="#">@product?.Brand</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">@product?.Name</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-lg-7">
+                    <div class="single_product_thumb">
+                        <div id="product_details_slider" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li class="active" data-target="#product_details_slider" data-slide-to="0" style="background-image: url(@product?.ImagePath);">
+                                </li>
+                                <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url(@product?.ImagePath);">
+                                </li>
+                                <li data-target="#product_details_slider" data-slide-to="2" style="background-image: url(@product?.ImagePath);">
+                                </li>
+                                <li data-target="#product_details_slider" data-slide-to="3" style="background-image: url(@product?.ImagePath);">
+                                </li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <a class="gallery_img" href="@product?.ImagePath">
+                                        <img class="d-block w-100" src="@product?.ImagePath" alt="First slide">
+                                    </a>
+                                </div>
+                                <div class="carousel-item">
+                                    <a class="gallery_img" href="@product?.ImagePath">
+                                        <img class="d-block w-100" src="@product?.ImagePath" alt="Second slide">
+                                    </a>
+                                </div>
+                                <div class="carousel-item">
+                                    <a class="gallery_img" href="@product?.ImagePath">
+                                        <img class="d-block w-100" src="@product?.ImagePath" alt="Third slide">
+                                    </a>
+                                </div>
+                                <div class="carousel-item">
+                                    <a class="gallery_img" href="@product?.ImagePath">
+                                        <img class="d-block w-100" src="@product?.ImagePath" alt="Fourth slide">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="single_product_desc">
+                        <!-- Product Meta Data -->
+                        <div class="product-meta-data">
+                            <div class="line"></div>
+                            <p class="product-price">@product?.Price Kr.</p>
+                            <a href="#">
+                                <h6> @product?.Brand @product?.Name</h6>
+                            </a>
+                            <!-- Ratings & Review -->
+                            <div class="ratings-review mb-15 d-flex align-items-center justify-content-between">
+                                <div class="ratings">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </div>
+                                <div class="review">
+                                    <a href="#">Write A Review</a>
+                                </div>
+                            </div>
+                            <!-- Avaiable -->
+                            <p class="avaibility"><i class="fa fa-circle"></i> In Stock</p>
+                        </div>
+
+                        <div class="short_overview my-5">
+                            <p>@product?.Description</p>
+                        </div>
+
+                        <!-- Add to Cart Form -->
+                        <form class="cart clearfix" method="post">
+                            <div class="cart-btn d-flex mb-50">
+                                <p>Qty</p>
+                                <div class="quantity">
+                                    <span class="qty-minus" @onclick="DecreaseQuantity">
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    </span>
+                                    <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" @bind="quantity">
+                                    <span class="qty-plus" @onclick="IncreaseQuantity">
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <button type="button" @onclick="BuyProduct" class="btn amado-btn">Buy</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {
+    [Parameter] public int ProductId { get; set; }
+
+    private Product? product;
+    private bool isLoading = true;
+    private int quantity = 1;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        product = await ProductService.GetProductAsync(ProductId);
+        isLoading = false;
+    }
+    
+    private void DecreaseQuantity()
+    {
+        if (quantity > 1)
+        {
+            quantity--;
+        }
+    }
+
+    private void IncreaseQuantity()
+    {
+        quantity++;
+    }
+    
+
+    private async void BuyProduct()
+    {
+
+        var custormer = new Customer
+        {
+            Id = 1,
+            Name = "Seb",
+            Email = "sebwe@live.dk",
+            Phone = "401231231",
+            Orders = new List<Order>()
+        };
+
+        var payment = new Payment()
+        {
+            Id = 1,
+            Order = null,
+            PaymentMethod = "Credit card",
+            Timestamp = DateTime.UtcNow,
+            PaymentIdentifier = "IDK",
+            PaymentConfirmation = "IDK",
+            Amount = product.Price * quantity
+        };
+        
+        var LineItem = new LineItem()
+        {
+            Id = 1,
+            Product = product,
+            Quantity = quantity,
+            Price = product.Price,
+            Order = null,
+            OrderId = 1,
+            ProductId = product.Id
+        };
+        
+        var lineItems = new List<LineItem>()
+        {
+            LineItem
+        };
+        
+        
+        if (product != null)
+        {
+            await OrderService.CreateOrderAsync(custormer, lineItems, payment);
+        }
+    }
+
+}

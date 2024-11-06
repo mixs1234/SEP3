@@ -27,16 +27,19 @@ public class Program
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
 
+        /*
         builder.Services.AddScoped(sp => new HttpClient
         {
             BaseAddress = new Uri("http://localhost:5110")
         });
+        */
         
         builder.Services.AddCascadingAuthenticationState();
         builder.Services.AddScoped<IdentityUserAccessor>();
         builder.Services.AddScoped<IdentityRedirectManager>();
         builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-        builder.Services.AddScoped<IOrderService, HttpOrderClient>();
+        builder.Services.AddScoped<IOrderService, FakeOrderClient>();
+        builder.Services.AddScoped<IProductService, FakeProductClient>();
 
         builder.Services.AddAuthentication(options =>
             {

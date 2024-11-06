@@ -29,6 +29,7 @@ public class OrdersContext : DbContext
     public DbSet<LineItem> LineItems { get; set; }
     public DbSet<Payment> Payments { get; set; }
 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new OrderEntityConfiguration());

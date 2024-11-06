@@ -63,12 +63,12 @@ public class OrderController : Controller
 
     [HttpPost]
     [Route("Orders")]
-    public async Task<IActionResult> CreateOrder(DateTimeOffset? createDate, int? customerId, [FromBody] List<LineItem> lineItems, int? paymentId)
+    public async Task<IActionResult> CreateOrder(DateTimeOffset? createDate, int? customerId, double? price)
     {
         createDate = DateTimeOffset.UtcNow;
         try
         {
-            Order order = await _orderRepository.CreateOrderAsync(createDate, customerId, lineItems, paymentId);
+            Order order = await _orderRepository.CreateOrderAsync(createDate, customerId, price);
             return Content(order.Id.ToString());
         }
         catch (Exception ex)
