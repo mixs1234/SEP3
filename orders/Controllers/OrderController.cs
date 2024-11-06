@@ -63,10 +63,13 @@ public class OrderController : Controller
 
     [HttpPost]
     [Route("Orders")]
-    public async Task<IActionResult> CreateOrder(DateTimeOffset? createdAt, int? customerId, [FromBody] List<LineItem> lineItems, int? paymentId)
+    public async Task<IActionResult> CreateOrder(DateTimeOffset? createdAt, int? customerId, string lineItemString, int? paymentId)
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(lineItemString))
+                throw new ArgumentNullException();
+            List<LineItem> lineItems  = JsonConvert.DeserializeObject<List<LineItem>>(lineItemString) ?? throw new InvalidOperationException();
             Order order = await _orderRepository.CreateOrderAsync(createdAt, customerId, lineItems, paymentId);
             return Content(order.Id.ToString());
         }

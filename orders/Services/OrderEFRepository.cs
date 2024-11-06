@@ -29,7 +29,7 @@ public class OrderEFRepository : IOrderRepository
 
     public async Task<Order> CreateOrderAsync(DateTimeOffset? createdAt, int? customerId, List<LineItem> lineItems, int? paymentId)
     {
-        if (createdAt.HasValue && customerId.HasValue && lineItems != null && lineItems.Any())
+        if (createdAt.HasValue && customerId.HasValue && lineItems != null)
         {
             Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == customerId.Value);
             if (customer == null)
@@ -56,6 +56,11 @@ public class OrderEFRepository : IOrderRepository
                     LineItems = lineItems,
                     Payment = payment
                 };
+            }
+            if (lineItems != null && lineItems.Any())
+            {
+                foreach (LineItem lineItem in lineItems)
+                    lineItem.Order = order;
             }
             return await CreateOrderAsync(order);
         }

@@ -14,6 +14,7 @@ public class OrdersContext : DbContext
     public OrdersContext(IConfiguration configuration)
     {
         Configuration = configuration;
+        Database.Migrate();
     }
 
     public static OrdersContext GetInstance(IConfiguration configuration)
