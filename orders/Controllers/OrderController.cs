@@ -82,10 +82,11 @@ public class OrderController : Controller
 
     [HttpPatch]
     [Route("Orders")]
-    public async Task<IActionResult> UpdateOrder(int? id, DateTimeOffset? createdAt, int? customerId, [FromBody] List<LineItem> lineItems, int? paymentId)
+    public async Task<IActionResult> UpdateOrder(int? id, DateTimeOffset? createdAt, int? customerId, string lineItemsString, int? paymentId)
     {
         try
         {
+            List<LineItem> lineItems  = JsonConvert.DeserializeObject<List<LineItem>>(lineItemsString) ?? throw new InvalidOperationException();
             await _orderRepository.UpdateOrderAsync(id, createdAt, customerId, lineItems, paymentId);
             return Ok();
         }
