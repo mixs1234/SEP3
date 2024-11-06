@@ -29,7 +29,22 @@ public class LineItemEFRepository : ILineItemRepository
 
     public async Task<LineItem> CreateLineItemAsync(int? orderId, int? productId, int? quantity, double? price)
     {
-        throw new NotImplementedException();
+        if (orderId.HasValue && productId.HasValue && quantity.HasValue && price.HasValue)
+        {
+            LineItem lineItem = new LineItem()
+            {
+                OrderId = orderId.Value,
+                Price = price.Value,
+                ProductId = productId.Value,
+                Quantity = quantity.Value
+            };
+            _context.LineItems.Add(lineItem);
+            await _context.SaveChangesAsync();
+            return lineItem;
+            //TODO: Event
+        }
+        else
+            throw new ArgumentNullException();
     }
 
     public async Task<List<LineItem>> GetLineItemsAsync()
@@ -47,7 +62,18 @@ public class LineItemEFRepository : ILineItemRepository
 
     public async Task UpdateLineItemAsync(int? id, int? orderId, int? productId, int? quantity, double? price)
     {
-        throw new NotImplementedException();
+        if (id.HasValue && orderId.HasValue && productId.HasValue && quantity.HasValue && price.HasValue)
+        {
+            LineItem lineItem = await GetLineItemAsync(id) ?? throw new InvalidOperationException();
+            lineItem.OrderId = orderId.Value;
+            lineItem.ProductId = productId.Value;
+            lineItem.Quantity = quantity.Value;
+            lineItem.Price = price.Value;
+            await _context.SaveChangesAsync();
+            //TODO: Event
+        }
+        else
+            throw new ArgumentNullException();
     }
 
     public async Task DeleteLineItemAsync(int? id)

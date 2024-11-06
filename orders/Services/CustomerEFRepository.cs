@@ -61,7 +61,18 @@ public class CustomerEFRepository : ICustomerRepository
 
     public async Task UpdateCustomerAsync(int? id, string name, string email, string phone)
     {
-        throw new NotImplementedException();
+        if (id.HasValue && !string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(email) &&
+            !string.IsNullOrWhiteSpace(phone))
+        {
+            Customer customer = await GetCustomerAsync(id) ?? throw new InvalidOperationException();
+            customer.Name = name;
+            customer.Email = email;
+            customer.Phone = phone;
+            await _context.SaveChangesAsync();
+            //TODO: Event
+        }
+        else
+            throw new ArgumentNullException();
     }
 
     public async Task DeleteCustomerAsync(int? id)

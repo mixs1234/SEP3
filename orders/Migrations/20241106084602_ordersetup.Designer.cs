@@ -12,7 +12,7 @@ using sep3.orders.Infrastructure;
 namespace orders.Migrations
 {
     [DbContext(typeof(OrdersContext))]
-    [Migration("20241105144549_ordersetup")]
+    [Migration("20241106084602_ordersetup")]
     partial class ordersetup
     {
         /// <inheritdoc />

@@ -14,11 +14,11 @@ namespace sep3.orders.Controllers;
 [ApiController]
 public class ProductController : Controller
 {
-    private readonly IProductRepository _orderRepository;
+    private readonly IProductRepository _productRepository;
 
-    public ProductController(IProductRepository orderRepository)
+    public ProductController(IProductRepository productRepository)
     {
-        this._orderRepository = orderRepository;
+        this._productRepository = productRepository;
     }
     
     [HttpGet]
@@ -27,7 +27,7 @@ public class ProductController : Controller
     {
         try
         {
-            List<Product> products = await _orderRepository.GetProductsAsync();
+            List<Product> products = await _productRepository.GetProductsAsync();
             return Content(JsonConvert.SerializeObject(products, Formatting.None,
                 new JsonSerializerSettings()
                 {
@@ -45,27 +45,69 @@ public class ProductController : Controller
     [Route("Products/{id:int}")]
     public async Task<IActionResult> GetProduct(int? id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Product product = await _productRepository.GetProductAsync(id);
+            return Content(JsonConvert.SerializeObject(product, Formatting.None,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                }));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPost]
     [Route("Products")]
     public async Task<IActionResult> CreateProduct(string name, double? price)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Product product = await _productRepository.CreateProductAsync(null, name, price);
+            return Content(JsonConvert.SerializeObject(product, Formatting.None,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                }));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPatch]
     [Route("Products")]
     public async Task<IActionResult> UpdateProduct(int? id, string name, double? price)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _productRepository.UpdateProductAsync(id, name, price);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete]
     [Route("Products/{id:int}")]
     public async Task<IActionResult> DeleteProduct(int? id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _productRepository.DeleteProductAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(410, ex.Message);
+        }
     }
 }

@@ -45,27 +45,70 @@ public class CustomerController : Controller
     [Route("Customers/{id:int}")]
     public async Task<IActionResult> GetCustomer(int? id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Customer customer = await _customerRepository.GetCustomerAsync(id);
+            return Content(JsonConvert.SerializeObject(customer, Formatting.None,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                }));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPost]
     [Route("Customers")]
     public async Task<IActionResult> CreateCustomer(string name, string email, string phone)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Customer customer = await _customerRepository.CreateCustomerAsync(name, email, phone);
+            return Content(JsonConvert.SerializeObject(customer, Formatting.None,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                }));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     [HttpPatch]
     [Route("Customers")]
     public async Task<IActionResult> UpdateCustomer(int? id, string name, string email, string phone)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _customerRepository.UpdateCustomerAsync(id, name, email, phone);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete]
     [Route("Customers/{id:int}")]
     public async Task<IActionResult> DeleteCustomer(int? id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _customerRepository.DeleteCustomerAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(410, ex.Message);
+        }
     }
 }

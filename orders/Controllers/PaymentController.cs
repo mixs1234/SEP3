@@ -45,27 +45,69 @@ public class PaymentController : Controller
     [Route("Payments/{id:int}")]
     public async Task<IActionResult> GetPayment(int? id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Payment payment = await _paymentRepository.GetPaymentAsync(id);
+            return Content(JsonConvert.SerializeObject(payment, Formatting.None,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                }));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPost]
     [Route("Payments")]
     public async Task<IActionResult> CreatePayment(int? orderId, string paymentMethod, DateTimeOffset? timestamp, string paymentIdentifier, string paymentConfirmation, double? amount)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Payment payment = await _paymentRepository.CreatePaymentAsync(orderId, paymentMethod, timestamp, paymentIdentifier, paymentConfirmation, amount);
+            return Content(JsonConvert.SerializeObject(payment, Formatting.None,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                }));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPatch]
     [Route("Payments")]
     public async Task<IActionResult> UpdatePayment(int? id, int? orderId, string paymentMethod, DateTimeOffset? timestamp, string paymentIdentifier, string paymentConfirmation, double? amount)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _paymentRepository.UpdatePaymentAsync(id, orderId, paymentMethod, timestamp, paymentIdentifier, paymentConfirmation, amount);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete]
     [Route("Payments/{id:int}")]
     public async Task<IActionResult> DeletePayment(int? id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _paymentRepository.DeletePaymentAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(410, ex.Message);
+        }
     }
 }

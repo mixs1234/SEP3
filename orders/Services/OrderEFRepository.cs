@@ -80,7 +80,7 @@ public class OrderEFRepository : IOrderRepository
     {
         if (id.HasValue && customerId.HasValue && lineItems != null && lineItems.Any())
         {
-            Order order = await GetOrderAsync(id);
+            Order order = await GetOrderAsync(id) ?? throw new InvalidOperationException();
             order.CreatedAt = createdAt.Value;
             if (customerId.HasValue)
                 order.Customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == customerId.Value);

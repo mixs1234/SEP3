@@ -45,27 +45,69 @@ public class LineItemController : Controller
     [Route("LineItems/{id:int}")]
     public async Task<IActionResult> GetLineItem(int? id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            LineItem lineItem = await _lineItemRepository.GetLineItemAsync(id);
+            return Content(JsonConvert.SerializeObject(lineItem, Formatting.None,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                }));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPost]
     [Route("LineItems")]
     public async Task<IActionResult> CreateLineItem(int? orderId, int? productId, int? quantity, double? price)
     {
-        throw new NotImplementedException();
+        try
+        {
+            LineItem lineItem = await _lineItemRepository.CreateLineItemAsync(orderId, productId, quantity, price);
+            return Content(JsonConvert.SerializeObject(lineItem, Formatting.None,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                }));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPatch]
     [Route("LineItems")]
     public async Task<IActionResult> UpdateLineItem(int? id, int? orderId, int? productId, int? quantity, double? price)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _lineItemRepository.UpdateLineItemAsync(id, orderId, productId, quantity, price);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete]
     [Route("LineItems/{id:int}")]
     public async Task<IActionResult> DeleteLineItem(int? id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _lineItemRepository.DeleteLineItemAsync(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(410, ex.Message);
+        }
     }
 }
