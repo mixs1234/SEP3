@@ -1,6 +1,7 @@
 ﻿@page "/product/{ProductId:int}"
 
-@using web.Models
+@using Microsoft.EntityFrameworkCore
+@using Model
 @using web.Services
 @inject IProductService ProductService
 @inject IOrderService OrderService
@@ -160,46 +161,14 @@
     private async void BuyProduct()
     {
 
-        var custormer = new Customer
-        {
-            Id = 1,
-            Name = "Seb",
-            Email = "sebwe@live.dk",
-            Phone = "401231231",
-            Orders = new List<Order>()
-        };
-
-        var payment = new Payment()
-        {
-            Id = 1,
-            Order = null,
-            PaymentMethod = "Credit card",
-            Timestamp = DateTime.UtcNow,
-            PaymentIdentifier = "IDK",
-            PaymentConfirmation = "IDK",
-            Amount = product.Price * quantity
-        };
-        
-        var LineItem = new LineItem()
-        {
-            Id = 1,
-            Product = product,
-            Quantity = quantity,
-            Price = product.Price,
-            Order = null,
-            OrderId = 1,
-            ProductId = product.Id
-        };
-        
-        var lineItems = new List<LineItem>()
-        {
-            LineItem
-        };
+        var custormerId = 1;
+        var lineItems = "Product: " + product?.Name + " Quantity: " + quantity;
+        var paymentId = 2;
         
         
         if (product != null)
         {
-            await OrderService.CreateOrderAsync(custormer, lineItems, payment);
+            await OrderService.CreateOrderAsync(custormerId, lineItems, paymentId);
         }
     }
 

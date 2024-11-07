@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace web.Models;
+namespace Model;
 
 public class Customer
 {

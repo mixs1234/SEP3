@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using web.Models;
+using Model;
 
 
 namespace web.Services;
@@ -18,28 +18,18 @@ public class FakeOrderClient : IOrderService
         throw new NotImplementedException();
     }
 
-    public Task<Order?> CreateOrderAsync(Customer customer, List<LineItem> lineItems, Payment payment)
+    public Task<Order?> CreateOrderAsync(int customerId, string lineItemString, int paymentId)
     {
-        var order = new Order()
-        {
-            Id = 1,
-            CreatedAt = DateTimeOffset.Now,
-            Customer = customer,
-            CustomerId = customer.Id,
-            LineItems = lineItems,
-            Payment = payment
-        };
-        PlaceOrder(order);
-        return new Task<Order?>(() => order);
+        PlaceOrder(customerId, lineItemString, paymentId);
+        return Task.FromResult<Order?>(null);
     }
     
-    private void PlaceOrder(Order order)
+    private void PlaceOrder(int customerId, string lineItemString, int paymentId)
     {
         Console.WriteLine("Order placed:");
-        Console.WriteLine($"Order ID: {order.Id}");
-        Console.WriteLine($"Created at: {order.CreatedAt}");
-        Console.WriteLine($"Customer ID: {order.CustomerId}");
-        Console.WriteLine($"Price: {order.Payment.Amount}");
+        Console.WriteLine($"Customer ID: {customerId}");
+        Console.WriteLine($"Line items: {lineItemString}");
+        Console.WriteLine($"Payment ID: {paymentId}");
     }
 
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using web.Models;
+using Model;
 
 namespace web.Services;
 
@@ -11,6 +11,6 @@ public interface IOrderService
     
     Task RemoveOrderAsync(int id);
     
-    Task<Order?> CreateOrderAsync(Customer customer, List<LineItem> lineItems, Payment payment);
+    Task<Order?> CreateOrderAsync(int customerId, string lineItemString, int paymentId);
 
 }
