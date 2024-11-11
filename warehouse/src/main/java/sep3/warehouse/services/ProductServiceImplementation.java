@@ -8,13 +8,12 @@ import java.util.Optional;
 
 @Service
 public class ProductServiceImplementation {
-    private ProductService productService;
 
+    private ProductService productService;
 
     public ProductServiceImplementation(ProductService productService) {
         this.productService = productService;
     }
-
 
     public List<Product> getAllProducts() {
         return productService.findAll();
