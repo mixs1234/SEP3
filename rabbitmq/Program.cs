@@ -8,8 +8,8 @@ class Program
     {
         var order = new Model.OrderDTO
         {
-            OrderId = "123",
-            ProductVariantId = "456"
+            OrderId = "1",
+            ProductVariantId = "1"
         };
         
         OrderPublisher orderPublisher = new OrderPublisher();
