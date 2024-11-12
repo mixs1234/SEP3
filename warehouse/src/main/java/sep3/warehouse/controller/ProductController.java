@@ -1,33 +1,48 @@
 package sep3.warehouse.controller;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import sep3.warehouse.models.Product;
-import sep3.warehouse.services.ProductServiceImplementation;
+import org.springframework.web.bind.annotation.*;
+import sep3.warehouse.DTO.ProductDTO;
+import sep3.warehouse.entities.Product;
+import sep3.warehouse.entities.ProductVariant;
+import sep3.warehouse.service.ProductService;
+import sep3.warehouse.service.ProductVariantService;
 
 import java.util.List;
 import java.util.Optional;
 
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/products")
 public class ProductController {
-    private ProductServiceImplementation productService;
+    private final ProductService productService;
+    private final ProductVariantService productVariantService;
 
-    public ProductController(ProductServiceImplementation productService) {
-        this.productService = productService;
+
+    @PostMapping
+    public ResponseEntity<Product> createProduct(@RequestBody ProductDTO product) {
+        Optional<Product> productCreated = productService.createProduct(product);
+
+        return productCreated.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) {
+        ProductDTO productDTO = productService.findById(id);
+
+        return ResponseEntity.ok(productDTO);
+    }
+
+    @GetMapping("/{id}/variants")
+    public ResponseEntity<List<ProductVariant>> getProductWithVariants(@PathVariable Long id) {
+        return ResponseEntity.ok(productVariantService.findAllByProductId(id));
     }
 
     @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public ResponseEntity<List<Product>> getAllProducts() {
+        return ResponseEntity.ok(productService.findAll());
     }
-
-    @GetMapping("{id}")
-    public ResponseEntity<Optional<Product>> getProductById(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.getProductById(id));
-    }
-
 }
