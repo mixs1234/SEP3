@@ -9,19 +9,20 @@ namespace brokers.broker
     
     public class OrderBroker : ControllerBase, IOrderBroker
     {
-        
-        
-        
         private readonly HttpClient _httpClient;
 
         public OrderBroker(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
-        
-        
+
         public async Task<Result<int>> CreateOrderAsync(CreateOrderDTO createOrderDto)
         {
+            if( createOrderDto.CustomerId == 0)
+            {
+                return Result<int>.Failure(400, "Customer ID is required.");
+            }
+            
             try
             {
                 var response = await _httpClient.PostAsJsonAsync("Orders", createOrderDto);
