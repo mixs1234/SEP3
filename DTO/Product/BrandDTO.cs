@@ -2,6 +2,6 @@
 
 public class BrandDTO
 {
-    public string name { get; set; }
-    public long id { get; set; }
+    public string Name { get; set; }
+    public long Id { get; set; }
 }

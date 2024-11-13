@@ -2,9 +2,9 @@
 
 public class ProductVariantDTO
 {
-    public long id { get; set; }
-    public string size { get; set; }
-    public string material { get; set; }
-    public int stock { get; set; }
+    public long Id { get; set; }
+    public string Size { get; set; }
+    public string Material { get; set; }
+    public int Stock { get; set; }
 
 }
