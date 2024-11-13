@@ -41,16 +41,12 @@ public class HttpOrderClient : IOrderService
     }
 
 
-    public async Task<Order?> CreateOrderAsync(int customerId, string lineItemString, int paymentId)
+    public async Task<Order?> CreateOrderAsync(int customerId, int productId)
     {
         var createOrderDTO = new CreateOrderDTO()
         {
             CustomerId = customerId,
-            LineItemsId = new List<int>()
-            {
-                2
-            },
-            PaymentId = paymentId
+            ProductId = productId
         };
 
         var httpResponse = await _httpClient.PostAsJsonAsync("/Orders", createOrderDTO);

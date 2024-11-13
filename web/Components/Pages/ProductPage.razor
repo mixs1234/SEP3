@@ -161,14 +161,13 @@
     private async void BuyProduct()
     {
 
-        var custormerId = 1;
-        var lineItems = "Product: " + product?.Name + " Quantity: " + quantity;
-        var paymentId = 2;
+        var customerId = 1;
+        var productId = 2;
         
         
         if (product != null)
         {
-            await OrderService.CreateOrderAsync(custormerId, lineItems, paymentId);
+            await OrderService.CreateOrderAsync(customerId, productId);
         }
     }
 
