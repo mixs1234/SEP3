@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using web.Models;
+using Model;
 
 namespace web.Services;
 
@@ -17,11 +17,7 @@ public class FakeProductClient : IProductService
             ImagePath = "img/product-img/Basic-White-T-Shirt.png",
             Category = "Clothing",
             Id = 1,
-            Brand = "Nike",
-            Color = "White",
-            Size = "M",
-            Material = "Cotton",
-            Discount = 0.0
+
         },
 
         new Product()
@@ -32,11 +28,7 @@ public class FakeProductClient : IProductService
             ImagePath = "img/product-img/Basic-Black-Sweatshirt.png",
             Category = "Clothing",
             Id = 2,
-            Brand = "Adidas",
-            Color = "Black",
-            Size = "L",
-            Material = "Polyester",
-            Discount = 0.0
+
         },
 
         new Product()
@@ -47,11 +39,7 @@ public class FakeProductClient : IProductService
             ImagePath = "img/product-img/Basic-Red-Sneakers.png",
             Category = "Footwear",
             Id = 3,
-            Brand = "Puma",
-            Color = "Red",
-            Size = "42",
-            Material = "Leather",
-            Discount = 0.0
+            
         }
     ];
 

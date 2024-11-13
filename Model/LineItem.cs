@@ -1,4 +1,4 @@
-namespace web.Models;
+namespace Model;
 
 public class LineItem
 {

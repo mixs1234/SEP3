@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace web.Models;
+namespace Model;
 
 public class Order
 {
+    
     public int Id { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public Customer Customer { get; set; }

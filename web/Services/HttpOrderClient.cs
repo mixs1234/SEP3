@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using DTO.Order;
 using Newtonsoft.Json;
-using web.Models;
+using Model;
 using web.Services;
+using JsonSerializerOptions = System.Text.Json.JsonSerializerOptions;
 
 namespace sep3web.Services;
 
@@ -36,41 +39,25 @@ public class HttpOrderClient : IOrderService
         }
         Console.WriteLine($"Order with ID {id} deleted");
     }
-    
-    
-    public async Task<Order?> CreateOrderAsync(Customer customer, List<LineItem> lineItems, Payment payment)
+
+
+    public async Task<Order?> CreateOrderAsync(int customerId, string lineItemString, int paymentId)
     {
-        // Serialize the lineItems as JSON
-        var json = JsonConvert.SerializeObject(lineItems);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        // Build the URL with query parameters for customerId and paymentId
-        var url = $"Order/Orders?customerId={customer.Id}";
-
-        // Include paymentId if it's not null or zero
-        if (payment != null && payment.Id != 0)
+        var createOrderDTO = new CreateOrderDTO()
         {
-            url += $"&paymentId={payment.Id}";
-        }
+            CustomerId = customerId,
+            LineItemsId = new List<int>()
+            {
+                2
+            },
+            PaymentId = paymentId
+        };
 
-        HttpResponseMessage httpResponse;
-        try
-        {
-            httpResponse = await _httpClient.PostAsync(url, content);
-        }
-        catch (Exception ex)
-        {
-            // Log exception or handle failure
-            throw new HttpRequestException("An error occurred while sending the order request.", ex);
-        }
+        var httpResponse = await _httpClient.PostAsJsonAsync("/Orders", createOrderDTO);
+        var response = await httpResponse.Content.ReadAsStringAsync();
 
-        if (!httpResponse.IsSuccessStatusCode)
-        {
-            var responseContent = await httpResponse.Content.ReadAsStringAsync();
-            // Log the error response if needed
-            throw new HttpRequestException($"Failed to add order. Status Code: {httpResponse.StatusCode}, Response: {responseContent}");
-        }
-        return JsonConvert.DeserializeObject<Order>(await httpResponse.Content.ReadAsStringAsync());
+        return new Order();
+
     }
 
 }

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DTO.Order;
 
 namespace sep3.orders.Controllers;
 
@@ -62,14 +63,30 @@ public class OrderController : Controller
 
     [HttpPost]
     [Route("Orders")]
-    public async Task<IActionResult> CreateOrder(DateTimeOffset? createdAt, int? customerId, string lineItemString, int? paymentId)
+    public async Task<IActionResult> CreateOrder(CreateOrderDTO createOrderDto)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(lineItemString))
-                throw new ArgumentNullException();
-            List<LineItem> lineItems  = JsonConvert.DeserializeObject<List<LineItem>>(lineItemString) ?? throw new InvalidOperationException();
-            Order order = await _orderRepository.CreateOrderAsync(createdAt, customerId, lineItems, paymentId);
+            
+            DateTimeOffset createdAt = DateTimeOffset.UtcNow;
+            var lineItems = new List<LineItem>();
+            foreach (var lineItemId in createOrderDto.LineItemsId)
+            {
+                LineItem lineItem = new LineItem();
+                lineItem.Id = lineItemId;
+                lineItem.Price = 100;
+                lineItem.Quantity = 1;
+                lineItem.Product = new Product()
+                {
+                    Id = 1,
+                    Name = "Product",
+                    Price = 100
+                };
+                lineItem.ProductId = 1;
+                lineItems.Add(lineItem);
+            }
+
+            Order order = await _orderRepository.CreateOrderAsync(createdAt, createOrderDto.CustomerId, lineItems, createOrderDto.PaymentId);
             return Content(order.Id.ToString());
         }
         catch (Exception ex)
