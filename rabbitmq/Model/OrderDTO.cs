@@ -2,6 +2,6 @@
 
 public class OrderDTO
 {
-    public string OrderId { get; set; }
-    public string ProductVariantId { get; set; }
+    public long OrderId { get; set; }
+    public long ProductVariantId { get; set; }
 }

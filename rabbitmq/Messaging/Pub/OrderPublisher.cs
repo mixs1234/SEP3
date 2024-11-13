@@ -1,4 +1,5 @@
-﻿using rabbitmq.Model;
+﻿using Newtonsoft.Json.Serialization;
+using rabbitmq.Model;
 
 namespace rabbitmq.Messaging.Pub;
 
@@ -24,7 +25,11 @@ public class OrderPublisher
             durable: true
             );
         
-        var message = JsonConvert.SerializeObject(order);
+        var message = JsonConvert.SerializeObject(order, new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        });
+
         var body = Encoding.UTF8.GetBytes(message);
         
         const string routingKey = "order.created";

@@ -2,22 +2,22 @@ package sep3.warehouse.rabbitmq;
 
 public class StockVerificationDTO {
 
-    private String orderId;
+    private long orderId;
     private boolean isInStock;
 
     public StockVerificationDTO() {
     }
 
-    public StockVerificationDTO(String orderId, boolean isInStock) {
+    public StockVerificationDTO(long orderId, boolean isInStock) {
         this.orderId = orderId;
         this.isInStock = isInStock;
     }
 
-    public String getOrderId() {
+    public long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(long orderId) {
         this.orderId = orderId;
     }
 
