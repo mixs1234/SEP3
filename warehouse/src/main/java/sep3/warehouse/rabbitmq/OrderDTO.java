@@ -1,30 +1,30 @@
 package sep3.warehouse.rabbitmq;
 
 public class OrderDTO {
-    private String orderId;
-    private String productVariantId;
+    private long orderId;
+    private long productVariantId;
 
     public OrderDTO() {
     }
 
-    public OrderDTO(String orderId, String productVariantId) {
+    public OrderDTO(long orderId, long productVariantId) {
         this.orderId = orderId;
         this.productVariantId = productVariantId;
     }
 
-    public String getOrderId() {
+    public long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(long orderId) {
         this.orderId = orderId;
     }
 
-    public String getProductVariantId() {
+    public long getProductVariantId() {
         return productVariantId;
     }
 
-    public void setProductVariantId(String productVariantId) {
+    public void setProductVariantId(long productVariantId) {
         this.productVariantId = productVariantId;
     }
 
