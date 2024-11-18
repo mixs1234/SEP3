@@ -17,8 +17,13 @@ public class ProductVariant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String size;
+
+    @Column(nullable = false)
     private String material;
+
+    @Column(nullable = false)
     private int stock;
 
     @ManyToOne

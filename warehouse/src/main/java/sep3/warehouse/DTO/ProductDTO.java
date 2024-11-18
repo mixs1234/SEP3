@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import sep3.warehouse.entities.Product;
 import sep3.warehouse.entities.ProductVariant;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,6 +19,8 @@ public class ProductDTO {
     private Long id;
     private String name;
     private String description;
+    private double price;
+    private String imagePath;
     private BrandDTO brand;
     private List<ProductVariant> productVariants;
 
@@ -26,6 +30,8 @@ public class ProductDTO {
         productDTO.setId(product.getId());
         productDTO.setName(product.getName());
         productDTO.setDescription(product.getDescription());
+        productDTO.setPrice(product.getPrice());
+        productDTO.setImagePath(product.getImagePath());
         productDTO.setBrand(BrandDTO.MapBrandToBrandDTO(product.getBrand()));
         productDTO.setProductVariants(product.getProductVariants());
 
@@ -37,8 +43,10 @@ public class ProductDTO {
         productDTO.setId(product.getId());
         productDTO.setName(product.getName());
         productDTO.setDescription(product.getDescription());
+        productDTO.setPrice(product.getPrice());
+        productDTO.setImagePath(product.getImagePath());
         productDTO.setBrand(BrandDTO.MapBrandToBrandDTO(product.getBrand()));
-        productDTO.setProductVariants(null);
+        productDTO.setProductVariants(new ArrayList<>());
         return productDTO;
     }
 
