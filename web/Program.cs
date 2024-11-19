@@ -30,7 +30,7 @@ public class Program
         
         builder.Services.AddScoped(sp => new HttpClient
         {
-            BaseAddress = new Uri("http://localhost:5110")
+            BaseAddress = new Uri("http://localhost:5220")
         });
         
         
@@ -39,7 +39,7 @@ public class Program
         builder.Services.AddScoped<IdentityRedirectManager>();
         builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
         builder.Services.AddScoped<IOrderService, HttpOrderClient>();
-        builder.Services.AddScoped<IProductService, FakeProductClient>();
+        builder.Services.AddScoped<IProductService, HttpProductClient>();
 
         builder.Services.AddAuthentication(options =>
             {

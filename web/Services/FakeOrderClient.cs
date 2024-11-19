@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DTO.Order;
 using Model;
 
 
@@ -23,7 +24,12 @@ public class FakeOrderClient : IOrderService
         PlaceOrder(customerId, productId);
         return Task.FromResult<Order?>(null);
     }
-    
+
+    public Task<Order?> CreateOrderAsync(CreateOrderDTO createOrderDTO)
+    {
+        throw new NotImplementedException();
+    }
+
     private void PlaceOrder(int customerId, int productId)
     {
         Console.WriteLine("Order placed:");
