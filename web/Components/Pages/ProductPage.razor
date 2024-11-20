@@ -1,7 +1,6 @@
 ﻿@page "/product/{ProductId:int}"
 
-@using Microsoft.EntityFrameworkCore
-@using sep3.Model
+@using web.Model
 @using web.Services
 @inject IProductService ProductService
 @inject IOrderService OrderService
@@ -26,10 +25,11 @@
                                 <a href="#">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="#">@product?.Category</a>
+                                <!-- Change to actual category and brand-->
+                                <a href="#">Category</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="#">@product?.Brand</a>
+                                <a href="#">Brand</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">@product?.Name</li>
                         </ol>
@@ -83,7 +83,7 @@
                             <div class="line"></div>
                             <p class="product-price">@product?.Price Kr.</p>
                             <a href="#">
-                                <h6> @product?.Brand @product?.Name</h6>
+                                <h6>@product?.Name</h6>
                             </a>
                             <!-- Ratings & Review -->
                             <div class="ratings-review mb-15 d-flex align-items-center justify-content-between">
@@ -164,6 +164,7 @@
         var customerId = 1;
         var productId = 2;
         
+        Console.WriteLine("Buying product");
         
         if (product != null)
         {

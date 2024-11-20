@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using sep3.DTO.Product;
-using sep3.Model;
 using Newtonsoft.Json;
+using web.Model;
 
 namespace web.Services;
 
@@ -33,6 +33,7 @@ public class HttpProductClient :  IProductService
     }
     
 
+    // Admin only
     public async Task<Product> CreateProductAsync(ProductDTO productDto)
     {
         var httpResponse = await _httpClient.PostAsJsonAsync("/Product", productDto);
@@ -41,11 +42,13 @@ public class HttpProductClient :  IProductService
         return new Product();
     }
 
+    // Admin only
     public Task<Product?> UpdateProductAsync(int id, Product product)
     {
         throw new System.NotImplementedException();
     }
 
+    // Admin only
     public async Task DeleteProductAsync(int id)
     {
         var httpResponse = await _httpClient.DeleteAsync($"/product/{id}");

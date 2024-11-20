@@ -1,8 +1,9 @@
-﻿using System.Net.Http.Json;
+﻿
 using ConsoleApp1.Services;
 using sep3.DTO.Order;
 using Microsoft.AspNetCore.Mvc;
-using sep3.Model;
+using sep3.broker.Model;
+
 
 namespace brokers.broker
 {
@@ -18,7 +19,7 @@ namespace brokers.broker
 
         public async Task<Result<int>> CreateOrderAsync(CreateOrderDTO createOrderDto)
         {
-            if( createOrderDto.CustomerId == 0)
+            if( createOrderDto.CustomerId == 0 )
             {
                 return Result<int>.Failure(400, "Customer ID is required.");
             }
@@ -33,16 +34,12 @@ namespace brokers.broker
                     {
                         return Result<int>.Success(orderId, "Order created successfully.");
                     }
-                    else
-                    {
-                        return Result<int>.Failure(500, "Failed to parse order ID.");
-                    }
+
+                    return Result<int>.Failure(500, "Failed to parse order ID.");
                 }
-                else
-                {
-                    var error = await response.Content.ReadAsStringAsync();
-                    return Result<int>.Failure((int)response.StatusCode, error);
-                }
+
+                var error = await response.Content.ReadAsStringAsync();
+                return Result<int>.Failure((int)response.StatusCode, error);
             }
             catch (Exception ex)
             {
@@ -60,11 +57,9 @@ namespace brokers.broker
                     var order = await response.Content.ReadFromJsonAsync<Order>();
                     return Result<Order>.Success(order, "Order retrieved successfully.");
                 }
-                else
-                {
-                    var error = await response.Content.ReadAsStringAsync();
-                    return Result<Order>.Failure((int)response.StatusCode, error);
-                }
+
+                var error = await response.Content.ReadAsStringAsync();
+                return Result<Order>.Failure((int)response.StatusCode, error);
             }
             catch (Exception ex)
             {

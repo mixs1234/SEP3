@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 using sep3.DTO.Order;
 using Newtonsoft.Json;
-using sep3.Model;
+using web.Model;
 using web.Services;
-using JsonSerializerOptions = System.Text.Json.JsonSerializerOptions;
 
 namespace sep3web.Services;
 
@@ -24,7 +22,7 @@ public class HttpOrderClient : IOrderService
     
     public Task<List<Order>?> GetOrdersAsync()
     {
-        var httpResponse = _httpClient.GetAsync("/Order");
+        var httpResponse = _httpClient.GetAsync("/Orders");
         var content = httpResponse.Result.Content.ReadAsStringAsync();
         var orders = JsonConvert.DeserializeObject<List<Order>>(content.Result);
         return Task.FromResult(orders);
@@ -32,7 +30,7 @@ public class HttpOrderClient : IOrderService
     
     public async Task RemoveOrderAsync(int id)
     {
-        var httpResponse = await _httpClient.DeleteAsync($"/Order/{id}");
+        var httpResponse = await _httpClient.DeleteAsync($"/Orders/{id}");
         if (!httpResponse.IsSuccessStatusCode)
         {
             throw new Exception($"Failed to delete order with ID {id}: {httpResponse.ReasonPhrase}");
@@ -43,24 +41,18 @@ public class HttpOrderClient : IOrderService
 
     public async Task<Order?> CreateOrderAsync(int customerId, int productId)
     {
-        var createOrderDTO = new CreateOrderDTO()
+        var createOrderDto = new CreateOrderDTO()
         {
             CustomerId = customerId,
-            ProductId = productId
+            ProductVariantId = productId
         };
 
-        var httpResponse = await _httpClient.PostAsJsonAsync("/Order", createOrderDTO);
+        var httpResponse = await _httpClient.PostAsJsonAsync("/Orders", createOrderDto);
+        
         var response = await httpResponse.Content.ReadAsStringAsync();
 
         return new Order();
 
     }
 
-    public async Task<Order?> CreateOrderAsync(CreateOrderDTO createOrderDTO)
-    {
-        var httpResponse = await _httpClient.PostAsJsonAsync("/Order", createOrderDTO);
-        var response = await httpResponse.Content.ReadAsStringAsync();
-
-        return new Order();
-    }
 }

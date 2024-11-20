@@ -67,6 +67,7 @@ public class OrderController : Controller
     {
         try
         {
+            Console.WriteLine("CreateOrderDTO: " + createOrderDto.ProductVariantId + " " + createOrderDto.CustomerId);
             Order order = await _orderRepository.CreateOrderAsync(Order.FromDTO(createOrderDto));
             return Content(order.Id.ToString());
         }

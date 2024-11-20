@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using sep3.DTO;
-using sep3.Model;
 using sep3.orders.Services;
-using rabbitmq.Model;
+using sep3.DTO.Order;
 
 namespace sep3.orders.Model;
 
@@ -40,7 +36,7 @@ public class Order
         _productRepository = productRepository;
     }
 
-    public static Order FromDTO(DTO.Order.CreateOrderDTO orderDTO)
+    public static Order FromDTO(CreateOrderDTO orderDTO)
     {
         Order order = new Order()
         {
@@ -48,9 +44,9 @@ public class Order
             CustomerId = orderDTO.CustomerId,
             LineItems = new List<LineItem>()
             {
-                new LineItem()
+                new()
                 {
-                    ProductId = orderDTO.ProductId,
+                    ProductId = orderDTO.ProductVariantId,
                     Quantity = 1,
                     Price = Math.Round(randomLower + (random.NextDouble() * (randomUpper - randomLower)), 2) // https://stackoverflow.com/a/20785539
                 }
@@ -83,23 +79,25 @@ public class Order
         return order;
     }
 
-    public sep3.Model.Order ToDTO()
+    public CreateOrderDTO ToDTO()
     {
-        sep3.Model.Order orderDTO = new sep3.Model.Order()
+        CreateOrderDTO orderDTO = new CreateOrderDTO
         {
-            Id = this.Id,
-            ProductId = LineItems.First().ProductId
-        };
-        return orderDTO;
-    }
-
-    public rabbitmq.Model.OrderDTO ToRDTO()
-    {
-        rabbitmq.Model.OrderDTO orderDTO = new OrderDTO()
-        {
-            OrderId = this.Id,
+            CustomerId = this.CustomerId,
             ProductVariantId = LineItems.First().ProductId
         };
         return orderDTO;
     }
+    
+    public CreateOrderConfirmationDTO ToConfirmationDTO()
+    {
+        CreateOrderConfirmationDTO orderDTO = new CreateOrderConfirmationDTO
+        {
+            OrderId = this.Id,
+            CustomerId = this.CustomerId,
+            ProductVariantId = LineItems.First().ProductId
+        };
+        return orderDTO;
+    }
+
 }

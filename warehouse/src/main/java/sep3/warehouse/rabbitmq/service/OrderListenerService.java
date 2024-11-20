@@ -37,6 +37,7 @@ public class OrderListenerService {
         Optional<ProductVariant> productVariantOpt = productVariantService.findById(order.getProductVariantId());
         if (productVariantOpt.isPresent()) {
             ProductVariant productVariant = productVariantOpt.get();
+            System.out.println("Product variant found: " + order.getProductVariantId());
             productVariantService.updateQuantity(productVariant.getId(), 1);
             return true;
         } else {

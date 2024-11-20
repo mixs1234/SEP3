@@ -27,6 +27,7 @@ public class LineItem
             this.Price = product.Price;
     }
 
+    /*
     public static LineItem FromDTO(sep3.Model.LineItem lineItem)
     {
         LineItem lineItemDTO = new LineItem()
@@ -52,4 +53,5 @@ public class LineItem
         };
         return lineItemDTO;
     }
+    */
 }

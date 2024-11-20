@@ -1,4 +1,4 @@
-using sep3.Model;
+
 
 namespace sep3.orders.Model;
 
@@ -29,6 +29,7 @@ public class Payment
         this.Amount = amount;
     }
 
+    /*
     public static Payment FromDTO(sep3.Model.Payment paymentDTO)
     {
         Payment payment = new Payment()
@@ -58,4 +59,5 @@ public class Payment
         };
         return paymentDTO;
     }
+    */
 }

@@ -1,5 +1,3 @@
-using sep3.Model;
-
 namespace sep3.orders.Model;
 
 public class Customer
@@ -23,6 +21,8 @@ public class Customer
         this.Phone = phone;
         this.Orders = orders;
     }
+    
+    /*
 
     public static Customer FromDTO(sep3.Model.Customer customerDTO)
     {
@@ -47,4 +47,5 @@ public class Customer
         };
         return customerDTO;
     }
+    */
 }

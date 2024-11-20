@@ -1,6 +1,7 @@
 ﻿using ConsoleApp1.Services;
+using sep3.broker.Model;
 using sep3.DTO.Product;
-using sep3.Model;
+
 
 namespace brokers.broker;
 

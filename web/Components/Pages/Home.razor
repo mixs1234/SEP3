@@ -1,9 +1,9 @@
 ﻿@page "/"
-@using sep3.Model
+
 @using web.Services
 @using web.Components.Product
+@using web.Model
 @inject IProductService ProductService
-@inject NavigationManager NavigationManager
 
 
 <PageTitle>Home</PageTitle>
@@ -36,10 +36,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //Redirect to testPanel temporarily
-        NavigationManager.NavigateTo("/testPanel");
-        
-        
         products = await ProductService.GetProductsAsync();
     }
 

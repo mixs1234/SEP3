@@ -9,10 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Update="Data\app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.8"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8"/>
@@ -33,7 +29,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DTO\DTO.csproj" />
-      <ProjectReference Include="..\Model\Model.csproj" />
       <ProjectReference Include="..\orders\orders.csproj" />
     </ItemGroup>
 
@@ -44,6 +39,9 @@
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Components\Pages\Admin\Order\Orders.razor" />
       <_ContentIncludedByDefault Remove="Components\Pages\Admin\Order\ViewOrders.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\Admin\Order.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\Admin\Product.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\Admin\TestPanel.razor" />
     </ItemGroup>
 
 </Project>

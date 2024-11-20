@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json.Serialization;
-using rabbitmq.Model;
+using sep3.DTO.Order;
 
 namespace rabbitmq.Messaging.Pub;
 
@@ -11,7 +11,7 @@ public class OrderPublisher
 {
     private const string ExchangeName = "order_topic_exchange";
 
-    public async Task PublishOrder(OrderDTO order)
+    public async Task PublishOrder(CreateOrderConfirmationDTO createOrderConfirmation)
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
         using var connection = await factory.CreateConnectionAsync();
@@ -25,7 +25,7 @@ public class OrderPublisher
             durable: true
             );
         
-        var message = JsonConvert.SerializeObject(order, new JsonSerializerSettings
+        var message = JsonConvert.SerializeObject(createOrderConfirmation, new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         });

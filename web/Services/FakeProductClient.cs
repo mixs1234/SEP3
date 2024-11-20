@@ -1,42 +1,50 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using sep3.Model;
-using sep3.DTO.Product;
+using web.Model;
 
 namespace web.Services;
 
 public class FakeProductClient : IProductService
 {
+    private readonly List<Product> _products =
+    [
+        new Product
+        {
+            Id = 1,
+            Name = "Product 1",
+            Price = 100,
+            ImagePath = "/img/product-img/Basic-Black-Sweatshirt.png",
+            Description = "This is product 1"
+        },
+
+        new Product
+        {
+            Id = 2,
+            Name = "Product 2",
+            Price = 200,
+            ImagePath = "/img/product-img/Basic-Red-Sneakers.png",
+            Description = "This is product 2"
+        },
+
+        new Product
+        {
+            Id = 3,
+            Name = "Product 3",
+            Price = 300,
+            ImagePath = "/img/product-img/Basic-White-T-Shirt.png",
+            Description = "This is product 3"
+        }
+    ];
     
-
-
+    
     public Task<List<Product>> GetProductsAsync()
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(_products);
     }
 
     public Task<Product?> GetProductAsync(int id)
     {
-        throw new System.NotImplementedException();
-    }
-
-    public Task<Product> CreateProductAsync(ProductDTO product)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Task<Product?> CreateProductAsync(Product product)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Task<Product?> UpdateProductAsync(int id, Product product)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Task DeleteProductAsync(int id)
-    {
-        throw new System.NotImplementedException();
+        return Task.FromResult(_products.FirstOrDefault(p => p.Id == id));
     }
 }

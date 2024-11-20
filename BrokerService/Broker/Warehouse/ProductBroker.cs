@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using ConsoleApp1.Services;
+using sep3.broker.Model;
 using sep3.DTO.Product;
-using sep3.Model;
 
 namespace brokers.broker;
 
@@ -41,7 +41,7 @@ public class ProductBroker : IProductBroker
                 });
                 if (product != null)
                 {
-                    return Result<int>.Success((int)product.Id, "Product created successfully.");
+                    return Result<int>.Success(product.Id, "Product created successfully.");
                 }
                 else
                 {
