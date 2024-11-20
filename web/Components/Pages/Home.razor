@@ -3,8 +3,12 @@
 @using web.Services
 @using web.Components.Product
 @inject IProductService ProductService
+@inject NavigationManager NavigationManager
+
 
 <PageTitle>Home</PageTitle>
+
+<head><meta http-equiv="refresh" content="delay_time; URL=new_website_url" /></head>
 
 <div class="products-catagories-area clearfix">
     <div class="amado-pro-catagory clearfix">
@@ -32,6 +36,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        //Redirect to testPanel temporarily
+        NavigationManager.NavigateTo("/testPanel");
+        
+        
         products = await ProductService.GetProductsAsync();
     }
 

@@ -12,7 +12,7 @@ using sep3.orders.Infrastructure;
 namespace orders.Migrations
 {
     [DbContext(typeof(OrdersContext))]
-    [Migration("20241029133751_InitialMigration")]
+    [Migration("20241113083642_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -33,14 +33,11 @@ namespace orders.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

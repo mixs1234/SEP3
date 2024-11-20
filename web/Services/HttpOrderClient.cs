@@ -24,7 +24,7 @@ public class HttpOrderClient : IOrderService
     
     public Task<List<Order>?> GetOrdersAsync()
     {
-        var httpResponse = _httpClient.GetAsync("Order/Orders");
+        var httpResponse = _httpClient.GetAsync("/Order");
         var content = httpResponse.Result.Content.ReadAsStringAsync();
         var orders = JsonConvert.DeserializeObject<List<Order>>(content.Result);
         return Task.FromResult(orders);
@@ -32,7 +32,7 @@ public class HttpOrderClient : IOrderService
     
     public async Task RemoveOrderAsync(int id)
     {
-        var httpResponse = await _httpClient.DeleteAsync($"Order/Orders/{id}");
+        var httpResponse = await _httpClient.DeleteAsync($"/Order/{id}");
         if (!httpResponse.IsSuccessStatusCode)
         {
             throw new Exception($"Failed to delete order with ID {id}: {httpResponse.ReasonPhrase}");
@@ -41,23 +41,26 @@ public class HttpOrderClient : IOrderService
     }
 
 
-    public async Task<Order?> CreateOrderAsync(int customerId, string lineItemString, int paymentId)
+    public async Task<Order?> CreateOrderAsync(int customerId, int productId)
     {
         var createOrderDTO = new CreateOrderDTO()
         {
             CustomerId = customerId,
-            LineItemsId = new List<int>()
-            {
-                2
-            },
-            PaymentId = paymentId
+            ProductId = productId
         };
 
-        var httpResponse = await _httpClient.PostAsJsonAsync("/Orders", createOrderDTO);
+        var httpResponse = await _httpClient.PostAsJsonAsync("/Order", createOrderDTO);
         var response = await httpResponse.Content.ReadAsStringAsync();
 
         return new Order();
 
     }
 
+    public async Task<Order?> CreateOrderAsync(CreateOrderDTO createOrderDTO)
+    {
+        var httpResponse = await _httpClient.PostAsJsonAsync("/Order", createOrderDTO);
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        return new Order();
+    }
 }

@@ -67,26 +67,7 @@ public class OrderController : Controller
     {
         try
         {
-            
-            DateTimeOffset createdAt = DateTimeOffset.UtcNow;
-            var lineItems = new List<LineItem>();
-            foreach (var lineItemId in createOrderDto.LineItemsId)
-            {
-                LineItem lineItem = new LineItem();
-                lineItem.Id = lineItemId;
-                lineItem.Price = 100;
-                lineItem.Quantity = 1;
-                lineItem.Product = new Product()
-                {
-                    Id = 1,
-                    Name = "Product",
-                    Price = 100
-                };
-                lineItem.ProductId = 1;
-                lineItems.Add(lineItem);
-            }
-
-            Order order = await _orderRepository.CreateOrderAsync(createdAt, createOrderDto.CustomerId, lineItems, createOrderDto.PaymentId);
+            Order order = await _orderRepository.CreateOrderAsync(createOrderDto.CustomerId, createOrderDto.ProductId);
             return Content(order.Id.ToString());
         }
         catch (Exception ex)
@@ -98,12 +79,11 @@ public class OrderController : Controller
 
     [HttpPatch]
     [Route("Orders")]
-    public async Task<IActionResult> UpdateOrder(int? id, DateTimeOffset? createdAt, int? customerId, string lineItemsString, int? paymentId)
+    public async Task<IActionResult> UpdateOrder(int? id, int? customerId, int? productId)
     {
         try
         {
-            List<LineItem> lineItems  = JsonConvert.DeserializeObject<List<LineItem>>(lineItemsString) ?? throw new InvalidOperationException();
-            await _orderRepository.UpdateOrderAsync(id, createdAt, customerId, lineItems, paymentId);
+            await _orderRepository.UpdateOrderAsync(id, customerId, productId);
             return Ok();
         }
         catch (Exception ex)

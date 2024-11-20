@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DTO.Order;
 using Model;
 
 
@@ -18,18 +19,22 @@ public class FakeOrderClient : IOrderService
         throw new NotImplementedException();
     }
 
-    public Task<Order?> CreateOrderAsync(int customerId, string lineItemString, int paymentId)
+    public Task<Order?> CreateOrderAsync(int customerId, int productId)
     {
-        PlaceOrder(customerId, lineItemString, paymentId);
+        PlaceOrder(customerId, productId);
         return Task.FromResult<Order?>(null);
     }
-    
-    private void PlaceOrder(int customerId, string lineItemString, int paymentId)
+
+    public Task<Order?> CreateOrderAsync(CreateOrderDTO createOrderDTO)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void PlaceOrder(int customerId, int productId)
     {
         Console.WriteLine("Order placed:");
         Console.WriteLine($"Customer ID: {customerId}");
-        Console.WriteLine($"Line items: {lineItemString}");
-        Console.WriteLine($"Payment ID: {paymentId}");
+        Console.WriteLine($"Product ID: {productId}");
     }
 
 }

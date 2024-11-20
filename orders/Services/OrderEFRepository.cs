@@ -27,41 +27,15 @@ public class OrderEFRepository : IOrderRepository
         // TODO: Event
     }
 
-    public async Task<Order> CreateOrderAsync(DateTimeOffset? createdAt, int? customerId, List<LineItem> lineItems, int? paymentId)
+    public async Task<Order> CreateOrderAsync(int? customerId, int? productId)
     {
-        if (createdAt.HasValue && customerId.HasValue && lineItems != null)
+        if (customerId.HasValue && productId.HasValue)
         {
-            Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == customerId.Value);
-            if (customer == null)
-                throw new Exception($"Customer {customerId} not found");
-            Payment? payment = null;
-            if (paymentId.HasValue)
-                payment = await _context.Payments.FirstOrDefaultAsync(p => p.Id == paymentId);
-            Order order = null;
-            if (payment == null) // Order isn't paid yet
+            Order order = new Order()
             {
-                order = new Order()
-                {
-                    CreatedAt = createdAt.Value,
-                    Customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == customerId.Value),
-                    LineItems = lineItems
-                };
-            }
-            else
-            {
-                order = new Order()
-                {
-                    CreatedAt = createdAt.Value,
-                    Customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == customerId.Value),
-                    LineItems = lineItems,
-                    Payment = payment
-                };
-            }
-            if (lineItems != null && lineItems.Any())
-            {
-                foreach (LineItem lineItem in lineItems)
-                    lineItem.Order = order;
-            }
+                CustomerId = customerId.Value,
+                ProductId = productId.Value
+            };
             return await CreateOrderAsync(order);
         }
         else
@@ -81,17 +55,13 @@ public class OrderEFRepository : IOrderRepository
             throw new ArgumentNullException(nameof(id));
     }
 
-    public async Task UpdateOrderAsync(int? id, DateTimeOffset? createdAt, int? customerId, List<LineItem> lineItems, int? paymentId)
+    public async Task UpdateOrderAsync(int? id, int? customerId, int? productId)
     {
-        if (id.HasValue && customerId.HasValue && lineItems != null && lineItems.Any())
+        if (id.HasValue && customerId.HasValue && productId.HasValue)
         {
             Order order = await GetOrderAsync(id) ?? throw new InvalidOperationException();
-            order.CreatedAt = createdAt.Value;
-            if (customerId.HasValue)
-                order.Customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == customerId.Value);
-            order.LineItems = lineItems;
-            if (paymentId.HasValue)
-                order.Payment = await _context.Payments.FirstOrDefaultAsync(p => p.Id == paymentId.Value);
+            order.CustomerId = customerId.Value;
+            order.ProductId = productId.Value;
             await _context.SaveChangesAsync();
             // TODO: Event
         }

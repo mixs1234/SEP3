@@ -31,9 +31,6 @@ else
         {
             <tr>
                 <td>@order.Id</td>
-                <td>@order.Customer.Name</td>
-                <td>@order.CreatedAt</td>
-                <td>@order.Payment.Amount</td>
                 <td>    
                     <button type="button" class="btn btn-danger" @onclick="() => RemoveOrder(order.Id)">Remove</button>
                     <button class="btn btn-warning">Update</button>
