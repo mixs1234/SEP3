@@ -1,6 +1,6 @@
-﻿using Model;
+﻿using sep3.Model;
 
-namespace DTO.Product;
+namespace sep3.DTO.Product;
 
 public class ProductDTO
 {

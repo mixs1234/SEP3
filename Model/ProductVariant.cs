@@ -1,4 +1,4 @@
-﻿namespace Model;
+﻿namespace sep3.Model;
 
 using System.Text.Json.Serialization;
 

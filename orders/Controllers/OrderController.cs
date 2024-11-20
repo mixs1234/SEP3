@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DTO.Order;
+using sep3.DTO.Order;
 
 namespace sep3.orders.Controllers;
 
@@ -27,7 +27,7 @@ public class OrderController : Controller
     {
         try
         {
-            List<Order> orders = await _orderRepository.GetOrdersAsync();
+            List<Model.Order> orders = await _orderRepository.GetOrdersAsync();
             return Content(JsonConvert.SerializeObject(orders, Formatting.None,
                 new JsonSerializerSettings()
                 {
@@ -67,6 +67,22 @@ public class OrderController : Controller
     {
         try
         {
+            Order order = await _orderRepository.CreateOrderAsync(Order.FromDTO(createOrderDto));
+            return Content(order.Id.ToString());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return BadRequest(ex.Message);
+        }
+    }
+/*    
+    [HttpPost]
+    [Route("Orders")]
+    public async Task<IActionResult> CreateOrder(CreateOrderDTO createOrderDto)
+    {
+        try
+        {
             
             DateTimeOffset createdAt = DateTimeOffset.UtcNow;
             var lineItems = new List<LineItem>();
@@ -95,6 +111,7 @@ public class OrderController : Controller
             return BadRequest(ex.Message);
         }
     }
+*/
 
     [HttpPatch]
     [Route("Orders")]

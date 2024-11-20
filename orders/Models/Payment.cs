@@ -1,3 +1,5 @@
+using sep3.Model;
+
 namespace sep3.orders.Model;
 
 public class Payment
@@ -25,5 +27,35 @@ public class Payment
         this.PaymentIdentifier = paymentIdentifier;
         this.PaymentConfirmation = paymentConfirmation;
         this.Amount = amount;
+    }
+
+    public static Payment FromDTO(sep3.Model.Payment paymentDTO)
+    {
+        Payment payment = new Payment()
+        {
+            Id = paymentDTO.Id,
+            OrderId = paymentDTO.OrderId,
+            PaymentMethod = paymentDTO.PaymentMethod,
+            Timestamp = paymentDTO.Timestamp,
+            PaymentIdentifier = paymentDTO.PaymentIdentifier,
+            PaymentConfirmation = paymentDTO.PaymentConfirmation,
+            Amount = paymentDTO.Amount
+        };
+        return payment;
+    }
+
+    public sep3.Model.Payment ToDTO()
+    {
+        sep3.Model.Payment paymentDTO = new sep3.Model.Payment()
+        {
+            Id = this.Id,
+            OrderId = this.OrderId,
+            PaymentMethod = this.PaymentMethod,
+            Timestamp = this.Timestamp,
+            PaymentIdentifier = this.PaymentIdentifier,
+            PaymentConfirmation = this.PaymentConfirmation,
+            Amount = this.Amount
+        };
+        return paymentDTO;
     }
 }

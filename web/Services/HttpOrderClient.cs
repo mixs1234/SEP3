@@ -4,9 +4,9 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
-using DTO.Order;
+using sep3.DTO.Order;
 using Newtonsoft.Json;
-using Model;
+using sep3.Model;
 using web.Services;
 using JsonSerializerOptions = System.Text.Json.JsonSerializerOptions;
 

@@ -17,6 +17,8 @@ public class CustomerEFRepository : ICustomerRepository
         _context = context;
         if (_context == null)
             _context = OrdersContext.GetInstance(null);
+        if (!_context.Customers.Any())
+            SeedFakeData();
     }
     
     public async Task<Customer> CreateCustomerAsync(Customer customer)
@@ -86,5 +88,28 @@ public class CustomerEFRepository : ICustomerRepository
         }
         else
             throw new ArgumentNullException(nameof(id));
+    }
+
+    private void SeedFakeData()
+    {
+        List<Customer> Customers = new List<Customer>()
+        {
+            new Customer()
+            {
+                Id = 1,
+                Name = "Test Name 1",
+                Email = "test1@test.com",
+                Phone = "123456"
+            },
+            new Customer()
+            {
+                Id = 2,
+                Name = "Test Name 2",
+                Email = "test2@test.com",
+                Phone = "654321"
+            }
+        };
+        _context.Customers.AddRange(Customers);
+        _context.SaveChanges();
     }
 }

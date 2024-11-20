@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Json;
 using ConsoleApp1.Services;
-using DTO.Order;
+using sep3.DTO.Order;
 using Microsoft.AspNetCore.Mvc;
-using Model;
+using sep3.Model;
 
 namespace brokers.broker
 {
