@@ -5,6 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import sep3.warehouse.DTO.BrandDTO;
 import sep3.warehouse.DTO.ProductDTO;
 import sep3.warehouse.entities.Brand;
 import sep3.warehouse.entities.Product;
@@ -21,13 +22,13 @@ public class ProductService {
     public ProductDTO findById(Long id) {
         Product product = productService.findById(id).orElseThrow(()-> new EntityNotFoundException("product with " + id +  "not found"));
 
-        product.setProductVariants(null);
-
         return ProductDTO.ProductMapToDTONoVariants(product);
     }
 
-    public List<Product> findAll() {
-        return productService.findAll();
+    public List<ProductDTO> findAll() {
+        List<Product> products = productService.findAll();
+
+        return products.stream().map(ProductDTO::ProductMapToDTONoVariants).toList();
     }
 
     public Optional<Product> createProduct (ProductDTO productDTO ) {

@@ -42,7 +42,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
         return ResponseEntity.ok(productService.findAll());
     }
 }
