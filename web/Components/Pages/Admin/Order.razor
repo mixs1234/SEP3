@@ -2,7 +2,7 @@
 @rendermode InteractiveServer
 
 @using System.ComponentModel.DataAnnotations
-@using DTO.Order
+@using sep3.DTO.Order
 @using web.Components.Layout.Admin
 @using web.Services
 @layout AdminNavMenu
@@ -89,7 +89,7 @@
 </div>
 
 @code {
-private List<Model.Order> orders;
+private List<sep3.Model.Order> orders;
 
 protected override async Task OnInitializedAsync()
 {
@@ -107,7 +107,7 @@ catch (Exception ex)
 {
 // Log or handle the exception as needed
 Console.Error.WriteLine($"Error loading orders: {ex.Message}");
-orders = new List<Model.Order>(); // Initialize to an empty list to avoid null reference
+orders = new List<sep3.Model.Order>(); // Initialize to an empty list to avoid null reference
 }
 }
 

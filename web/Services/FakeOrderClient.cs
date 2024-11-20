@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using sep3.DTO.Order;
 using sep3.Model;
 
 
@@ -14,6 +15,16 @@ public class FakeOrderClient : IOrderService
     }
 
     public Task RemoveOrderAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Order?> CreateOrderAsync(int customerId, int productId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Order?> CreateOrderAsync(CreateOrderDTO createOrderDTO)
     {
         throw new NotImplementedException();
     }

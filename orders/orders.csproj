@@ -29,6 +29,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DTO\DTO.csproj" />
+      <ProjectReference Include="..\rabbitmq\rabbitmq.csproj" />
     </ItemGroup>
 
 </Project>

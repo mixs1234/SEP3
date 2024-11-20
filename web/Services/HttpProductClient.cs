@@ -4,8 +4,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using DTO.Product;
-using Model;
+using sep3.DTO.Product;
+using sep3.Model;
 using Newtonsoft.Json;
 
 namespace web.Services;
