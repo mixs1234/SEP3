@@ -1,4 +1,4 @@
-﻿namespace DTO.Product;
+﻿namespace sep3.DTO.Product;
 
 public class ProductVariantDTO
 {

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using ConsoleApp1.Services;
-using DTO.Product;
-using Model;
+using sep3.DTO.Product;
+using sep3.Model;
 
 namespace brokers.broker;
 

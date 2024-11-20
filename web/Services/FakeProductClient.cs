@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using DTO.Product;
-using Model;
+using sep3.Model;
 
 namespace web.Services;
 

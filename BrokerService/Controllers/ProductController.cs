@@ -1,5 +1,5 @@
 ﻿using brokers.broker;
-using DTO.Product;
+using sep3.DTO.Product;
 using Microsoft.AspNetCore.Mvc;
 
 namespace brokers.controllers;

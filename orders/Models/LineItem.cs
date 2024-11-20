@@ -26,4 +26,30 @@ public class LineItem
         else
             this.Price = product.Price;
     }
+
+    public static LineItem FromDTO(sep3.Model.LineItem lineItem)
+    {
+        LineItem lineItemDTO = new LineItem()
+        {
+            Id = lineItem.Id,
+            OrderId = lineItem.OrderId,
+            ProductId = lineItem.ProductId,
+            Quantity = lineItem.Quantity,
+            Price = lineItem.Price
+        };
+        return lineItemDTO;
+    }
+
+    public sep3.Model.LineItem ToDTO()
+    {
+        sep3.Model.LineItem lineItemDTO = new sep3.Model.LineItem()
+        {
+            Id = this.Id,
+            OrderId = this.OrderId,
+            ProductId = this.ProductId,
+            Quantity = this.Quantity,
+            Price = this.Price
+        };
+        return lineItemDTO;
+    }
 }

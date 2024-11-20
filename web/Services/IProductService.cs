@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using DTO.Product;
-using Model;
+using sep3.Model;
+using sep3.DTO.Product;
 
 namespace web.Services;
 

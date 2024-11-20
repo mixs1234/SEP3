@@ -44,13 +44,22 @@ public class OrderEFRepository : IOrderRepository
 
     public async Task<List<Order>> GetOrdersAsync()
     {
-        return await _context.Orders.ToListAsync();
+        return await _context.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.LineItems)
+            .ToListAsync(); // Eager loading https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager
     }
 
     public async Task<Order> GetOrderAsync(int? id)
     {
         if (id.HasValue)
-            return await _context.Orders.Where(o => o.Id == id.Value).FirstOrDefaultAsync();
+            return await _context.Orders
+                .Where(o => o.Id == id.Value)
+                .Include(o => o.Customer)
+                .Include(o => o.LineItems)
+                .ThenInclude(li => li.Product)
+                .Include(o => o.Payment)
+                .FirstOrDefaultAsync();
         else
             throw new ArgumentNullException(nameof(id));
     }

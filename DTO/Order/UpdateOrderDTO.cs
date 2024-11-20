@@ -1,4 +1,4 @@
-﻿namespace DTO.Order
+﻿namespace sep3.DTO.Order
 {
     public class UpdateOrderDTO
     {

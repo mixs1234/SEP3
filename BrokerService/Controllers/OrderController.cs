@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using DTO.Order;
+using sep3.DTO.Order;
 using Microsoft.AspNetCore.Mvc;
 using brokers.broker; // Namespace where IOrderBroker is defined
-using Model;
+using sep3.Model;
 
 namespace brokers.controllers
 {

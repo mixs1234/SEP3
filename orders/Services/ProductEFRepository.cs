@@ -16,7 +16,12 @@ public class ProductEFRepository : IProductRepository
     {
         _context = context;
         if (_context == null)
+        {
             _context = OrdersContext.GetInstance(null);
+            Order.SetRepo(this);
+        }
+        if (!_context.Products.Any())
+            SeedFakeData();
     }
     
     public async Task<Product> CreateProductAsync(Product product)
@@ -87,5 +92,38 @@ public class ProductEFRepository : IProductRepository
         }
         else
             throw new ArgumentNullException(nameof(id));
+    }
+
+    private void SeedFakeData()
+    {
+        List<Product> products = new List<Product>()
+        {
+            new Product()
+            {
+                Id = 1,
+                Name = "Product 1",
+                Price = 10.0
+            },
+            new Product()
+            {
+                Id = 2,
+                Name = "Product 2",
+                Price = 20.0
+            },
+            new Product()
+            {
+                Id = 3,
+                Name = "Product 3",
+                Price = 33.03
+            },
+            new Product()
+            {
+                Id = 4,
+                Name = "Product 4",
+                Price = 44.4
+            }
+        };
+        _context.Products.AddRange(products);
+        _context.SaveChanges();
     }
 }

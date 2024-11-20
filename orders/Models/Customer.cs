@@ -1,3 +1,5 @@
+using sep3.Model;
+
 namespace sep3.orders.Model;
 
 public class Customer
@@ -20,5 +22,29 @@ public class Customer
         this.Email = email;
         this.Phone = phone;
         this.Orders = orders;
+    }
+
+    public static Customer FromDTO(sep3.Model.Customer customerDTO)
+    {
+        Customer customer = new Customer()
+        {
+            Id = customerDTO.Id,
+            Name = customerDTO.Name,
+            Email = customerDTO.Email,
+            Phone = customerDTO.Phone
+        };
+        return customer;
+    }
+
+    public sep3.Model.Customer ToDTO()
+    {
+        sep3.Model.Customer customerDTO = new sep3.Model.Customer()
+        {
+            Id = this.Id,
+            Name = this.Name,
+            Email = this.Email,
+            Phone = this.Phone
+        };
+        return customerDTO;
     }
 }
