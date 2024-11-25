@@ -1,6 +1,5 @@
-using Npgsql.EntityFrameworkCore.PostgreSQL;
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using rabbitmq.Messaging.Pub;
 using sep3.orders.Infrastructure;
 using sep3.orders.Services;
 
@@ -20,15 +19,12 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddDbContext<OrdersContext>(options =>
+        builder.Services.AddDbContext<OrderDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("OrderContext")));
-        OrdersContext.GetInstance(configuration);
-        builder.Services.AddTransient<IOrderRepository, OrderEFRepository>();
-        builder.Services.AddTransient<ICustomerRepository, CustomerEFRepository>();
-        builder.Services.AddTransient<IProductRepository, ProductEFRepository>();
-        builder.Services.AddTransient<IPaymentRepository, PaymentEFRepository>();
-        builder.Services.AddTransient<ILineItemRepository, LineItemEFRepository>();
-
+        OrderDbContext.GetInstance(configuration);
+        builder.Services.AddTransient<IOrderRepository, OrderReposity>();
+        builder.Services.AddScoped<OrderPublisher>();
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -37,11 +33,6 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
-        //app.UseHttpsRedirection();
-
-        //app.UseAuthorization();
-
 
         app.MapControllers();
 
