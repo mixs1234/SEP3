@@ -29,7 +29,10 @@ public class HttpProductClient :  IProductService
 
     public Task<Product?> GetProductAsync(int id)
     {
-        throw new System.NotImplementedException();
+        var httpResponse = _httpClient.GetAsync($"/product/{id}");
+        var content = httpResponse.Result.Content.ReadAsStringAsync();
+        var product = JsonConvert.DeserializeObject<Product>(content.Result);
+        return Task.FromResult(product);
     }
     
 
@@ -51,7 +54,7 @@ public class HttpProductClient :  IProductService
     // Admin only
     public async Task DeleteProductAsync(int id)
     {
-        var httpResponse = await _httpClient.DeleteAsync($"/product/{id}");
+        var httpResponse = await _httpClient.DeleteAsync($"product/{id}");
         if (!httpResponse.IsSuccessStatusCode)
         {
             throw new Exception($"Failed to delete order with ID {id}: {httpResponse.ReasonPhrase}");

@@ -28,6 +28,14 @@ public class ProductBroker : IProductBroker
             {
                 return Result<int>.Failure(400, "Product description is required.");
             }
+            if (productDto.Brand == null)
+            {
+                return Result<int>.Failure(400, "Product brand is required.");
+            }
+            if (productDto.ProductVariantDTOs == null || productDto.ProductVariantDTOs.Count == 0)
+            {
+                return Result<int>.Failure(400, "Product variants are required.");
+            }
 
             var response = await _httpClient.PostAsJsonAsync("api/products", productDto);
             var responseContent = await response.Content.ReadAsStringAsync();
