@@ -43,7 +43,6 @@ public class HttpOrderClient : IOrderService
     {
         var createOrderDto = new CreateOrderDTO()
         {
-            CustomerId = customerId,
             ProductVariantId = productId
         };
 

@@ -1,4 +1,4 @@
-﻿using rabbitmq.Messaging.Pub;
+using rabbitmq.Messaging.Pub;
 using sep3.DTO.Order;
 
 namespace rabbitmq;
@@ -10,7 +10,6 @@ class Program
         var order = new CreateOrderConfirmationDTO()
         {
             OrderId = 1,
-            CustomerId = 1,
             ProductVariantId = 1
         };
         
