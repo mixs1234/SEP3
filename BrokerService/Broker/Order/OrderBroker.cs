@@ -19,14 +19,9 @@ namespace brokers.broker
 
         public async Task<Result<int>> CreateOrderAsync(CreateOrderDTO createOrderDto)
         {
-            if( createOrderDto.CustomerId == 0 )
-            {
-                return Result<int>.Failure(400, "Customer ID is required.");
-            }
-            
             try
             {
-                var response = await _httpClient.PostAsJsonAsync("Orders", createOrderDto);
+                var response = await _httpClient.PostAsJsonAsync("api/orders", createOrderDto);
                 if (response.IsSuccessStatusCode)
                 {
                     var orderIdString = await response.Content.ReadAsStringAsync();
@@ -71,7 +66,7 @@ namespace brokers.broker
         {
             try
             {
-                var response = await _httpClient.GetAsync("Orders");
+                var response = await _httpClient.GetAsync("api/orders");
                 if (response.IsSuccessStatusCode)
                 {
                     var orders = await response.Content.ReadFromJsonAsync<IEnumerable<Order>>();

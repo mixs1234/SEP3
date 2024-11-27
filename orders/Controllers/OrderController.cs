@@ -19,7 +19,7 @@ public class OrderController :Controller
     public async Task<IActionResult> CreateOrderAsync([FromBody] CreateOrderDTO order)
     {
         var createdOrder = await _orderRepository.CreateOrderAsync(order);
-        return Ok(createdOrder);
+        return Ok(createdOrder.Id.ToString());
     }
     
     
