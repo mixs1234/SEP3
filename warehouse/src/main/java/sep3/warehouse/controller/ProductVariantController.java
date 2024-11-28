@@ -4,8 +4,11 @@ package sep3.warehouse.controller;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sep3.warehouse.DTO.productVariants.CreateProductVariantDto;
+import sep3.warehouse.DTO.productVariants.ProductVariantDTO;
 import sep3.warehouse.entities.ProductVariant;
 import sep3.warehouse.service.ProductVariantService;
 
@@ -18,10 +21,12 @@ public class ProductVariantController {
     private final ProductVariantService productVariantService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductVariant> getProductVariantById(@PathVariable Long id) {
-
-        ProductVariant productVariant = productVariantService.findById(id).orElseThrow(()->new IllegalArgumentException("No product found with id: " +id));
-        return ResponseEntity.ok(productVariant);
+    public ResponseEntity<ProductVariantDTO> getProductVariantById(@PathVariable Long id) {
+        return ResponseEntity.ok(productVariantService.findById(id));
     }
 
+    @PostMapping
+    public ResponseEntity<ProductVariantDTO> createProductVariant(@RequestBody CreateProductVariantDto createProductVariantDto) {
+        return new ResponseEntity <>(productVariantService.createProductVariant(createProductVariantDto), HttpStatus.CREATED);
+    }
 }

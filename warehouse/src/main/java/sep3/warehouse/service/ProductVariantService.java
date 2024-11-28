@@ -4,6 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import sep3.warehouse.DTO.productVariants.CreateProductVariantDto;
+import sep3.warehouse.DTO.productVariants.ProductVariantDTO;
 import sep3.warehouse.entities.ProductVariant;
 import sep3.warehouse.service.IProductVariantService;
 
@@ -14,13 +16,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductVariantService {
     private final IProductVariantService productVariantService;
+    private final IProductService productService;
 
-    public Optional<ProductVariant> findById(long id) {
-        return productVariantService.findById(id);
+    public ProductVariantDTO findById(long id) {
+
+         ProductVariant productVariant = productVariantService.findById(id).orElseThrow(()-> new EntityNotFoundException("Product variant with id: " + id + " not found"));
+
+         return ProductVariantDTO.mapFromProductVariantToDTO(productVariant);
     }
 
-    public List<ProductVariant> findAllByProductId(long productId) {
-        return productVariantService.findAllByProductId(productId);
+    public List<ProductVariantDTO> findAllByProductId(long productId) {
+        return productVariantService.findAllByProductId(productId).stream().map(ProductVariantDTO::mapFromProductVariantToDTO).toList();
     }
 
     public ProductVariant updateQuantity(long variantId, int quantity) {
@@ -34,5 +40,22 @@ public class ProductVariantService {
         productVariantService.save(productVariant);
 
         return productVariant;
+    }
+
+    public ProductVariantDTO createProductVariant(CreateProductVariantDto createProductVariantDto) {
+        if (createProductVariantDto == null){
+            throw new IllegalArgumentException("createProductVariantDto is null");
+        }
+
+        if (!productService.existsById(createProductVariantDto.getProduct().getId())){
+            throw new IllegalArgumentException("Cannot create variant without main product, no product with id: "
+                    + createProductVariantDto.getProduct().getId() + " was found");
+        }
+
+        ProductVariant productVariant = CreateProductVariantDto.mapCreateProductVariantDtotoProductVariant(createProductVariantDto);
+
+        productVariantService.save(productVariant);
+
+        return ProductVariantDTO.mapFromProductVariantToDTO(productVariant);
     }
 }

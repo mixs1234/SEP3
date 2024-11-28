@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sep3.warehouse.DTO.productVariants.ProductVariantDTO;
 import sep3.warehouse.entities.ProductVariant;
 import sep3.warehouse.rabbitmq.OrderDTO;
 import sep3.warehouse.rabbitmq.StockVerificationDTO;
@@ -34,11 +35,11 @@ public class OrderListenerService {
     }
 
     private boolean verifyStock(OrderDTO order) {
-        Optional<ProductVariant> productVariantOpt = productVariantService.findById(order.getProductVariantId());
-        if (productVariantOpt.isPresent()) {
-            ProductVariant productVariant = productVariantOpt.get();
+        ProductVariant productVariantOpt = ProductVariantDTO.mapFromDTOToProductVariant(productVariantService.findById(order.getProductVariantId()));
+
+        if (productVariantOpt != null) {
             System.out.println("Product variant found: " + order.getProductVariantId());
-            productVariantService.updateQuantity(productVariant.getId(), 1);
+            productVariantService.updateQuantity(productVariantOpt.getId(), 1);
             return true;
         } else {
             // Handle the case where the product variant is not found
