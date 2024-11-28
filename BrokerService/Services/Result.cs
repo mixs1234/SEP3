@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp1.Services;
+﻿namespace sep3.broker.Services;
 
 public class Result<T>
 {

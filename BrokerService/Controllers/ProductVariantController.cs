@@ -1,49 +1,24 @@
-﻿using brokers.broker;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using sep3.brokers.broker;
 
-namespace brokers.controllers;
+namespace sep3.brokers.controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class ProductVariantController: ControllerBase
+[Route("product/{id}/[controller]")]
+public class ProductVariantController : ControllerBase
 {
-    
     private readonly IProductVariantBroker _productVariantBroker;
-    
+
     public ProductVariantController(IProductVariantBroker productVariantBroker)
     {
         _productVariantBroker = productVariantBroker;
     }
-    
-    
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetProductVariant(int id)
-    {
-        var result = await _productVariantBroker.GetProductVariantAsync(id);
-        if (result.IsSuccess)
-        {
-            return Ok(result.Data);
-        }
-        else
-        {
-            return StatusCode(result.StatusCode, result.Message ?? "Failed to retrieve product variant.");
-        }
-    }
-    
-    /* Not implemented yet on java side
+
     [HttpGet]
-    public async Task<IActionResult> GetProductVariants()
+    public async Task<IActionResult> GetProductVariantsAsync(
+        [FromRoute] int id
+        )
     {
-        var result = await _productVariantBroker.GetAllProductVariantsAsync();
-        if (result.IsSuccess)
-        {
-            return Ok(result.Data);
-        }
-        else
-        {
-            return StatusCode(result.StatusCode, result.Message ?? "Failed to retrieve product variants.");
-        }
+        return Ok();
     }
-    */
-    
 }

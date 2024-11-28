@@ -1,8 +1,7 @@
-﻿using brokers.broker;
-using sep3.DTO.Product;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using sep3.brokers.broker;
 
-namespace brokers.controllers;
+namespace sep3.brokers.controllers;
 
 
 [ApiController]
@@ -16,49 +15,6 @@ public class ProductController : ControllerBase
         _productBroker = productBroker;
     }
     
-    [HttpPost]
-    public async Task<IActionResult> CreateProduct([FromBody] ProductDTO productDto)
-    {
-        
-        var result = await _productBroker.CreateProductAsync(productDto);
-        if (result.IsSuccess)
-        {
-            return Ok(new { ProductId = result.Data, result.Message });
-        }
-        else
-        {
-            return StatusCode(result.StatusCode, result.Message ?? "Failed to create product.");
-        }
-    }
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetProduct(int id)
-    {
-        var result = await _productBroker.GetProductAsync(id);
-        if (result.IsSuccess)
-        {
-            return Ok(result.Data);
-        }
-        else
-        {
-            return StatusCode(result.StatusCode, result.Message ?? "Failed to retrieve product.");
-        }
-    }
-    
-    [HttpGet("{id}/variants")]
-    public async Task<IActionResult> GetProductVariants(int id)
-    {
-        var result = await _productBroker.GetProductVariantsAsync(id);
-        if (result.IsSuccess)
-        {
-            return Ok(result.Data);
-        }
-        else
-        {
-            return StatusCode(result.StatusCode, result.Message ?? "Failed to retrieve product variants.");
-        }
-    }
-
-    
     [HttpGet]
     public async Task<IActionResult> GetProducts()
     {
@@ -67,9 +23,22 @@ public class ProductController : ControllerBase
         {
             return Ok(result.Data);
         }
-        else
-        {
-            return StatusCode(result.StatusCode, result.Message ?? "Failed to retrieve products.");
-        }
+
+        return StatusCode(result.StatusCode, result.Message);
     }
+    
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetProduct(int id)
+    {
+        var result = await _productBroker.GetProductAsync(id);
+        if (result.IsSuccess)
+        {
+            return Ok(result.Data);
+        }
+
+        return StatusCode(result.StatusCode, result.Message);
+    }
+    
+    
+    
 }
