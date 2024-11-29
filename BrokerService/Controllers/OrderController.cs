@@ -24,10 +24,8 @@ namespace brokers.controllers
             {
                 return Ok(new { OrderId = result.Data, result.Message });
             }
-            else
-            {
-                return StatusCode(result.StatusCode, result.Message ?? "Failed to create order.");
-            }
+
+            return StatusCode(result.StatusCode, result.Message);
         }
 
         [HttpGet("{id}")]
@@ -38,10 +36,8 @@ namespace brokers.controllers
             {
                 return Ok(result.Data);
             }
-            else
-            {
-                return StatusCode(result.StatusCode, result.Message ?? "Failed to retrieve order.");
-            }
+
+            return StatusCode(result.StatusCode, result.Message ?? "Failed to retrieve order.");
         }
 
         [HttpGet]
@@ -52,10 +48,8 @@ namespace brokers.controllers
             {
                 return Ok(result.Data);
             }
-            else
-            {
-                return StatusCode(result.StatusCode, result.Message);
-            }
+
+            return StatusCode(result.StatusCode, result.Message);
         }
 
         [HttpPut]
@@ -66,10 +60,8 @@ namespace brokers.controllers
             {
                 return Ok(result.Message);
             }
-            else
-            {
-                return StatusCode(result.StatusCode, result.Message);
-            }
+
+            return StatusCode(result.StatusCode, result.Message);
         }
 
         [HttpDelete("{id}")]
@@ -78,12 +70,10 @@ namespace brokers.controllers
             var result = await _orderBroker.DeleteOrderAsync(id);
             if (result.IsSuccess)
             {
-                return Ok(result.Message ?? "Order deleted successfully.");
+                return Ok(result.Message);
             }
-            else
-            {
-                return StatusCode(result.StatusCode, result.Message);
-            }
+
+            return StatusCode(result.StatusCode, result.Message);
         }
     }
 }

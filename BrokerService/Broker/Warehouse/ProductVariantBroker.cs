@@ -1,5 +1,8 @@
-﻿using sep3.broker.Services;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using sep3.broker.Services;
 using sep3.DTO.Product;
+using sep3.DTO.Product.Create;
 
 namespace sep3.brokers.broker;
 
@@ -12,13 +15,50 @@ public class ProductVariantBroker : IProductVariantBroker
         _httpClient = httpClient;
     }
     
-    public Task<Result<List<ProductVariantDTO>>> GetProductVariantsAsync(int id)
+    public async Task<Result<List<ProductVariantDTO>>> GetProductVariantsAsync(
+        [FromRoute] int id
+        )
     {
-        throw new NotImplementedException();
+        try
+        {
+            var response = await _httpClient.GetAsync($"api/variants/{id}");
+            var responseContent = await response.Content.ReadAsStringAsync();
+            
+            Console.WriteLine($"Response Status: {response.StatusCode}, Content: {responseContent}");
+            
+            if (!response.IsSuccessStatusCode)
+                return Result<List<ProductVariantDTO>>.Failure((int)response.StatusCode, responseContent);
+            
+            var productVariants = JsonSerializer.Deserialize<List<ProductVariantDTO>>(responseContent, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return productVariants != null ? Result<List<ProductVariantDTO>>.Success(productVariants, "Product variants retrieved successfully.") 
+                : Result<List<ProductVariantDTO>>.Failure(500, "Failed to parse product variants from response.");
+            
+        }
+        catch (Exception ex)
+        {
+            return Result<List<ProductVariantDTO>>.Failure(500, ex.Message);
+        }
     }
 
-    public Task<Result<ProductVariantDTO>> CreateProductVariantAsync(ProductVariantDTO dto)
+    public async Task<Result<ProductVariantDTO>> CreateProductVariantAsync(CreateProductVariantDTO createDTO)
     {
-        throw new NotImplementedException();
+        var response = await _httpClient.PostAsJsonAsync("api/variants", createDTO);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        
+        Console.WriteLine($"Response Status: {response.StatusCode}, Content: {responseContent}");
+        
+        if (!response.IsSuccessStatusCode)
+            return Result<ProductVariantDTO>.Failure((int)response.StatusCode, responseContent);
+        
+        var productVariant = JsonSerializer.Deserialize<ProductVariantDTO>(responseContent, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
+        
+        return productVariant != null ? Result<ProductVariantDTO>.Success(productVariant, "Product variant created successfully.") 
+            : Result<ProductVariantDTO>.Failure(500, "Failed to parse product variant from response.");
     }
 }

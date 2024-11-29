@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using sep3.broker.Services;
 using sep3.DTO.Product;
+using sep3.DTO.Product.Create;
 
 namespace sep3.brokers.broker;
 
@@ -65,7 +66,7 @@ public class ProductBroker : IProductBroker
         }
     }
 
-    public async Task<Result<ProductDTO>> CreateProductAsync(ProductDTO dto)
+    public async Task<Result<ProductDTO>> CreateProductAsync(CreateProductDTO dto)
     {
         try
         {
