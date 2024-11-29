@@ -4,7 +4,7 @@ package sep3.warehouse.service;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
-import sep3.warehouse.DTO.BrandDTO;
+import sep3.warehouse.DTO.brands.BrandDTO;
 import sep3.warehouse.entities.Brand;
 
 import java.util.Optional;

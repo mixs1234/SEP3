@@ -5,8 +5,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
-import sep3.warehouse.DTO.BrandDTO;
-import sep3.warehouse.DTO.ProductDTO;
+import sep3.warehouse.DTO.products.CreateProductDto;
+import sep3.warehouse.DTO.products.ProductDTO;
 import sep3.warehouse.entities.Brand;
 import sep3.warehouse.entities.Product;
 
@@ -22,24 +22,24 @@ public class ProductService {
     public ProductDTO findById(Long id) {
         Product product = productService.findById(id).orElseThrow(()-> new EntityNotFoundException("product with " + id +  "not found"));
 
-        return ProductDTO.ProductMapToDTONoVariants(product);
+        return ProductDTO.mapProductToDTONoVariants(product);
     }
 
     public List<ProductDTO> findAll() {
         List<Product> products = productService.findAll();
 
-        return products.stream().map(ProductDTO::ProductMapToDTONoVariants).toList();
+        return products.stream().map(ProductDTO::mapProductToDTONoVariants).toList();
     }
 
-    public Optional<Product> createProduct (ProductDTO productDTO ) {
-        Product product = new Product();
-        Optional<Brand> brand = brandService.findById(productDTO.getBrand().getId());
-
-        if (brand.isPresent()) {
-            product.setName(productDTO.getName());
-            product.setDescription(productDTO.getDescription());
-            product.setBrand(brand.get());
+    public ProductDTO createProduct (CreateProductDto createProductDto) {
+        if (createProductDto == null){
+            throw new IllegalArgumentException("createProductDto cannot be null");
         }
-        return Optional.of(productService.save(product));
+
+        Product product = CreateProductDto.mapCreateProductDtoToProduct(createProductDto);
+
+        productService.save(product);
+
+        return ProductDTO.mapProductToDTONoVariants(product);
     }
 }
