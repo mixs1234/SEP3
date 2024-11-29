@@ -52,12 +52,19 @@ public class ProductController : ControllerBase
             Description = dto.Description,
             Price = dto.Price,
             ImagePath = dto.ImagePath,
-            BrandDTO = dto.Brand
+            Brand = new BrandDTO()
+            {
+                Id = dto.Brand.Id,
+                Name = dto.Brand.Name
+            }
         };
         
         var result = await _productBroker.CreateProductAsync(createProductDTO);
         
+        Console.WriteLine($"Product creation result: {result.Data}");
+        
         if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Message);
+        
         foreach (var createProductVariantDto in dto.ProductVariants.Select(productVariant => new CreateProductVariantDTO
                  {
                      Size = productVariant.Size,
