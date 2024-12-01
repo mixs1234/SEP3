@@ -29,8 +29,6 @@ namespace brokers.broker
                     {
                         return Result<int>.Success(orderId, "Order created successfully.");
                     }
-
-                    return Result<int>.Failure(500, "Failed to parse order ID.");
                 }
 
                 var error = await response.Content.ReadAsStringAsync();

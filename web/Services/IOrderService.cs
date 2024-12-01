@@ -11,7 +11,7 @@ public interface IOrderService
     
     Task RemoveOrderAsync(int id);
     
-    Task<Order?> CreateOrderAsync(int customerId, int productId);
+    Task<Order?> CreateOrderAsync(int customerId, int productId, int quantity);
     
 
 }

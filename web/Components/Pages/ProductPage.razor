@@ -168,7 +168,7 @@
         
         if (product != null)
         {
-            await OrderService.CreateOrderAsync(customerId, productId);
+            await OrderService.CreateOrderAsync(customerId, productId, quantity);
         }
     }
 
