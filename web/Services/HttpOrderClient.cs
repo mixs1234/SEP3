@@ -22,7 +22,7 @@ public class HttpOrderClient : IOrderService
     
     public Task<List<Order>?> GetOrdersAsync()
     {
-        var httpResponse = _httpClient.GetAsync("/Orders");
+        var httpResponse = _httpClient.GetAsync("/Order");
         var content = httpResponse.Result.Content.ReadAsStringAsync();
         var orders = JsonConvert.DeserializeObject<List<Order>>(content.Result);
         return Task.FromResult(orders);
@@ -30,7 +30,7 @@ public class HttpOrderClient : IOrderService
     
     public async Task RemoveOrderAsync(int id)
     {
-        var httpResponse = await _httpClient.DeleteAsync($"/Orders/{id}");
+        var httpResponse = await _httpClient.DeleteAsync($"/Order/{id}");
         if (!httpResponse.IsSuccessStatusCode)
         {
             throw new Exception($"Failed to delete order with ID {id}: {httpResponse.ReasonPhrase}");
@@ -47,7 +47,7 @@ public class HttpOrderClient : IOrderService
             Quantity = quantity,
         };
 
-        var httpResponse = await _httpClient.PostAsJsonAsync("/Orders", createOrderDto);
+        var httpResponse = await _httpClient.PostAsJsonAsync("/Order", createOrderDto);
         
         var response = await httpResponse.Content.ReadAsStringAsync();
 

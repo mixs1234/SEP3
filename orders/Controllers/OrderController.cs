@@ -18,6 +18,7 @@ public class OrderController :Controller
     [Route("api/orders")]
     public async Task<IActionResult> CreateOrderAsync([FromBody] CreateOrderDTO order)
     {
+        Console.WriteLine("Creating order");
         var createdOrder = await _orderRepository.CreateOrderAsync(order);
         return Ok(createdOrder.Id.ToString());
     }

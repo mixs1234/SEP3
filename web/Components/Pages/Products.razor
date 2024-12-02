@@ -152,15 +152,15 @@ else
                 ImagePath = this.ImagePath,
                 Description = this.Description,
                 Brand = new BrandDTO() { Id = Brand, Name = "" },
-                ProductVariantDTOs = new List<ProductVariantDTO>()
-                {
+                ProductVariants =
+                [
                     new ProductVariantDTO()
                     {
                         Material = "Material",
                         Size = "Size",
                         Stock = 0
                     }
-                }
+                ]
             };
             return dto;
         }
