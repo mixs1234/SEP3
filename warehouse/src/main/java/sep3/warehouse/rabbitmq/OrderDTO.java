@@ -3,13 +3,16 @@ package sep3.warehouse.rabbitmq;
 public class OrderDTO {
     private long orderId;
     private long productVariantId;
+    private int quantity;
 
-    public OrderDTO() {
+    public OrderDTO(int quantity) {
+        this.quantity = quantity;
     }
 
-    public OrderDTO(long orderId, long productVariantId) {
+    public OrderDTO(long orderId, long productVariantId, int quantity) {
         this.orderId = orderId;
         this.productVariantId = productVariantId;
+        this.quantity = quantity;
     }
 
     public long getOrderId() {
@@ -28,4 +31,11 @@ public class OrderDTO {
         this.productVariantId = productVariantId;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

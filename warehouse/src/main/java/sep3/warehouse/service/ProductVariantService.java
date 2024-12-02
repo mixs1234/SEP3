@@ -35,6 +35,7 @@ public class ProductVariantService {
 
         int currentStock = productVariant.getStock();
         int newStock = currentStock - quantity;
+
         productVariant.setStock(newStock);
 
         productVariantService.save(productVariant);

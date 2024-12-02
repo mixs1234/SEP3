@@ -14,5 +14,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .ValueGeneratedOnAdd();
         builder.Property(o => o.ProductVariantId)
             .IsRequired();
+        builder.Property(o => o.Quantity)
+            .IsRequired();
     }
 }

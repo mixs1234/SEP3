@@ -31,7 +31,8 @@ public class Order
         return new CreateOrderConfirmationDTO
         {
             OrderId = order.Id,
-            ProductVariantId = order.ProductVariantId
+            ProductVariantId = order.ProductVariantId,
+            Quantity = order.Quantity
         };
     }
     

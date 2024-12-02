@@ -3,15 +3,12 @@ package sep3.warehouse.rabbitmq.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sep3.warehouse.DTO.productVariants.ProductVariantDTO;
 import sep3.warehouse.entities.ProductVariant;
 import sep3.warehouse.rabbitmq.OrderDTO;
 import sep3.warehouse.rabbitmq.StockVerificationDTO;
 import sep3.warehouse.service.ProductVariantService;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +36,7 @@ public class OrderListenerService {
 
         if (productVariantOpt != null) {
             System.out.println("Product variant found: " + order.getProductVariantId());
-            productVariantService.updateQuantity(productVariantOpt.getId(), 1);
+            productVariantService.updateQuantity(productVariantOpt.getId(), order.getQuantity());
             return true;
         } else {
             // Handle the case where the product variant is not found
