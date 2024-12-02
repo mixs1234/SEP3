@@ -6,12 +6,14 @@ public class Order
 {
     public int Id { get; set; }
     public int ProductVariantId { get; set; }
+    public int Quantity { get; set; }
     
     public static CreateOrderDTO ToCreateOrderDto(Order order)
     {
         return new CreateOrderDTO
         {
-            ProductVariantId = order.ProductVariantId
+            ProductVariantId = order.ProductVariantId,
+            Quantity = order.Quantity
         };
     }
     
@@ -19,7 +21,8 @@ public class Order
     {
         return new Order
         {
-            ProductVariantId = createOrderDto.ProductVariantId
+            ProductVariantId = createOrderDto.ProductVariantId,
+            Quantity = createOrderDto.Quantity
         };
     }
     
