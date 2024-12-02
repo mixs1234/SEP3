@@ -38,6 +38,8 @@ public class ProductService {
         if (brand.isPresent()) {
             product.setName(productDTO.getName());
             product.setDescription(productDTO.getDescription());
+            product.setImagePath(productDTO.getImagePath());
+            product.setPrice(productDTO.getPrice());
             product.setBrand(brand.get());
         }
         return Optional.of(productService.save(product));

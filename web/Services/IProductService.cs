@@ -10,9 +10,7 @@ public interface IProductService
     Task<List<Product>> GetProductsAsync();
     Task<Product?> GetProductAsync(int id);
     // Admin only
-    /*
     Task<Product> CreateProductAsync(ProductDTO product);
     Task<Product?> UpdateProductAsync(int id, Product product);
     Task DeleteProductAsync(int id);
-    */
 }

@@ -30,6 +30,7 @@ public class Program
         builder.Services.AddCascadingAuthenticationState();
         builder.Services.AddScoped<IOrderService, HttpOrderClient>();
         builder.Services.AddScoped<IProductService, HttpProductClient>();
+        builder.Services.AddScoped<IVariantService, HttpVariantClient>();
 
         builder.Services.AddAuthentication(options =>
             {
