@@ -59,6 +59,8 @@ public class ProductController : ControllerBase
             }
         };
         
+        Console.WriteLine(createProductDTO);
+        
         var result = await _productBroker.CreateProductAsync(createProductDTO);
         
         Console.WriteLine($"Product creation result: {result.Data}");

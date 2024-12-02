@@ -29,7 +29,7 @@ public class HttpProductClient :  IProductService
 
     public Task<Product?> GetProductAsync(int id)
     {
-        var httpResponse = _httpClient.GetAsync($"/product/{id}");
+        var httpResponse = _httpClient.GetAsync($"/Product/{id}");
         var content = httpResponse.Result.Content.ReadAsStringAsync();
         var product = JsonConvert.DeserializeObject<Product>(content.Result);
         return Task.FromResult(product);
@@ -39,9 +39,17 @@ public class HttpProductClient :  IProductService
     // Admin only
     public async Task<Product> CreateProductAsync(ProductDTO productDto)
     {
-        var httpResponse = await _httpClient.PostAsJsonAsync("/product", productDto);
+        
+        
+        var httpResponse = await _httpClient.PostAsJsonAsync("/Product", productDto);
         var response = await httpResponse.Content.ReadAsStringAsync();
-
+        
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            throw new Exception($"Failed to create product: {httpResponse.ReasonPhrase}");
+        }
+        
+        Console.WriteLine("Product created");
         return new Product();
     }
 
@@ -54,7 +62,7 @@ public class HttpProductClient :  IProductService
     // Admin only
     public async Task DeleteProductAsync(int id)
     {
-        var httpResponse = await _httpClient.DeleteAsync($"product/{id}");
+        var httpResponse = await _httpClient.DeleteAsync($"Product/{id}");
         if (!httpResponse.IsSuccessStatusCode)
         {
             throw new Exception($"Failed to delete order with ID {id}: {httpResponse.ReasonPhrase}");

@@ -1,0 +1,141 @@
+﻿@page "/admin/create-product"
+@using sep3.DTO.Product
+@using web.Services
+@inject IProductService ProductService
+@inject IBrandService BrandService
+@rendermode InteractiveServer
+
+<div class="single-product-area section-padding-100 clearfix">
+    <PageTitle>Admin Panel - Create Product</PageTitle>
+
+    <h1>Create New Product</h1>
+
+    <EditForm Model="newProduct" OnValidSubmit="HandleSubmit" FormName="CreateProductForm">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+
+        <div class="form-group">
+            <label for="name">Product Name</label>
+            <InputText id="name" class="form-control" @bind-Value="newProduct.Name"/>
+            <ValidationMessage For="@(() => newProduct.Name)"/>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <InputTextArea id="description" class="form-control" @bind-Value="newProduct.Description"/>
+            <ValidationMessage For="@(() => newProduct.Description)"/>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price</label>
+            <InputNumber id="price" class="form-control" @bind-Value="newProduct.Price"/>
+            <ValidationMessage For="@(() => newProduct.Price)"/>
+        </div>
+
+        <div class="form-group">
+            <label for="imagePath">Image Path</label>
+            <InputText id="imagePath" class="form-control" @bind-Value="newProduct.ImagePath"/>
+            <ValidationMessage For="@(() => newProduct.ImagePath)"/>
+        </div>
+
+        <div class="form-group">
+            <label for="brand">Brand</label>
+            <InputSelect id="brand" class="form-control" @bind-Value="selectedBrandId">
+                <option value="" disabled selected>Choose a brand</option>
+                @foreach (var brand in brands)
+                {
+                    <option value="@brand.Id">@brand.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => selectedBrandId)"/>
+        </div>
+
+        <h3>Product Variants</h3>
+        @if (newProduct.ProductVariants.Count == 0)
+        {
+            <p>No variants added yet.</p>
+        }
+        @foreach (var variant in newProduct.ProductVariants)
+        {
+            <div class="variant-item">
+                <div class="form-group">
+                    <label>Size</label>
+                    <InputText class="form-control" @bind-Value="variant.Size"/>
+                </div>
+                <div class="form-group">
+                    <label>Material</label>
+                    <InputText class="form-control" @bind-Value="variant.Material"/>
+                </div>
+                <div class="form-group">
+                    <label>Stock</label>
+                    <InputNumber class="form-control" @bind-Value="variant.Stock"/>
+                </div>
+                <button type="button" class="btn btn-danger" @onclick="() => RemoveVariant(variant)">Remove Variant</button>
+            </div>
+        }
+        <button type="button" class="btn btn-secondary mt-3" @onclick="AddVariant">Add Variant</button>
+
+        <button type="submit" class="btn btn-primary mt-3">Create Product</button>
+    </EditForm>
+</div>
+
+@code {
+
+    private ProductDTO newProduct = new()
+    {
+        ProductVariants = new List<ProductVariantDTO>()
+    };
+
+    private List<BrandDTO> brands = new();
+    private int? selectedBrandId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var fetchedBrands = await BrandService.GetBrandsAsync();
+            if (fetchedBrands != null)
+            {
+                brands = fetchedBrands;
+            }
+
+            foreach (var brandDto in fetchedBrands)
+            {
+                Console.WriteLine(brandDto);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching brands: {ex.Message}");
+        }
+    }
+
+    private void AddVariant()
+    {
+        newProduct.ProductVariants.Add(new ProductVariantDTO());
+    }
+
+    private void RemoveVariant(ProductVariantDTO variant)
+    {
+        newProduct.ProductVariants.Remove(variant);
+    }
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            if (selectedBrandId.HasValue)
+            {
+                newProduct.Brand = brands.FirstOrDefault(b => b.Id == selectedBrandId);
+            }
+
+            await ProductService.CreateProductAsync(newProduct);
+            Console.WriteLine("Product created successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating product: {ex.Message}");
+        }
+    }
+
+}

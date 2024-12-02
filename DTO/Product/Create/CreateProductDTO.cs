@@ -7,4 +7,9 @@ public class CreateProductDTO
     public double Price { get; set; }
     public string ImagePath { get; set; }
     public BrandDTO Brand { get; set; }
+    
+    public override string ToString()
+    {
+        return $"Name: {Name}, Description: {Description}, Price: {Price}, ImagePath: {ImagePath}, Brand: {Brand?.Name}";
+    }
 }
