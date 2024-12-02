@@ -1,0 +1,151 @@
+@page "/variants"
+@using System.ComponentModel.DataAnnotations
+@using sep3.DTO.Product
+@using web.Model
+@using web.Services
+@inject IVariantService VariantService
+
+<PageTitle>Variants</PageTitle>
+<h1>Variants:</h1>
+
+<button type="button" class="btn btn-primary" @onclick="OnInitializedAsync">Refresh</button>
+
+
+@if (variants == null)
+{
+<p>Loading...</p>
+}
+else
+{
+<table class="table">
+    <thead>
+    <tr>
+        <th>ProductVariantId</th>
+        <th>Size</th>
+        <th>Material</th>
+        <th>Stock</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var variant in variants)
+    {
+    <tr>
+        <td>@variant.Id</td>
+        <td>@variant.Size</td>
+        <td>@variant.Material</td>
+        <td>@variant.Stock</td>
+        <td>
+            <button type="button" class="btn btn-danger" @onclick="() => RemoveProductVariant(variant.Id)">Remove</button>
+            <button class="btn btn-warning">Update</button>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+}
+
+<h2>Create New Product Variant</h2>
+
+<EditForm Model="newVariant" OnValidSubmit="CreateVariant" FormName="CreateVariantForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="Brand">ProductId</label>
+        <InputNumber @bind-Value="newVariant.ProductId" class="form-control" id="ProductId" placeholder="Enter Product Id"/>
+    </div>
+    
+    <div class="form-group">
+        <label for="Size">Size</label>
+        <InputText @bind-Value="newVariant.Size" class="form-control" id="Size" placeholder="Enter Size" />
+    </div>
+
+    <div class="form-group">
+        <label for="Material">Material</label>
+        <InputNumber @bind-Value="newVariant.Material" class="form-control" id="Material" placeholder="Enter Material" />
+    </div>
+    
+    <div class="form-group">
+        <label for="Stock">Stock</label>
+        <InputNumber @bind-Value="newVariant.Stock" class="form-control" id="Stock" placeholder="Enter Stock"/>
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+</EditForm>
+
+@code
+{
+
+    //Load Product Variants
+    private List<ProductVariant>? variants;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            variants = await VariantService.GetProductVariantsAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        Console.WriteLine("Variants loaded successfully.");
+        StateHasChanged();
+    }
+
+    //Remove Product Variants
+    private async Task RemoveProductVariant(int variantId)
+    {
+        Console.WriteLine($"Attempting to remove product variant with ID: {variantId}");
+        try
+        {
+            await VariantService.DeleteProductVariantAsync(variantId);
+            variants = await VariantService.GetProductVariantsAsync();
+            Console.WriteLine("Product variant removed successfully.");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error removing product variant: {e.Message}");
+        }
+    }
+
+
+    //Create Product Variant
+    [SupplyParameterFromForm]
+    private ProductVariantModel? newVariant { get; set; }
+
+    public class ProductVariantModel
+    {
+        [Required(ErrorMessage = "ProductId is required")]
+        public int ProductId { get; set; }
+        
+        [Required(ErrorMessage = "Size is required.")]
+        [StringLength(10, ErrorMessage = "Size cannot be longer than 10 characters.")]
+        public string Size { get; set; }
+
+        [Required(ErrorMessage = "Material is required")]
+        [StringLength(20, ErrorMessage = "Material cannot be longer than 20 characters.")]
+        public string Material { get; set; }
+
+        [Required(ErrorMessage = "Stock is required")]
+        public int Stock { get; set; }
+
+        public ProductVariantDTO ToDTO()
+        {
+            ProductVariantDTO dto = new ProductVariantDTO()
+            {
+                Size = this.Size,
+                Material = this.Material,
+                Stock = this.Stock
+            };
+            return dto;
+        }
+    }
+
+    private async Task CreateVariant()
+    {
+        await VariantService.CreateProductVariantsAsync(newVariant.ToDTO());
+        await OnInitializedAsync();
+    }
+}

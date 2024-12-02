@@ -1,0 +1,174 @@
+@page "/products"
+@using System.ComponentModel.DataAnnotations
+@using sep3.DTO.Product
+@using web.Model
+@using web.Services
+@inject IProductService ProductService
+
+<PageTitle>Products</PageTitle>
+<h1>Products:</h1>
+
+<button type="button" class="btn btn-primary" @onclick="OnInitializedAsync">Refresh</button>
+
+
+@if (products == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ProductId</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>ImagePath</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var product in products)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>@product.Name</td>
+                <td>@product.Price</td>
+                <td>@product.ImagePath</td>
+                <td>@product.Description</td>
+                <td>    
+                    <button type="button" class="btn btn-danger" @onclick="() => RemoveProduct(product.Id)">Remove</button>
+                    <button class="btn btn-warning">Update</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+<h2>Create New Product</h2>
+
+<EditForm Model="newProduct" OnValidSubmit="CreateProduct" FormName="CreateProductForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <InputText @bind-Value="newProduct.Name" class="form-control" id="Name" placeholder="Enter Product Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="Price">Price</label>
+        <InputNumber @bind-Value="newProduct.Price" class="form-control" id="Price" placeholder="Enter Price" />
+    </div>
+
+    <div class="form-group">
+        <label for="ImagePath">Image Path</label>
+        <InputText @bind-Value="newProduct.ImagePath" class="form-control" id="ImagePath" placeholder="Enter Image Path" />
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <InputText @bind-Value="newProduct.Description" class="form-control" id="Description" placeholder="Enter Description" />
+    </div>
+    
+    <div class="form-group">
+        <label for="Brand">Brand</label>
+        <InputNumber @bind-Value="newProduct.Brand" class="form-control" id="Brand" placeholder="Enter Brand id"/>
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+</EditForm>
+
+@code
+{
+    
+    //Load Products
+    private List<Product>? products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            products = await ProductService.GetProductsAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        Console.WriteLine("Products loaded successfully.");
+        StateHasChanged();
+    }
+    
+    //Remove Products
+    private async Task RemoveProduct(int productId)
+    {
+        Console.WriteLine($"Attempting to remove product with ID: {productId}");
+        try
+        {
+            await ProductService.DeleteProductAsync(productId);
+            products = await ProductService.GetProductsAsync();
+            Console.WriteLine("Product removed successfully.");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error removing product: {e.Message}");
+        }
+    }
+
+    
+    //Create Product
+    [SupplyParameterFromForm]
+    private ProductModel? newProduct { get; set; }
+    
+    public class ProductModel
+    {
+        [Required(ErrorMessage = "Name is required.")]
+        [StringLength(50, ErrorMessage = "Name cannot be longer than 50 characters.")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Price is required.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
+        public double? Price { get; set; }
+        
+        [Required(ErrorMessage = "Image Path is required")]
+        [StringLength(200, ErrorMessage = "ImagePath cannot be longer than 200 characters.")]
+        public string ImagePath { get; set; }
+        
+        [Required(ErrorMessage = "Description is required")]
+        [StringLength(5000, ErrorMessage = "Description cannot be longer than 5000 characters.")]
+        public string Description { get; set; }
+        
+        [Required(ErrorMessage = "Brand is required")]
+        public int Brand { get; set; }
+        
+        public ProductDTO ToDTO()
+        {
+            ProductDTO dto = new ProductDTO()
+            {
+                Name = this.Name,
+                Price = this.Price.Value,
+                ImagePath = this.ImagePath,
+                Description = this.Description,
+                Brand = new BrandDTO() { Id = Brand, Name = "" },
+                ProductVariantDTOs = new List<ProductVariantDTO>()
+                {
+                    new ProductVariantDTO()
+                    {
+                        Material = "Material",
+                        Size = "Size",
+                        Stock = 0
+                    }
+                }
+            };
+            return dto;
+        }
+    }
+    
+    private async Task CreateProduct()
+    {
+        await ProductService.CreateProductAsync(newProduct.ToDTO());
+        await OnInitializedAsync();
+    }
+}

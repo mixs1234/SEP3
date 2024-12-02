@@ -39,7 +39,7 @@ public class HttpProductClient :  IProductService
     // Admin only
     public async Task<Product> CreateProductAsync(ProductDTO productDto)
     {
-        var httpResponse = await _httpClient.PostAsJsonAsync("/Product", productDto);
+        var httpResponse = await _httpClient.PostAsJsonAsync("/product", productDto);
         var response = await httpResponse.Content.ReadAsStringAsync();
 
         return new Product();
