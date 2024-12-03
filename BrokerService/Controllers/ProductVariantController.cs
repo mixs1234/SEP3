@@ -27,7 +27,7 @@ public class ProductVariantController : ControllerBase
         return result.IsSuccess ? Ok(result.Data) : StatusCode(result.StatusCode, result.Message);
     }
     
-    [HttpPost]
+    /*[HttpPost]
     public async Task<IActionResult> CreateProductVariantAsync(
         [FromBody] ProductVariant variant,
          [FromQuery] ProductDTO productDTO
@@ -41,6 +41,14 @@ public class ProductVariantController : ControllerBase
             Product = productDTO
         };
         var result = await _productVariantBroker.CreateProductVariantAsync(createDTO);
+
+        return result.IsSuccess ? Ok(result.Data) : StatusCode(result.StatusCode, result.Message);
+    }*/
+    
+    [HttpPost]
+    public async Task<IActionResult> CreateProductVariantAsync([FromBody] CreateProductVariantDTO variant)
+    {
+        var result = await _productVariantBroker.CreateProductVariantAsync(variant);
 
         return result.IsSuccess ? Ok(result.Data) : StatusCode(result.StatusCode, result.Message);
     }

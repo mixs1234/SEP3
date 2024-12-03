@@ -1,6 +1,8 @@
 ﻿@page "/admin/create-variant"
 @using web.Model
 @using web.Services
+@using sep3.DTO.Product.Create
+@using sep3.DTO.Product
 @inject IProductService ProductService
 @inject IVariantService VariantService
 @rendermode InteractiveServer
@@ -9,18 +11,65 @@
     <PageTitle>Admin Panel - Create Variant</PageTitle>
 
     <h1>Create Variant</h1>
+    
+    <EditForm Model="newVariant" OnValidSubmit="HandleSubmit" FormName="CreateVariantForm">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+
+        <div class="form-group">
+            <label for="product">Product</label>
+            <InputSelect id="product" class="form-control" @bind-Value="_selectedProductId">
+                <option value="" disabled selected>Choose a product</option>
+                @foreach (var product in products)
+                {
+                    <option value="@product.Id">@product.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => _selectedProductId)"/>
+        </div>
+        
+        <div class="form-group">
+            <label>Size</label>
+            <InputText class="form-control" @bind-Value="newVariant.Size"/>
+        </div>
+        
+        <div class="form-group">
+            <label>Material</label>
+            <InputText class="form-control" @bind-Value="newVariant.Material"/>
+        </div>
+        
+        <div class="form-group">
+            <label>Stock</label>
+            <InputNumber class="form-control" @bind-Value="newVariant.Stock"/>
+        </div>
+        
+        <button type="submit" class="btn btn-primary mt-3">Create Variant</button>
+    </EditForm>
 
 </div>
 
-@code {
+@code
+{
     
     private List<Product> products = new List<Product>();
-    private List<ProductVariant> variants = new List<ProductVariant>();
+    //private List<ProductVariant> variants = new List<ProductVariant>();
 
     protected override async Task OnInitializedAsync()
     {
         products = await ProductService.GetProductsAsync();
-        variants = await VariantService.GetProductVariantsAsync();
+        //variants = await VariantService.GetProductVariantsAsync();
     }
     
+    // Needs to be initialized to avoid binding errors
+    private CreateProductVariantDTO newVariant = new CreateProductVariantDTO();
+    private int? _selectedProductId;
+
+    private async Task HandleSubmit()
+    {
+        if (!_selectedProductId.HasValue)
+            Console.WriteLine($"Error creating variant: No product has been selected");
+        newVariant.ProductId = _selectedProductId.Value;
+        await VariantService.CreateProductVariantAsync(newVariant);
+        Console.WriteLine($"Created variant");
+    }
 }

@@ -48,13 +48,13 @@ public class ProductVariantService {
             throw new IllegalArgumentException("createProductVariantDto is null");
         }
 
-        if (!productService.existsById(createProductVariantDto.getProduct().getId())){
+        if (!productService.existsById(createProductVariantDto.getProductId())){
             throw new IllegalArgumentException("Cannot create variant without main product, no product with id: "
-                    + createProductVariantDto.getProduct().getId() + " was found");
+                    + createProductVariantDto.getProductId() + " was found");
         }
 
         ProductVariant productVariant = CreateProductVariantDto.mapCreateProductVariantDtotoProductVariant(createProductVariantDto);
-
+        productVariant.setProduct(productService.findById(createProductVariantDto.getProductId()).orElseThrow());
         productVariantService.save(productVariant);
 
         return ProductVariantDTO.mapFromProductVariantToDTO(productVariant);

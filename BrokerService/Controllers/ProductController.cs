@@ -55,6 +55,7 @@ public class ProductController : ControllerBase
         return StatusCode(result.StatusCode, result.Message);
     }
     
+    /*
     [HttpPost]
     public async Task<IActionResult> CreateProduct(ProductDTO dto)
     {
@@ -96,7 +97,48 @@ public class ProductController : ControllerBase
 
         return StatusCode(result.StatusCode, result.Message);
     }
+    */
     
-    
+    [HttpPost]
+    public async Task<IActionResult> CreateProduct(ProductDTO dto)
+    {
+        var createProductDTO = new CreateProductDTO
+        {
+            Name = dto.Name,
+            Description = dto.Description,
+            Price = dto.Price,
+            ImagePath = dto.ImagePath,
+            Brand = new BrandDTO()
+            {
+                Id = dto.Brand.Id,
+                Name = dto.Brand.Name
+            }
+        };
+        
+        Console.WriteLine(createProductDTO);
+        
+        var result = await _productBroker.CreateProductAsync(createProductDTO);
+        
+        Console.WriteLine($"Product creation result: {result.Data}");
+        
+        if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Message);
+        
+        foreach (var createProductVariantDto in dto.ProductVariants.Select(productVariant => new CreateProductVariantDTO
+                 {
+                     Size = productVariant.Size,
+                     Material = productVariant.Material,
+                     Stock = productVariant.Stock,
+                     ProductId = (int)result.Data.Id
+                 }))
+        {
+            var productVariantResult = await _productVariantBroker.CreateProductVariantAsync(createProductVariantDto);
+            if (!productVariantResult.IsSuccess)
+            {
+                return StatusCode(productVariantResult.StatusCode, productVariantResult.Message);
+            }
+        }
+
+        return StatusCode(result.StatusCode, result.Message);
+    }
     
 }

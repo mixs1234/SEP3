@@ -12,14 +12,18 @@ public class CreateProductVariantDto {
     private String size;
     private String material;
     private int stock;
-    private ProductDTO product;
+    private long productId;
 
     public static ProductVariant mapCreateProductVariantDtotoProductVariant(CreateProductVariantDto createProductVariantDto) {
         ProductVariant productVariant = new ProductVariant();
         productVariant.setSize(createProductVariantDto.getSize());
         productVariant.setMaterial(createProductVariantDto.getMaterial());
         productVariant.setStock(createProductVariantDto.getStock());
-        productVariant.setProduct(ProductDTO.mapProductDTOToProductNoVariants(createProductVariantDto.getProduct()));
+        productVariant.setProduct(null);
         return productVariant;
+    }
+
+    public long getProductId() {
+        return productId;
     }
 }

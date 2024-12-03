@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using sep3.DTO.Product;
+using sep3.DTO.Product.Create;
 using Newtonsoft.Json;
 using web.Model;
 
@@ -27,7 +28,15 @@ public class HttpVariantClient :  IVariantService
         return Task.FromResult(variants);
     }
 
-    public async Task<ProductVariant> CreateProductVariantsAsync(ProductVariantDTO variant)
+    public async Task<ProductVariant> CreateProductVariantAsync(ProductVariantDTO variant)
+    {
+        var httpResponse = await _httpClient.PostAsJsonAsync("/ProductVariant", variant);
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        return new ProductVariant();
+    }
+
+    public async Task<ProductVariant> CreateProductVariantAsync(CreateProductVariantDTO variant)
     {
         var httpResponse = await _httpClient.PostAsJsonAsync("/ProductVariant", variant);
         var response = await httpResponse.Content.ReadAsStringAsync();
