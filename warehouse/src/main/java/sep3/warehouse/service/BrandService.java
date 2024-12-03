@@ -1,23 +1,30 @@
 package sep3.warehouse.service;
 
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import sep3.warehouse.DTO.brands.BrandDTO;
 import sep3.warehouse.entities.Brand;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BrandService {
     private final IBrandService brandService;
 
-    public Optional<Brand> findById(BrandDTO brandDTO) {
-        Long brandId = brandDTO.getId();
+    public BrandDTO findById(Long id) {
+        Brand brand = brandService.findById(id).orElseThrow(()-> new EntityNotFoundException("brand with " + id +  "not found"));
 
-        return brandService.findById(brandId);
+        return BrandDTO.mapBrandToBrandDTO(brand);
+    }
+
+    public List<BrandDTO> findAll() {
+        return brandService.findAll().stream().map(BrandDTO::mapBrandToBrandDTO).collect(Collectors.toList());
     }
 
 

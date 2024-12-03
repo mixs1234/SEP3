@@ -13,7 +13,6 @@ public class Program
 
 
         builder.Services.AddControllers();
-        builder.Services.AddScoped<IProductVariantBroker, ProductVariantBroker>();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -33,6 +32,13 @@ public class Program
         });
 
         builder.Services.AddHttpClient<IProductBroker, ProductBroker>(client =>
+        {
+            client.BaseAddress = new Uri("http://localhost:8080/");
+            client.DefaultRequestHeaders.Accept.Add(
+                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        });
+        
+        builder.Services.AddHttpClient<IBrandBroker, BrandBroker>(client =>
         {
             client.BaseAddress = new Uri("http://localhost:8080/");
             client.DefaultRequestHeaders.Accept.Add(

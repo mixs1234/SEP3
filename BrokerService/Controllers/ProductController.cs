@@ -31,6 +31,18 @@ public class ProductController : ControllerBase
         return StatusCode(result.StatusCode, result.Message);
     }
     
+    [HttpGet("{id}/variants")]
+    public async Task<IActionResult> GetProductVariants(int id)
+    {
+        var result = await _productBroker.GetProductVariantsAsync(id);
+        if (result.IsSuccess)
+        {
+            return Ok(result.Data);
+        }
+
+        return StatusCode(result.StatusCode, result.Message);
+    }
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProduct(int id)
     {
@@ -58,6 +70,8 @@ public class ProductController : ControllerBase
                 Name = dto.Brand.Name
             }
         };
+        
+        Console.WriteLine(createProductDTO);
         
         var result = await _productBroker.CreateProductAsync(createProductDTO);
         

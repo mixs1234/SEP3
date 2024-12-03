@@ -1,0 +1,26 @@
+﻿@page "/admin/create-variant"
+@using web.Model
+@using web.Services
+@inject IProductService ProductService
+@inject IVariantService VariantService
+@rendermode InteractiveServer
+
+<div class="single-product-area section-padding-100 clearfix">
+    <PageTitle>Admin Panel - Create Variant</PageTitle>
+
+    <h1>Create Variant</h1>
+
+</div>
+
+@code {
+    
+    private List<Product> products = new List<Product>();
+    private List<ProductVariant> variants = new List<ProductVariant>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await ProductService.GetProductsAsync();
+        variants = await VariantService.GetProductVariantsAsync();
+    }
+    
+}

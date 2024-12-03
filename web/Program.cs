@@ -31,6 +31,7 @@ public class Program
         builder.Services.AddScoped<IOrderService, HttpOrderClient>();
         builder.Services.AddScoped<IProductService, HttpProductClient>();
         builder.Services.AddScoped<IVariantService, HttpVariantClient>();
+        builder.Services.AddScoped<IBrandService, HttpBrandClient>();
 
         builder.Services.AddAuthentication(options =>
             {

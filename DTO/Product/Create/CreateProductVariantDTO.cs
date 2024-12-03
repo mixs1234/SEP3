@@ -6,4 +6,9 @@ public class CreateProductVariantDTO
     public string Material { get; set; }
     public int Stock { get; set; }
     public ProductDTO Product { get; set; }
+    
+    public override string ToString()
+    {
+        return $"Size: {Size}, Material: {Material}, Stock: {Stock}, Product: {Product?.Name}";
+    }
 }

@@ -29,4 +29,10 @@ public class ProductVariantController {
     public ResponseEntity<ProductVariantDTO> createProductVariant(@RequestBody CreateProductVariantDto createProductVariantDto) {
         return new ResponseEntity <>(productVariantService.createProductVariant(createProductVariantDto), HttpStatus.CREATED);
     }
+
+    @PutMapping
+    public ResponseEntity<ProductVariantDTO> updateProductVariant(@RequestBody ProductVariantDTO productVariantDTO){
+        return ResponseEntity.ok(productVariantService.updateProductVariant(productVariantDTO));
+    }
+
 }
