@@ -11,4 +11,5 @@ public interface IProductBroker
     Task<Result<ProductDTO>> GetProductAsync(int id);
     Task<Result<List<ProductDTO>>> GetAllProductsAsync();
     Task<Result<ProductDTO>> CreateProductAsync(CreateProductDTO dto);
+    Task<Result<List<ProductVariantDTO>>> GetProductVariantsAsync(int id);
 }

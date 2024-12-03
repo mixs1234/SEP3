@@ -21,7 +21,7 @@ public class HttpProductClient :  IProductService
     
     public Task<List<Product>?> GetProductsAsync()
     {
-        var httpResponse = _httpClient.GetAsync("/product");
+        var httpResponse = _httpClient.GetAsync("/Product");
         var content = httpResponse.Result.Content.ReadAsStringAsync();
         var products = JsonConvert.DeserializeObject<List<Product>>(content.Result);
         return Task.FromResult(products);
@@ -34,7 +34,15 @@ public class HttpProductClient :  IProductService
         var product = JsonConvert.DeserializeObject<Product>(content.Result);
         return Task.FromResult(product);
     }
-    
+
+    public Task<List<ProductVariant>?> GetProductVariantsAsync(int id)
+    {
+        var httpResponse = _httpClient.GetAsync($"/Product/{id}/Variants");
+        var content = httpResponse.Result.Content.ReadAsStringAsync();
+        var variants = JsonConvert.DeserializeObject<List<ProductVariant>>(content.Result);
+        return Task.FromResult(variants);
+    }
+
 
     // Admin only
     public async Task<Product> CreateProductAsync(ProductDTO productDto)
