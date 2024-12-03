@@ -59,4 +59,22 @@ public class ProductVariantService {
 
         return ProductVariantDTO.mapFromProductVariantToDTO(productVariant);
     }
+
+    public ProductVariantDTO updateProductVariant(ProductVariantDTO productVariantDTO){
+        if(productVariantDTO == null){
+            throw  new IllegalArgumentException("productVariantDTO");
+        }
+
+        ProductVariant productVariant = productVariantService.findById(productVariantDTO.getId()).orElseThrow(() ->
+                new IllegalArgumentException("Id not in DB"));
+
+        productVariant.setMaterial(productVariantDTO.getMaterial());
+        productVariant.setSize(productVariantDTO.getSize());
+        productVariant.setStock(productVariant.getStock());
+
+        productVariantService.save(productVariant);
+
+        return ProductVariantDTO.mapFromProductVariantToDTO(productVariant);
+
+    }
 }

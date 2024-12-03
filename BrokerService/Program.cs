@@ -13,7 +13,6 @@ public class Program
 
 
         builder.Services.AddControllers();
-        builder.Services.AddScoped<IProductVariantBroker, ProductVariantBroker>();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
