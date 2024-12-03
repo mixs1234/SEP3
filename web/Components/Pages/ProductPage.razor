@@ -120,7 +120,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <button type="button" @onclick="BuyProduct" class="btn amado-btn">Buy</button>
+                            <button type="button" @onclick="AddProduct" class="btn amado-btn">Add To Cart</button>
                         </form>
 
                     </div>
@@ -158,17 +158,15 @@
     }
     
 
-    private async void BuyProduct()
+    private async void AddProduct()
     {
-
         var customerId = 1;
-        var productId = 2;
         
         Console.WriteLine("Buying product");
         
         if (product != null)
         {
-            await OrderService.CreateOrderAsync(customerId, productId, quantity);
+            
         }
     }
 
