@@ -21,23 +21,15 @@ public class HttpVariantClient :  IVariantService
     
     public Task<List<ProductVariant>?> GetProductVariantsAsync()
     {
-        var httpResponse = _httpClient.GetAsync("/variants");
+        var httpResponse = _httpClient.GetAsync("/ProductVariant");
         var content = httpResponse.Result.Content.ReadAsStringAsync();
         var variants = JsonConvert.DeserializeObject<List<ProductVariant>>(content.Result);
         return Task.FromResult(variants);
     }
 
-    public Task<ProductVariant?> GetProductVariantAsync(int id)
-    {
-        var httpResponse = _httpClient.GetAsync($"/variants/{id}");
-        var content = httpResponse.Result.Content.ReadAsStringAsync();
-        var variant = JsonConvert.DeserializeObject<ProductVariant>(content.Result);
-        return Task.FromResult(variant);
-    }
-
     public async Task<ProductVariant> CreateProductVariantsAsync(ProductVariantDTO variant)
     {
-        var httpResponse = await _httpClient.PostAsJsonAsync("/variants", variant);
+        var httpResponse = await _httpClient.PostAsJsonAsync("/ProductVariant", variant);
         var response = await httpResponse.Content.ReadAsStringAsync();
 
         return new ProductVariant();
@@ -45,11 +37,16 @@ public class HttpVariantClient :  IVariantService
 
     public Task<ProductVariant?> UpdateProductVariantAsync(int id, ProductVariant variant)
     {
-        throw new NotImplementedException();
+        var httpResponse = _httpClient.PutAsJsonAsync($"/ProductVariant/{id}", variant);
+        var content = httpResponse.Result.Content.ReadAsStringAsync();
+        
+        if (!httpResponse.Result.IsSuccessStatusCode)
+        {
+            throw new Exception($"Failed to update variant with ID {id}: {httpResponse.Result.ReasonPhrase}");
+        }
+        
+        var updatedVariant = JsonConvert.DeserializeObject<ProductVariant>(content.Result);
+        return Task.FromResult(updatedVariant);
     }
 
-    public Task DeleteProductVariantAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
 }

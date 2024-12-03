@@ -43,7 +43,6 @@ public class HttpProductClient :  IProductService
         return Task.FromResult(variants);
     }
 
-
     // Admin only
     public async Task<Product> CreateProductAsync(ProductDTO productDto)
     {

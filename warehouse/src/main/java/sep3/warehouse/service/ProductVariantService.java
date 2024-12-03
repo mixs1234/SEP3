@@ -70,7 +70,7 @@ public class ProductVariantService {
 
         productVariant.setMaterial(productVariantDTO.getMaterial());
         productVariant.setSize(productVariantDTO.getSize());
-        productVariant.setStock(productVariant.getStock());
+        productVariant.setStock(productVariantDTO.getStock());
 
         productVariantService.save(productVariant);
 

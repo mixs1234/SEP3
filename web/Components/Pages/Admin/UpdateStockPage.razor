@@ -9,34 +9,105 @@
     <h1 class="mb-4">Admin Panel - Update Variant</h1>
 
     <div class="mb-3">
-        <input 
-            type="text" 
-            class="form-control" 
-            placeholder="Search products..." 
-            @bind="SearchTerm" 
-            @bind:event="oninput" />
+        <input
+            type="text"
+            class="form-control"
+            placeholder="Search products..."
+            @bind="SearchTerm"
+            @bind:event="oninput"/>
     </div>
 
     <table class="table table-striped table-bordered">
         <thead class="thead-dark">
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Price</th>
-                <th scope="col">Description</th>
-                <th scope="col">Image</th>
-            </tr>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Description</th>
+            <th scope="col">Image</th>
+        </tr>
         </thead>
         <tbody>
-            @if (filteredProducts.Any())
+        @if (_filteredProducts.Any())
+        {
+            @foreach (var product in _filteredProducts)
             {
-                @foreach (var product in filteredProducts)
+                <tr @onclick="() => OnProductSelected(product)" style="cursor: pointer;">
+                    <td>@product.Name</td>
+                    <td>@product.Price.ToString("C")</td>
+                    <td>@product.Description</td>
+                    <td>
+                        <img src="@product.ImagePath" alt="@product.Name" class="img-thumbnail" style="max-width: 75px;"/>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">No products found</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    @if (_selectedProduct != null)
+    {
+        <h2 class="mt-5">Variants for @_selectedProduct.Name</h2>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Variant Id</th>
+                <th scope="col">Variant Material</th>
+                <th scope="col">Variant Size</th>
+                <th scope="col">Variant Stock</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (_productVariants != null && _productVariants.Any())
+            {
+                @foreach (var variant in _productVariants)
                 {
-                    <tr @onclick="() => OnProductSelected(product)" style="cursor: pointer;">
-                        <td>@product.Name</td>
-                        <td>@product.Price.ToString("C")</td>
-                        <td>@product.Description</td>
+                    <tr>
+                        <td>@variant.Id</td>
                         <td>
-                            <img src="@product.ImagePath" alt="@product.Name" class="img-thumbnail" style="max-width: 75px;" />
+                            @if (_editableVariant == variant && _editableField == "Material")
+                            {
+                                <input type="text" class="form-control" @bind="variant.Material" @bind:event="oninput" />
+                            }
+                            else
+                            {
+                                <span @ondblclick="@(() => StartEditing(variant,"Material"))">@variant.Material</span>
+                            }
+                        </td>
+                        <td>
+                            @if (_editableVariant == variant && _editableField == "Size")
+                            {
+                                <input type="text" class="form-control" @bind="variant.Size" @bind:event="oninput" />
+                            }
+                            else
+                            {
+                                <span @ondblclick="@(() => StartEditing(variant,"Size"))">
+                                    @variant.Size
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            @if (_editableVariant == variant && _editableField == "Stock")
+                            {
+                                <input type="number" class="form-control" @bind="variant.Stock" @bind:event="oninput"/>
+                            }
+                            else
+                            {
+                                <span @ondblclick="@(() => StartEditing(variant,"Stock"))">@variant.Stock</span>
+                            }
+                        </td>
+                        <td>
+                            @if (_editableVariant == variant)
+                            {
+                                <button class="btn btn-sm btn-success" @onclick="() => SaveChanges(variant)">Save</button>
+                                <button class="btn btn-sm btn-secondary" @onclick="CancelEditing">Cancel</button>
+                            }
                         </td>
                     </tr>
                 }
@@ -44,90 +115,84 @@
             else
             {
                 <tr>
-                    <td colspan="4" class="text-center">No products found</td>
+                    <td colspan="5" class="text-center">No variants found</td>
                 </tr>
             }
-        </tbody>
-    </table>
-
-    @if (selectedProduct != null)
-    {
-        <h2 class="mt-5">Variants for @selectedProduct.Name</h2>
-        <table class="table table-striped table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Variant Name</th>
-                    <th scope="col">Variant Material</th>
-                    <th scope="col">Variant Size</th>
-                    <th scope="col">Variant Stock</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (productVariants.Any())
-                {
-                    @foreach (var variant in productVariants)
-                    {
-                        <tr>
-                            <td>@variant.Id</td>
-                            <td>@variant.Material</td>
-                            <td>@variant.Size</td>
-                            <td>@variant.Stock</td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="2" class="text-center">No variants found</td>
-                    </tr>
-                }
             </tbody>
         </table>
     }
+
 </div>
 
 
 @code {
-    private List<Product> products = new List<Product>();
-    private List<ProductVariant>? productVariants = new List<ProductVariant>();
-    private List<Product> filteredProducts = new List<Product>();
-    private Product selectedProduct = null;
+    private List<Product> _products = [];
+    private List<ProductVariant>? _productVariants = [];
+    private List<Product> _filteredProducts = [];
+    private Product _selectedProduct;
+    private ProductVariant? _editableVariant;
+    private string _editableField = "";
+    private string _searchTerm = string.Empty;
 
-    private string searchTerm = string.Empty;
     private string SearchTerm
     {
-        get => searchTerm;
+        get => _searchTerm;
         set
         {
-            searchTerm = value;
+            _searchTerm = value;
             FilterProducts();
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        products = await ProductService.GetProductsAsync();
-        filteredProducts = products; // Initialize filtered list
+        _products = await ProductService.GetProductsAsync();
+        _filteredProducts = _products; 
     }
 
     private void FilterProducts()
     {
-        if (string.IsNullOrWhiteSpace(searchTerm))
+        if (string.IsNullOrWhiteSpace(_searchTerm))
         {
-            filteredProducts = products;
+            _filteredProducts = _products;
         }
         else
         {
-            filteredProducts = products
-                .Where(p => p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                            p.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+            _filteredProducts = _products
+                .Where(p => p.Name.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                            p.Description.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
     }
-    
+
     private async Task OnProductSelected(Product product)
     {
-        selectedProduct = product;
-        productVariants = await ProductService.GetProductVariantsAsync(product.Id);
+        _selectedProduct = product;
+        _productVariants = await ProductService.GetProductVariantsAsync(product.Id);
     }
+    
+    private void StartEditing(ProductVariant variant, string field)
+    {
+        _editableVariant = variant;
+        _editableField = field;
+    }
+
+    private void CancelEditing()
+    {
+        _editableVariant = null;
+        _editableField = "";
+    }
+
+    private async Task SaveChanges(ProductVariant variant)
+    {
+        _editableVariant = null;
+        _editableField = "";
+
+        
+        await VariantService.UpdateProductVariantAsync(variant.Id, variant);
+
+        
+        _productVariants = await ProductService.GetProductVariantsAsync(_selectedProduct.Id);
+    }
+
 }
