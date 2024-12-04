@@ -191,16 +191,17 @@
             {
                 // Attempt to create the order
                 var order = await OrderService.CreateOrderAsync(customerId, productId, quantity);
-
                 if (order.IsSuccess)
                 {
-                    modalMessage = $"Order #{order.OrderId} created successfully!";
-                    Console.WriteLine(order.IsSuccess + " " + order.OrderId);
+                    var orderIdTrimmed = order.OrderId.Trim('"');
+                    modalMessage = $"Order #{orderIdTrimmed} created successfully!";
+                    Console.WriteLine("Order created: " + order.IsSuccess + " Order ID:" + order.OrderId);
                 }
                 else
                 {
+                    order.OrderId.Trim('"');
                     modalMessage = $"Failed to create order: {order.StatusCode}";
-                    Console.WriteLine(order.IsSuccess + " " + order.StatusCode);
+                    Console.WriteLine("Order created:" + order.IsSuccess + " StatusCode:" + order.StatusCode);
                 }
             }
             catch (Exception ex)
