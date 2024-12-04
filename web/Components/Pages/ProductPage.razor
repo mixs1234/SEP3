@@ -195,10 +195,12 @@
                 if (order.IsSuccess)
                 {
                     modalMessage = $"Order #{order.OrderId} created successfully!";
+                    Console.WriteLine(order.IsSuccess + " " + order.OrderId);
                 }
                 else
                 {
                     modalMessage = $"Failed to create order: {order.StatusCode}";
+                    Console.WriteLine(order.IsSuccess + " " + order.StatusCode);
                 }
             }
             catch (Exception ex)
