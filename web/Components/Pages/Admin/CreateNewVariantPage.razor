@@ -2,7 +2,6 @@
 @using web.Model
 @using web.Services
 @using sep3.DTO.Product.Create
-@using sep3.DTO.Product
 @inject IProductService ProductService
 @inject IVariantService VariantService
 @rendermode InteractiveServer
@@ -51,24 +50,23 @@
 @code
 {
     
-    private List<Product> products = new List<Product>();
-    //private List<ProductVariant> variants = new List<ProductVariant>();
+    private List<Product> products = [];
 
     protected override async Task OnInitializedAsync()
     {
         products = await ProductService.GetProductsAsync();
-        //variants = await VariantService.GetProductVariantsAsync();
     }
-    
-    // Needs to be initialized to avoid binding errors
-    private CreateProductVariantDTO newVariant = new CreateProductVariantDTO();
+
+    private CreateProductVariantDTO newVariant = new();
     private int? _selectedProductId;
 
     private async Task HandleSubmit()
     {
         if (!_selectedProductId.HasValue)
             Console.WriteLine($"Error creating variant: No product has been selected");
+        
         newVariant.ProductId = _selectedProductId.Value;
+        
         await VariantService.CreateProductVariantAsync(newVariant);
         Console.WriteLine($"Created variant");
     }

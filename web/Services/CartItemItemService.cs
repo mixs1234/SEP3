@@ -42,6 +42,13 @@ public class CartItemItemService : ICartItemService
         return Task.FromResult(_productVariants);
     }
 
+    public Task ClearCartAsync()
+    {
+        _productVariants.Clear();
+        CartItemsUpdated?.Invoke(_productVariants.Count);
+        return Task.CompletedTask;
+    }
+
     public void SubscribeToChanges(Action<int> callback)
     {
         CartItemsUpdated += callback;

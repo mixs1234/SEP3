@@ -88,10 +88,9 @@
     {
         await OrderService.CreateOrderAsync(_shoppingCart);
         
-        foreach(var element in _shoppingCart)
-        {
-            await CartItemService.RemoveFromCartASync(element);
-        }
+        await CartItemService.ClearCartAsync();
+        GetTotalPrice();
+        StateHasChanged();
         
     }
 }
