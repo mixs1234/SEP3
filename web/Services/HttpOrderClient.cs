@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using sep3.DTO.Order;
 using Newtonsoft.Json;
+using sep3.broker.Model;
 using web.Model;
 using web.Services;
 
@@ -39,7 +41,7 @@ public class HttpOrderClient : IOrderService
     }
 
 
-    public async Task<Order?> CreateOrderAsync(int customerId, int productId, int quantity)
+    public async Task<OrderResponse?> CreateOrderAsync(int customerId, int productId, int quantity)
     {
         var createOrderDto = new CreateOrderDTO()
         {
@@ -50,8 +52,17 @@ public class HttpOrderClient : IOrderService
         var httpResponse = await _httpClient.PostAsJsonAsync("/Order", createOrderDto);
         
         var response = await httpResponse.Content.ReadAsStringAsync();
-
-        return new Order();
+        
+        
+        var orderStatus =  httpResponse;
+        //Order created successfully
+        if (orderStatus.IsSuccessStatusCode)
+        {
+            return new OrderResponse(orderStatus.IsSuccessStatusCode,response,orderStatus.StatusCode);
+        }
+        
+        //Order creation failed add more in the future if needed like error messages
+        return new OrderResponse(orderStatus.IsSuccessStatusCode,response,orderStatus.StatusCode);
 
     }
 
