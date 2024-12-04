@@ -6,14 +6,14 @@ using web.Model;
 
 namespace web.Services;
 
-public class ShoppingCartService : IShoppingCartService
+public class CartItemItemService : ICartItemService
 {
-    private readonly List<ShoppingCartItem> _productVariants = new List<ShoppingCartItem>();
+    private readonly List<CartItem> _productVariants = new List<CartItem>();
 
 
     public Task AddToCartASync(ProductVariant productVariant, Product product, int quantity)
     {
-        ShoppingCartItem shoppingCartItem = new ShoppingCartItem
+        CartItem cartItem = new CartItem
         {
             VariantId = productVariant.Id,
             Name = product.Name,
@@ -23,17 +23,17 @@ public class ShoppingCartService : IShoppingCartService
             Quantity = quantity
         };
         
-        _productVariants.Add(shoppingCartItem);
+        _productVariants.Add(cartItem);
         return Task.CompletedTask;
     }
 
-    public Task RemoveFromCartASync(ShoppingCartItem shoppingCartItem)
+    public Task RemoveFromCartASync(CartItem cartItem)
     {
-        _productVariants.Remove(shoppingCartItem);
+        _productVariants.Remove(cartItem);
         return Task.CompletedTask;
     }
 
-    public Task<List<ShoppingCartItem>> GetCartASync()
+    public Task<List<CartItem>> GetCartASync()
     {
         return Task.FromResult(_productVariants);
     }

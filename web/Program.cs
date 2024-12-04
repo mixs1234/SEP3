@@ -32,7 +32,7 @@ public class Program
         builder.Services.AddScoped<IProductService, HttpProductClient>();
         builder.Services.AddScoped<IVariantService, HttpVariantClient>();
         builder.Services.AddScoped<IBrandService, HttpBrandClient>();
-        builder.Services.AddSingleton<IShoppingCartService, ShoppingCartService>();
+        builder.Services.AddSingleton<ICartItemService, CartItemItemService>();
 
         builder.Services.AddAuthentication(options =>
             {

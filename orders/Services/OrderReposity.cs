@@ -20,6 +20,10 @@ public class OrderReposity : IOrderRepository
     {
         try
         {
+            _context.ShoppingCarts.Add(null);
+            
+            
+            
             var orderCreated = _context.orders.Add(Order.FromCreateOrderDto(createOrderDto));
             await _context.SaveChangesAsync();
             await _orderPublisher.PublishOrder(Order.ToCreateOrderConfirmationDto(orderCreated.Entity));

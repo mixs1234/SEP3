@@ -5,35 +5,32 @@ namespace sep3.orders.Model;
 public class Order
 {
     public int Id { get; set; }
-    public int ProductVariantId { get; set; }
-    public int Quantity { get; set; }
-    
+    public ShoppingCart ShoppingCart { get; set; }
+    public int ShoppingCartId { get; set; }
+
+    public Order()
+    {
+    }
+
+    public Order(int id, ShoppingCart shoppingCart)
+    {
+        Id = id;
+        ShoppingCart = shoppingCart;
+    }
+
     public static CreateOrderDTO ToCreateOrderDto(Order order)
     {
-        return new CreateOrderDTO
-        {
-            ProductVariantId = order.ProductVariantId,
-            Quantity = order.Quantity
-        };
+        throw new NotImplementedException();
     }
     
     public static Order FromCreateOrderDto(CreateOrderDTO createOrderDto)
     {
-        return new Order
-        {
-            ProductVariantId = createOrderDto.ProductVariantId,
-            Quantity = createOrderDto.Quantity
-        };
+        throw new NotImplementedException();
     }
     
     public static CreateOrderConfirmationDTO ToCreateOrderConfirmationDto(Order order)
     {
-        return new CreateOrderConfirmationDTO
-        {
-            OrderId = order.Id,
-            ProductVariantId = order.ProductVariantId,
-            Quantity = order.Quantity
-        };
+        throw new NotImplementedException();
     }
     
 }

@@ -21,6 +21,8 @@ public class OrderDbContext : DbContext
     }
     
     public DbSet<Order> orders { get; set; }
+    public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -30,6 +32,8 @@ public class OrderDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new OrderConfiguration());
+        modelBuilder.ApplyConfiguration(new ShoppingCartConfiguration());
+        modelBuilder.ApplyConfiguration(new CartItemConfiguration());
     }
     
     

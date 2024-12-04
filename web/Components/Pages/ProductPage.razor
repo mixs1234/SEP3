@@ -3,7 +3,7 @@
 @using web.Model
 @using web.Services
 @inject IProductService ProductService
-@inject IShoppingCartService ShoppingCartService
+@inject ICartItemService CartItemService
 @rendermode InteractiveServer
 
 <div class="single-product-area section-padding-100 clearfix">
@@ -193,7 +193,7 @@
             throw new Exception("Product or variant is null.");
         }
 
-        await ShoppingCartService.AddToCartASync(selectedVariant, product, quantity);
+        await CartItemService.AddToCartASync(selectedVariant, product, quantity);
     }
 
 }

@@ -12,9 +12,10 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.Id)
             .IsRequired()
             .ValueGeneratedOnAdd();
-        builder.Property(o => o.ProductVariantId)
-            .IsRequired();
-        builder.Property(o => o.Quantity)
-            .IsRequired();
+        
+        
+        builder.HasOne(x => x.ShoppingCart)
+            .WithOne(x => x.Order)
+            .HasForeignKey<Order>(x => x.ShoppingCartId);
     }
 }

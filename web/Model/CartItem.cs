@@ -2,7 +2,7 @@
 
 namespace web.Model;
 
-public class ShoppingCartItem
+public class CartItem
 {
     public long VariantId { get; set; }
     public string Name { get; set; }
@@ -11,11 +11,11 @@ public class ShoppingCartItem
     public string Size { get; set; }
     public int Quantity { get; set; }
 
-    public ShoppingCartItem()
+    public CartItem()
     {
     }
 
-    public ShoppingCartItem(long variantId, string name, string description, double price, string size, int quantity)
+    public CartItem(long variantId, string name, string description, double price, string size, int quantity)
     {
         VariantId = variantId;
         Name = name;
