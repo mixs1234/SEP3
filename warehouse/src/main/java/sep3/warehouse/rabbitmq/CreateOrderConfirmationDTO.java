@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class StockVerificationDTO {
-    private long orderId;
-    private boolean isInStock;
+public class CreateOrderConfirmationDTO {
+    private int orderId;
+    private Map<Long, Integer> productVariantIdToQuantity;
 }

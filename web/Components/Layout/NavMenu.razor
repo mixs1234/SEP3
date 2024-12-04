@@ -1,6 +1,9 @@
-﻿@implements IDisposable
-
+﻿@using web.Services
+@implements IDisposable
+@inject ICartItemService CartItemService
 @inject NavigationManager NavigationManager
+
+@rendermode InteractiveServer
 
 <!-- Mobile Nav (max width 767px)-->
 <div class="mobile-nav">
@@ -41,7 +44,7 @@
                 <a href="">Product</a>
             </li>
             <li>
-                <a href="">Cart</a>
+                <a href="/ShoppingCart">Cart</a>
             </li>
             <li>
                 <a href="">Checkout</a>
@@ -58,7 +61,7 @@
     </div>
     <!-- Cart Menu -->
     <div class="cart-fav-search mb-100">
-        <a href="" class="cart-nav"><img src="img/core-img/cart.png" alt=""> Cart <span>(0)</span></a>
+        <a href="/Shoppingcart" class="cart-nav"><img src="img/core-img/cart.png" alt=""> Cart <span>(@cartItemCount)</span></a>
         <a href="#" class="fav-nav"><img src="img/core-img/favorites.png" alt=""> Favourite</a>
         <a href="#" class="search-nav"><img src="img/core-img/search.png" alt=""> Search</a>
     </div>
@@ -82,11 +85,27 @@
 
 @code {
     private string? currentUrl;
-
+    private int cartItemCount;
+    private Action<int> _cartItemCountCallback;
+    
     protected override void OnInitialized()
     {
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         NavigationManager.LocationChanged += OnLocationChanged;
+        _cartItemCountCallback = count =>
+        {
+            cartItemCount = count;
+            StateHasChanged();
+        };
+        CartItemService.SubscribeToChanges(_cartItemCountCallback);
+        GetCartItemCount();
+    }
+    
+    private async void GetCartItemCount()
+    {
+        var cart = await CartItemService.GetCartASync();
+        cartItemCount = cart.Count;
+        StateHasChanged();
     }
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
@@ -98,6 +117,10 @@
     public void Dispose()
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
+        if (_cartItemCountCallback != null)
+        {
+            CartItemService.UnsubscribeFromChanges(_cartItemCountCallback);
+        }
     }
 
 }

@@ -3,7 +3,7 @@
 @using web.Model
 @using web.Services
 @inject IProductService ProductService
-@inject IOrderService OrderService
+@inject ICartItemService CartItemService
 @rendermode InteractiveServer
 
 <div class="single-product-area section-padding-100 clearfix">
@@ -106,6 +106,22 @@
                             <p>@product?.Description</p>
                         </div>
 
+                        <div class="mb-2">
+                            <select @bind="selectedSize">
+                                @if (variantsForProduct.Any())
+                                {
+                                    @foreach (var variant in variantsForProduct)
+                                    {
+                                        <option value="@variant.Size">@variant.Size</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option disabled selected>Please select a size</option>
+                                }
+                            </select>
+                        </div>
+
                         <!-- Add to Cart Form -->
                         <form class="cart clearfix" method="post">
                             <div class="cart-btn d-flex mb-50">
@@ -120,9 +136,8 @@
                                     </span>
                                 </div>
                             </div>
-                            <button type="button" @onclick="BuyProduct" class="btn amado-btn">Buy</button>
+                            <button type="button" @onclick="AddProductToCartASync" class="btn amado-btn">Add To Cart</button>
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -134,16 +149,28 @@
 @code {
     [Parameter] public int ProductId { get; set; }
 
+    private List<ProductVariant> variantsForProduct { get; set; }
+
+    private string selectedSize = "M";
+
+    private ProductVariant selectedVariant;
+
     private Product? product;
     private bool isLoading = true;
     private int quantity = 1;
-    
+
     protected override async Task OnInitializedAsync()
     {
         product = await ProductService.GetProductAsync(ProductId);
+        variantsForProduct = await ProductService.GetProductVariantsAsync(ProductId) ?? new List<ProductVariant>();
         isLoading = false;
     }
-    
+
+    public void SetSelectedVariant()
+    {
+        selectedVariant = variantsForProduct.FirstOrDefault(v => v.Size == selectedSize) ?? throw new InvalidOperationException("Variant cannot be null");
+    }
+
     private void DecreaseQuantity()
     {
         if (quantity > 1)
@@ -156,20 +183,17 @@
     {
         quantity++;
     }
-    
 
-    private async void BuyProduct()
+    private async Task AddProductToCartASync()
     {
+        SetSelectedVariant();
 
-        var customerId = 1;
-        var productId = 2;
-        
-        Console.WriteLine("Buying product");
-        
-        if (product != null)
+        if (product == null || selectedVariant == null)
         {
-            await OrderService.CreateOrderAsync(customerId, productId, quantity);
+            throw new Exception("Product or variant is null.");
         }
+
+        await CartItemService.AddToCartASync(selectedVariant, product, quantity);
     }
 
 }

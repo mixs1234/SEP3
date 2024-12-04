@@ -1,0 +1,97 @@
+@page "/ShoppingCart"
+@using web.Model
+@using web.Services
+@inject ICartItemService CartItemService
+@inject IOrderService OrderService
+@rendermode InteractiveServer
+
+<div class="single-product-area section-padding-100 clearfix">
+    <PageTitle>ShoppingCart</PageTitle>
+    <h1>ShoppingCart:</h1>
+
+    <div >
+        @if (_shoppingCart != null && _shoppingCart.Any())
+        {
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in _shoppingCart)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Price</td>
+                        <td>@item.Size</td>
+                        <td>@item.Quantity</td>
+                        <td>
+                            <button class="btn btn-danger" @onclick="() => RemoveItemASync(item)">Remove</button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Your shopping cart is empty.</p>
+        }
+    </div>
+    <div>
+        <div>
+            <h3>Total Price:</h3>
+            <h4>@totalPrice</h4>
+        </div>
+        <div>
+            <button @onclick="BuyShoppingCartASync">Purchase Cart</button>
+        </div>
+    </div>
+
+</div>
+
+@code
+{
+    private List<CartItem> _shoppingCart = [];
+    private double totalPrice = 0;
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _shoppingCart = await CartItemService.GetCartASync();
+        await GetTotalPrice();
+    }
+
+    private async Task RemoveItemASync(CartItem item)
+    {
+        await CartItemService.RemoveFromCartASync(item);
+        await GetTotalPrice();
+    }
+
+    private Task GetTotalPrice()
+    {
+        totalPrice = 0;
+        foreach (var item in _shoppingCart)
+        {
+            totalPrice += (item.Price * item.Quantity);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private async void BuyShoppingCartASync()
+    {
+        await OrderService.CreateOrderAsync(_shoppingCart);
+        
+        foreach(var element in _shoppingCart)
+        {
+            await CartItemService.RemoveFromCartASync(element);
+        }
+        
+    }
+}

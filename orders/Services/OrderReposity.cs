@@ -20,9 +20,34 @@ public class OrderReposity : IOrderRepository
     {
         try
         {
-            var orderCreated = _context.orders.Add(Order.FromCreateOrderDto(createOrderDto));
+            var shoppingCart = new ShoppingCart
+            {
+                CartItems = CartItem.ToModel(createOrderDto.CartItems)
+            };
+            
+            await _context.ShoppingCarts.AddAsync(shoppingCart);
+            
+            var order = new Order
+            {
+                ShoppingCart = shoppingCart
+            };
+            
+            var orderCreated = await _context.orders.AddAsync(order);
+            
             await _context.SaveChangesAsync();
-            await _orderPublisher.PublishOrder(Order.ToCreateOrderConfirmationDto(orderCreated.Entity));
+            
+            var orderCreatedID = orderCreated.Entity.Id;
+            
+            var productVariantIdQuantityDictionary = createOrderDto.CartItems.
+                ToDictionary(cartItem => cartItem.VariantId, cartItem => cartItem.Quantity);
+
+            var createOrderConfirmation = new CreateOrderConfirmationDTO
+            {
+                OrderId = orderCreatedID,
+                ProductVariantIdToQuantity = productVariantIdQuantityDictionary
+            };
+            
+            await _orderPublisher.PublishOrder(createOrderConfirmation);
             return orderCreated.Entity;
         }
         catch (Exception ex)
