@@ -44,7 +44,7 @@ public class HttpOrderClient : IOrderService
 
     public async Task<Order?> CreateOrderAsync(List<CartItem> cartItems)
     {
-        var cartItemsDto = cartItems.Select(item => new CartItemDto
+        var cartItemsDto = cartItems.Select(item => new CreateCartItemDto()
         {
             Description = item.Description,
             Name = item.Name,
@@ -58,10 +58,11 @@ public class HttpOrderClient : IOrderService
         {
             throw new Exception($"Failed to add order with, there is no items in order");
         }
-        
-        var shoppingCartDtoToSend = new ShoppingCartDto(cartItemsDto);
-        
-        var createOrderDto = new CreateOrderDTO(shoppingCartDtoToSend);
+
+        var createOrderDto = new CreateOrderDTO()
+        {
+            CartItems = cartItemsDto
+        };
         
         var httpResponse = await _httpClient.PostAsJsonAsync("/Order", createOrderDto);
 

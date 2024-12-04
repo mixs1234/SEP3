@@ -1,4 +1,5 @@
-﻿using sep3.DTO.Order;
+﻿using DTO.Cart;
+using sep3.DTO.Order;
 
 namespace sep3.orders.Model;
 
@@ -25,4 +26,5 @@ public class ShoppingCart
     {
         throw new NotImplementedException();
     }
+    
 }

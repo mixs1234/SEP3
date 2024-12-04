@@ -1,4 +1,6 @@
-﻿namespace sep3.orders.Model;
+﻿using DTO.Cart;
+
+namespace sep3.orders.Model;
 
 public class CartItem
 {
@@ -26,5 +28,21 @@ public class CartItem
         Price = price;
         Size = size;
         Quantity = quantity;
+    }
+
+
+    public static List<CartItem> ToModel(List<CreateCartItemDto> createCartItemDtos)
+    {
+        return createCartItemDtos
+            .Select(cartItem => new CartItem
+            {
+                VariantId = cartItem.VariantId,
+                Name = cartItem.Name,
+                Description = cartItem.Description,
+                Price = cartItem.Price,
+                Size = cartItem.Size,
+                Quantity = cartItem.Quantity,
+            })
+            .ToList();
     }
 }

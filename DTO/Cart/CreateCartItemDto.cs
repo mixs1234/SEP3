@@ -1,8 +1,7 @@
 ﻿namespace DTO.Cart;
 
-public class CartItemDto
+public class CreateCartItemDto
 {
-    public int CartItemId { get; set; }
     public long VariantId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
