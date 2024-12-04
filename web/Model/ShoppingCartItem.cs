@@ -10,4 +10,18 @@ public class ShoppingCartItem
     public double Price { get; set; }
     public string Size { get; set; }
     public int Quantity { get; set; }
+
+    public ShoppingCartItem()
+    {
+    }
+
+    public ShoppingCartItem(long variantId, string name, string description, double price, string size, int quantity)
+    {
+        VariantId = variantId;
+        Name = name;
+        Description = description;
+        Price = price;
+        Size = size;
+        Quantity = quantity;
+    }
 }

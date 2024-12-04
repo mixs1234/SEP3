@@ -1,18 +1,89 @@
 @page "/ShoppingCart"
+@using web.Model
+@using web.Services
+@inject IShoppingCartService ShoppingCartService
+@inject IOrderService OrderService
+@rendermode InteractiveServer
 
 <PageTitle>ShoppingCart</PageTitle>
 <h1>ShoppingCart:</h1>
 
+<div >
+    @if (_shoppingCartItems != null && _shoppingCartItems.Any())
+    {
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Size</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in _shoppingCartItems)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price</td>
+                    <td>@item.Size</td>
+                    <td>@item.Quantity</td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="() => RemoveItemASync(item)">Remove</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Your shopping cart is empty.</p>
+    }
+</div>
+<div>
+    <div>
+        <h3>Total Price:</h3>
+        <h4>@totalPrice</h4>
+    </div>
+    <div>
+        <button @onclick="BuyShoppingCart">Purchase Cart</button>
+    </div>
+</div>
 
-<table>
-    <thead>
-    <tr>
-        <th>Product</th>
-        <th>Name</th>
-        <th>Size</th>
-        <th>Description</th>
-        <th>Quantity</th>
-        <th>Price</th>
-    </tr>
-    </thead>
-</table>
+
+
+@code
+{
+    private List<ShoppingCartItem> _shoppingCartItems = new List<ShoppingCartItem>();
+    private double totalPrice = 0;
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _shoppingCartItems = await ShoppingCartService.GetCartASync();
+        await GetTotalPrice();
+    }
+
+    private async Task RemoveItemASync(ShoppingCartItem item)
+    {
+        await ShoppingCartService.RemoveFromCartASync(item);
+        await GetTotalPrice();
+    }
+
+    private Task GetTotalPrice()
+    {
+        totalPrice = 0;
+        foreach (var item in _shoppingCartItems)
+        {
+            totalPrice += (item.Price * item.Quantity);
+        }
+        return Task.CompletedTask;
+    }
+
+    private void BuyShoppingCart()
+    {
+        
+    }
+}

@@ -10,15 +10,15 @@ using web.Model;
 
 namespace web.Services;
 
-public class HttpVariantClient :  IVariantService
+public class HttpVariantClient : IVariantService
 {
     private readonly HttpClient _httpClient;
-    
+
     public HttpVariantClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
-    
+
     public Task<List<ProductVariant>?> GetProductVariantsAsync()
     {
         var httpResponse = _httpClient.GetAsync("/variants");
