@@ -28,14 +28,6 @@ public class HttpVariantClient : IVariantService
         return Task.FromResult(variants);
     }
 
-    public async Task<ProductVariant> CreateProductVariantAsync(ProductVariantDTO variant)
-    {
-        var httpResponse = await _httpClient.PostAsJsonAsync("/ProductVariant", variant);
-        var response = await httpResponse.Content.ReadAsStringAsync();
-
-        return new ProductVariant();
-    }
-
     public async Task<ProductVariant> CreateProductVariantAsync(CreateProductVariantDTO variant)
     {
         var httpResponse = await _httpClient.PostAsJsonAsync("/ProductVariant", variant);

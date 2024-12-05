@@ -10,7 +10,6 @@ public interface IVariantService
 {
     Task<List<ProductVariant>> GetProductVariantsAsync();
     // Admin only
-    Task<ProductVariant> CreateProductVariantAsync(ProductVariantDTO variant);
     Task<ProductVariant> CreateProductVariantAsync(CreateProductVariantDTO variant);
     Task<ProductVariant?> UpdateProductVariantAsync(int id, ProductVariant variant);
 }
