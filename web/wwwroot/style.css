@@ -11,3 +11,15 @@
     /* ---------------------------------------
     ##### - PLACE YOUR CUSTOM CSS HERE - #####
     --------------------------------------- */
+
+    .amado-pro-catagory {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px; 
+        justify-content: flex-start;
+    }
+    
+    .single-products-catagory {
+        width: 20%;
+   
+    }
