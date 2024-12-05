@@ -2,15 +2,16 @@
 using sep3.DTO.Order;
 using sep3.orders.Infrastructure;
 using sep3.orders.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace sep3.orders.Services;
 
-public class OrderReposity : IOrderRepository
+public class OrderRepository : IOrderRepository
 {
     private readonly OrderDbContext _context;
     private readonly OrderPublisher _orderPublisher;
-    
-    public OrderReposity(OrderDbContext context, OrderPublisher orderPublisher)
+
+    public OrderRepository(OrderDbContext context, OrderPublisher orderPublisher)
     {
         _context = context;
         _orderPublisher = orderPublisher;
@@ -20,34 +21,58 @@ public class OrderReposity : IOrderRepository
     {
         try
         {
+            // Fetch the initial status (e.g., "Pending") from the database
+            var initialStatus = await _context.Status
+                .FirstOrDefaultAsync(s => s.Id == 1);
+            
+            if (initialStatus == null)
+            {
+                throw new InvalidOperationException("Initial status 'Pending' not found in the database.");
+            }
+
+            // Create ShoppingCart
             var shoppingCart = new ShoppingCart
             {
                 CartItems = CartItem.ToModel(createOrderDto.CartItems)
             };
-            
+
             await _context.ShoppingCarts.AddAsync(shoppingCart);
-            
+
+            // Create Order
             var order = new Order
             {
-                ShoppingCart = shoppingCart
+                ShoppingCart = shoppingCart,
+                StatusId = initialStatus.Id, // Set initial status
+                StatusHistories = new List<StatusHistory>
+                {
+                    new StatusHistory
+                    {
+                        StatusId = initialStatus.Id,
+                        ChangedAt = DateTime.UtcNow
+                    }
+                }
             };
-            
-            var orderCreated = await _context.orders.AddAsync(order);
-            
-            await _context.SaveChangesAsync();
-            
-            var orderCreatedID = orderCreated.Entity.Id;
-            
-            var productVariantIdQuantityDictionary = createOrderDto.CartItems.
-                ToDictionary(cartItem => cartItem.VariantId, cartItem => cartItem.Quantity);
 
+            var orderCreated = await _context.orders.AddAsync(order);
+
+            await _context.SaveChangesAsync();
+
+            var orderCreatedID = orderCreated.Entity.Id;
+
+            // Create a dictionary for the confirmation DTO
+            var productVariantIdQuantityDictionary = createOrderDto.CartItems
+                .ToDictionary(cartItem => cartItem.VariantId, cartItem => cartItem.Quantity);
+
+            // Create confirmation DTO
             var createOrderConfirmation = new CreateOrderConfirmationDTO
             {
                 OrderId = orderCreatedID,
                 ProductVariantIdToQuantity = productVariantIdQuantityDictionary
             };
-            
+
+            // Publish the order creation event
             await _orderPublisher.PublishOrder(createOrderConfirmation);
+
             return orderCreated.Entity;
         }
         catch (Exception ex)

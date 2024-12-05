@@ -5,20 +5,13 @@ namespace sep3.orders.Model;
 public class Order
 {
     public int Id { get; set; }
-    public ShoppingCart ShoppingCart { get; set; }
+    public int StatusId { get; set; }
     public int ShoppingCartId { get; set; }
     
-
-    public static CreateOrderDTO ToCreateOrderDto(Order order)
-    {
-        throw new NotImplementedException();
-    }
+    public ShoppingCart ShoppingCart { get; set; }
+    public Status CurrentStatus { get; set; }
+    public ICollection<StatusHistory> StatusHistories { get; set; }
     
-    
-    public static CreateOrderConfirmationDTO ToCreateOrderConfirmationDto(Order order)
-    {
-        throw new NotImplementedException();
-    }
 
     public static Order ToModel(CreateOrderDTO createOrderDto)
     {

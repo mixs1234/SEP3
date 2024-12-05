@@ -9,22 +9,4 @@ public class ShoppingCart
     public List<CartItem> CartItems { get; set; }
     public Order Order { get; set; }
     
-
-
-    public ShoppingCart()
-    {
-    }
-
-    public ShoppingCart(int id, List<CartItem> cartItems)
-    {
-        Id = id;
-        CartItems = cartItems;
-    }
-
-
-    public static ShoppingCart FromCreateOrderDto(CreateOrderDTO createOrderDto)
-    {
-        throw new NotImplementedException();
-    }
-    
 }

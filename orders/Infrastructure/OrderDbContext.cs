@@ -23,6 +23,8 @@ public class OrderDbContext : DbContext
     public DbSet<Order> orders { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+    public DbSet<Status> Status { get; set; }
+    public DbSet<StatusHistory> StatusHistory { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -34,6 +36,8 @@ public class OrderDbContext : DbContext
         modelBuilder.ApplyConfiguration(new OrderConfiguration());
         modelBuilder.ApplyConfiguration(new ShoppingCartConfiguration());
         modelBuilder.ApplyConfiguration(new CartItemConfiguration());
+        modelBuilder.ApplyConfiguration(new StatusConfiguration());
+        modelBuilder.ApplyConfiguration(new StatusHistoryConfiguration());
     }
     
     

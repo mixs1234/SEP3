@@ -15,21 +15,6 @@ public class CartItem
     public ShoppingCart ShoppingCart { get; set; }
     public int ShoppingCartId { get; set; }
 
-    public CartItem()
-    {
-    }
-
-    public CartItem(int id, long variantId, string name, string description, double price, string size, int quantity)
-    {
-        Id = id;
-        VariantId = variantId;
-        Name = name;
-        Description = description;
-        Price = price;
-        Size = size;
-        Quantity = quantity;
-    }
-
 
     public static List<CartItem> ToModel(List<CreateCartItemDto> createCartItemDtos)
     {

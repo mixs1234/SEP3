@@ -14,6 +14,11 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .ValueGeneratedOnAdd();
         
         
+        builder.HasOne(o => o.CurrentStatus)
+            .WithMany()
+            .HasForeignKey(o => o.StatusId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         builder.HasOne(x => x.ShoppingCart)
             .WithOne(x => x.Order)
             .HasForeignKey<Order>(x => x.ShoppingCartId);

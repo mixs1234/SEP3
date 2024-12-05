@@ -22,7 +22,7 @@ public class Program
         builder.Services.AddDbContext<OrderDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("OrderContext")));
         OrderDbContext.GetInstance(configuration);
-        builder.Services.AddTransient<IOrderRepository, OrderReposity>();
+        builder.Services.AddTransient<IOrderRepository, OrderRepository>();
         builder.Services.AddScoped<OrderPublisher>();
         
         var app = builder.Build();
