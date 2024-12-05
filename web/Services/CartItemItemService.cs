@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using orders.Migrations;
 using web.Model;
@@ -22,6 +23,15 @@ public class CartItemItemService : ICartItemService
             Size = productVariant.Size,
             Quantity = quantity
         };
+
+        foreach (var item in _productVariants)
+        {
+            if (cartItem.VariantId == item.VariantId)
+            {
+                item.Quantity += cartItem.Quantity;
+                return Task.CompletedTask;
+            }
+        }
         _productVariants.Add(cartItem);
         
         CartItemsUpdated?.Invoke(_productVariants.Count);
