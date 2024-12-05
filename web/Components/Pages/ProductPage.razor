@@ -4,6 +4,7 @@
 @using web.Services
 @inject IProductService ProductService
 @inject ICartItemService CartItemService
+@inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
 
 <div class="single-product-area section-padding-100 clearfix">
@@ -17,6 +18,21 @@
     {
         <div class="container-fluid">
 
+            <div aria-live="polite" aria-atomic="true" class="position-relative">
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto">Cart Notification</strong>
+                            <small class="text-muted">Just now</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            Item added to your cart!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="row">
                 <div class="col-12">
                     <nav aria-label="breadcrumb">
@@ -136,7 +152,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <button type="button" @onclick="AddProductToCartASync" class="btn amado-btn">Add To Cart</button>
+                            <button type="button" @onclick="AddProductToCartAsync" class="btn amado-btn">Add To Cart</button>
                         </form>
                     </div>
                 </div>
@@ -184,7 +200,7 @@
         quantity++;
     }
 
-    private async Task AddProductToCartASync()
+    private async Task AddProductToCartAsync()
     {
         SetSelectedVariant();
 
@@ -194,6 +210,8 @@
         }
 
         await CartItemService.AddToCartASync(selectedVariant, product, quantity);
+        
+        await JSRuntime.InvokeVoidAsync("showCartToast", $"{product.Name} added to your cart!");
     }
 
 }

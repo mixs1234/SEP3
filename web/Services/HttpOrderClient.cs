@@ -8,6 +8,7 @@ using DTO.Cart;
 using sep3.DTO.Order;
 using Newtonsoft.Json;
 using orders.Migrations;
+using sep3.broker.Model;
 using web.Model;
 using web.Services;
 
@@ -42,7 +43,7 @@ public class HttpOrderClient : IOrderService
     }
 
 
-    public async Task<Order?> CreateOrderAsync(List<CartItem> cartItems)
+    public async Task<OrderResponse?> CreateOrderAsync(List<CartItem> cartItems)
     {
         var cartItemsDto = cartItems.Select(item => new CreateCartItemDto()
         {
@@ -68,6 +69,14 @@ public class HttpOrderClient : IOrderService
 
         var response = await httpResponse.Content.ReadAsStringAsync();
 
-        return new Order();
+        var orderStatus =  httpResponse;
+        //Order created successfully
+        if (orderStatus.IsSuccessStatusCode)
+        {
+            return new OrderResponse(orderStatus.IsSuccessStatusCode,response,orderStatus.StatusCode);
+        }
+        
+        //Order creation failed add more in the future if needed like error messages
+        return new OrderResponse(orderStatus.IsSuccessStatusCode,response,orderStatus.StatusCode);
     }
 }

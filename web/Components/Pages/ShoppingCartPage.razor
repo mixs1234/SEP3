@@ -3,12 +3,27 @@
 @using web.Services
 @inject ICartItemService CartItemService
 @inject IOrderService OrderService
+@inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
 
 <div class="single-product-area section-padding-100 clearfix">
     <PageTitle>ShoppingCart</PageTitle>
     <h1>ShoppingCart:</h1>
-
+    <!-- Purchase Popup -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Cart Notification</strong>
+                    <small class="text-muted">Just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Item added to your cart!
+                </div>
+            </div>
+        </div>
+    </div>
     <div >
         @if (_shoppingCart != null && _shoppingCart.Any())
         {
@@ -61,6 +76,7 @@
     private double totalPrice = 0;
 
 
+
     protected override async Task OnParametersSetAsync()
     {
         _shoppingCart = await CartItemService.GetCartASync();
@@ -86,11 +102,30 @@
 
     private async void BuyShoppingCartASync()
     {
-        await OrderService.CreateOrderAsync(_shoppingCart);
-        
-        await CartItemService.ClearCartAsync();
-        GetTotalPrice();
+        try
+        {
+            var order = await OrderService.CreateOrderAsync(_shoppingCart);
+            var orderIdTrimmed = order.OrderId.Trim('"');
+            if (order.IsSuccess)
+            {
+                Console.WriteLine("Order created: " + order.IsSuccess + " Order ID:" + orderIdTrimmed);
+                await CartItemService.ClearCartAsync();
+                await GetTotalPrice();
+                
+                // Show toast
+                await JSRuntime.InvokeVoidAsync("showCartToast", $"Order #{orderIdTrimmed} created successfully!");
+            }
+            else
+            {
+                Console.WriteLine("Order created:" + order.IsSuccess + " StatusCode:" + order.StatusCode);
+                // Show toast
+                await JSRuntime.InvokeVoidAsync("showCartToast", $"Error on: Order #{orderIdTrimmed} with error {order.StatusCode}!");
+            }    
+        }catch (Exception ex)
+        {
+            StateHasChanged();
+            await JSRuntime.InvokeVoidAsync("showCartToast", $"Fejl! {ex.Message}");
+        }
         StateHasChanged();
-        
     }
 }
