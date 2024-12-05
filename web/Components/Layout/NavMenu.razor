@@ -95,7 +95,7 @@
         _cartItemCountCallback = count =>
         {
             cartItemCount = count;
-            StateHasChanged();
+            InvokeAsync(StateHasChanged);
         };
         CartItemService.SubscribeToChanges(_cartItemCountCallback);
         GetCartItemCount();
