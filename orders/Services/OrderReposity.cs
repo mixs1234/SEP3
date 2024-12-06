@@ -99,25 +99,34 @@ public class OrderRepository : IOrderRepository
     {
         return await _context.Orders
             .Include(x => x.CurrentStatus)
+            .Include(x => x.ShoppingCart)
+            .ThenInclude(x => x.CartItems)
+            .Include(x => x.Customer)
             .ToListAsync();
     }
 
     public async Task<Order> UpdateOrderStatusASync(int orderId, int statusId)
     {
         var order = await _context.Orders.Include(x => x.StatusHistories).FirstOrDefaultAsync(x => x.Id == orderId);
-        
-        var newStatus = _context.Status.FirstOrDefault(x => x.Id == statusId);
-        
+        if (order == null) return null; // Handle if order is not found
+
+        var newStatus = await _context.Status.FirstOrDefaultAsync(x => x.Id == statusId);
+        if (newStatus == null) 
+        {
+            throw new ArgumentException($"Status with Id {statusId} does not exist.");
+        }
+
         order.StatusId = newStatus.Id;
-        
+
         order.StatusHistories.Add(new StatusHistory()
         {
             StatusId = newStatus.Id,
             ChangedAt = DateTime.UtcNow,
         });
-        
+
         await _context.SaveChangesAsync();
 
         return order;
     }
+
 }

@@ -7,7 +7,7 @@ using sep3.broker.Model;
 
 namespace brokers.broker
 {
-    
+
     public class OrderBroker : ControllerBase, IOrderBroker
     {
         private readonly HttpClient _httpClient;
@@ -40,89 +40,32 @@ namespace brokers.broker
             }
         }
 
-        public async Task<Result<Order>> GetOrderAsync(int id)
+        public async Task<Result<string>> GetAllOrdersAsync()
         {
-            try
+            var response = await _httpClient.GetAsync("api/orders");
+            if (response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"Orders/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var order = await response.Content.ReadFromJsonAsync<Order>();
-                    return Result<Order>.Success(order, "Order retrieved successfully.");
-                }
-
-                var error = await response.Content.ReadAsStringAsync();
-                return Result<Order>.Failure((int)response.StatusCode, error);
+                var orders = await response.Content.ReadAsStringAsync();
+                return Result<string>.Success(orders, "Orders fetched successfully.");
             }
-            catch (Exception ex)
-            {
-                return Result<Order>.Failure(500, ex.Message);
-            }
+            
+            var error = await response.Content.ReadAsStringAsync();
+            return Result<string>.Failure((int)response.StatusCode, error);
+            
         }
 
-        public async Task<Result<IEnumerable<Order>>> GetAllOrdersAsync()
+        public async Task<Result<string>> UpdateOrderAsync(int orderId, int statusId)
         {
-            try
+            var response = _httpClient.PutAsync($"api/orders/{orderId}?statusId={statusId}", null);
+            
+            if (response.Result.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync("api/orders");
-                if (response.IsSuccessStatusCode)
-                {
-                    var orders = await response.Content.ReadFromJsonAsync<IEnumerable<Order>>();
-                    return Result<IEnumerable<Order>>.Success(orders, "Orders retrieved successfully.");
-                }
-                else
-                {
-                    var error = await response.Content.ReadAsStringAsync();
-                    return Result<IEnumerable<Order>>.Failure((int)response.StatusCode, error);
-                }
+                var content = await response.Result.Content.ReadAsStringAsync();
+                return Result<string>.Success(content,"Order updated successfully.");
             }
-            catch (Exception ex)
-            {
-                return Result<IEnumerable<Order>>.Failure(500, ex.Message);
-            }
-        }
-
-        public async Task<Result> UpdateOrderAsync(CreateOrderDTO createOrderDto)
-        {
-            try
-            {
-                var response = await _httpClient.PutAsJsonAsync("Orders", createOrderDto);
-                if (response.IsSuccessStatusCode)
-                {
-                    return Result.Success("Order updated successfully.");
-                }
-                else
-                {
-                    var error = await response.Content.ReadAsStringAsync();
-                    return Result.Failure((int)response.StatusCode, error);
-                }
-            }
-            catch (Exception ex)
-            {
-                return Result.Failure(500, ex.Message);
-            }
-        }
-
-
-        public async Task<Result> DeleteOrderAsync(int id)
-        {
-            try
-            {
-                var response = await _httpClient.DeleteAsync($"Orders/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    return Result.Success("Order deleted successfully.");
-                }
-                else
-                {
-                    var error = await response.Content.ReadAsStringAsync();
-                    return Result.Failure((int)response.StatusCode, error);
-                }
-            }
-            catch (Exception ex)
-            {
-                return Result.Failure(500, ex.Message);
-            }
+            
+            var error = response.Result.Content.ReadAsStringAsync();
+            return Result<string>.Failure((int)response.Result.StatusCode, error.Result);
         }
     }
 }

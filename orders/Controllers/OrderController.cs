@@ -16,10 +16,11 @@ public class OrderController : Controller
 
     [HttpGet]
     [Route(("api/orders"))]
-    
-    
-    
-    
+    public async Task<IActionResult> GetOrdersAsync()
+    {
+        var orders = await _orderRepository.GetAllOrdersAsync();
+        return Ok(orders);
+    }
     
     [HttpPost]
     [Route("api/orders")]
@@ -32,12 +33,10 @@ public class OrderController : Controller
 
     [HttpPut]
     [Route("api/orders/{orderId}")]
-    public async Task<IActionResult> UpdateOrderAsync([FromBody] int statusId, [FromRoute] int orderId)
+    public async Task<IActionResult> UpdateOrderAsync([FromQuery] int statusId, [FromRoute] int orderId)
     {
-        var updatedOrder = _orderRepository.UpdateOrderStatusASync(orderId, statusId);
+        var updatedOrder = await _orderRepository.UpdateOrderStatusASync(orderId, statusId);
         return Ok(updatedOrder);
     }
-    
-    
     
 }
