@@ -25,6 +25,14 @@ public class OrderRepository : IOrderRepository
             var initialStatus = await _context.Status
                 .FirstOrDefaultAsync(s => s.Id == 1);
             
+            var customerInDb = await _context.Customer
+                .FirstOrDefaultAsync(c => c.Id == createOrderDto.CustomerId);
+
+            if (customerInDb == null)
+            {
+                await _context.Customer.AddAsync(new Customer { Id = createOrderDto.CustomerId });
+            }
+
             if (initialStatus == null)
             {
                 throw new InvalidOperationException("Initial status 'Pending' not found in the database.");
@@ -42,6 +50,7 @@ public class OrderRepository : IOrderRepository
             var order = new Order
             {
                 ShoppingCart = shoppingCart,
+                CustomerId = createOrderDto.CustomerId,
                 StatusId = initialStatus.Id, // Set initial status
                 StatusHistories = new List<StatusHistory>
                 {
@@ -53,7 +62,7 @@ public class OrderRepository : IOrderRepository
                 }
             };
 
-            var orderCreated = await _context.orders.AddAsync(order);
+            var orderCreated = await _context.Orders.AddAsync(order);
 
             await _context.SaveChangesAsync();
 

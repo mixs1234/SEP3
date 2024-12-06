@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using sep3.orders.Infrastructure;
@@ -11,9 +12,11 @@ using sep3.orders.Infrastructure;
 namespace orders.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    partial class OrderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241206110011_Updated_CartItem")]
+    partial class Updated_CartItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,6 +83,9 @@ namespace orders.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
 
                     b.HasIndex("ShoppingCartId")
                         .IsUnique();
@@ -191,15 +197,15 @@ namespace orders.Migrations
 
             modelBuilder.Entity("sep3.orders.Model.Order", b =>
                 {
-                    b.HasOne("sep3.orders.Model.ShoppingCart", "ShoppingCart")
-                        .WithOne("Order")
-                        .HasForeignKey("sep3.orders.Model.Order", "ShoppingCartId")
+                    b.HasOne("sep3.orders.Model.Customer", "Customer")
+                        .WithOne()
+                        .HasForeignKey("sep3.orders.Model.Order", "CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("sep3.orders.Model.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
+                    b.HasOne("sep3.orders.Model.ShoppingCart", "ShoppingCart")
+                        .WithOne("Order")
+                        .HasForeignKey("sep3.orders.Model.Order", "ShoppingCartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -7,7 +7,9 @@ public class Order
     public int Id { get; set; }
     public int StatusId { get; set; }
     public int ShoppingCartId { get; set; }
+    public int CustomerId { get; set; }
     
+    public Customer Customer { get; set; }
     public ShoppingCart ShoppingCart { get; set; }
     public Status CurrentStatus { get; set; }
     public ICollection<StatusHistory> StatusHistories { get; set; }

@@ -14,17 +14,10 @@ public class CartItemConfiguration : IEntityTypeConfiguration<CartItem>
             .ValueGeneratedOnAdd();
         builder.Property(x => x.VariantId)
             .IsRequired();
-        builder.Property(x => x.Name)
-            .IsRequired();
-        builder.Property(x => x.Description)
-            .IsRequired();
-        builder.Property(x => x.Price)
-            .IsRequired();
-        builder.Property(x => x.Size)
-            .IsRequired();
         builder.Property(x => x.Quantity)
             .IsRequired();
-
+        builder.Property(x => x.ProductId)
+            .IsRequired();
         builder.HasOne(x => x.ShoppingCart)
             .WithMany(x => x.CartItems)
             .HasForeignKey(x => x.ShoppingCartId);

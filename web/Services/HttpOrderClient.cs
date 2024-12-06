@@ -46,11 +46,8 @@ public class HttpOrderClient : IOrderService
     {
         var cartItemsDto = cartItems.Select(item => new CreateCartItemDto()
         {
-            Description = item.Description,
-            Name = item.Name,
-            Price = item.Price,
             Quantity = item.Quantity,
-            Size = item.Size,
+            ProductId = item.ProductId,
             VariantId = item.VariantId
         }).ToList();
 
@@ -61,6 +58,7 @@ public class HttpOrderClient : IOrderService
 
         var createOrderDto = new CreateOrderDTO()
         {
+            CustomerId = 1, // HARDCODED
             CartItems = cartItemsDto
         };
         

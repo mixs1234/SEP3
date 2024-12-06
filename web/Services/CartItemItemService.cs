@@ -17,6 +17,7 @@ public class CartItemItemService : ICartItemService
         CartItem cartItem = new CartItem
         {
             VariantId = productVariant.Id,
+            ProductId = product.Id,
             Name = product.Name,
             Description = product.Description,
             Price = product.Price,

@@ -22,5 +22,10 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasOne(x => x.ShoppingCart)
             .WithOne(x => x.Order)
             .HasForeignKey<Order>(x => x.ShoppingCartId);
+
+        builder.HasOne(x => x.Customer)
+            .WithMany()
+            .HasForeignKey(o => o.StatusId);
+
     }
 }

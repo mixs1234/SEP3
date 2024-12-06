@@ -6,10 +6,7 @@ public class CartItem
 {
     public int Id { get; set; }
     public long VariantId { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public double Price { get; set; }
-    public string Size { get; set; }
+    public long ProductId { get; set; }
     public int Quantity { get; set; }
 
     public ShoppingCart ShoppingCart { get; set; }
@@ -22,10 +19,7 @@ public class CartItem
             .Select(cartItem => new CartItem
             {
                 VariantId = cartItem.VariantId,
-                Name = cartItem.Name,
-                Description = cartItem.Description,
-                Price = cartItem.Price,
-                Size = cartItem.Size,
+                ProductId = cartItem.ProductId,
                 Quantity = cartItem.Quantity,
             })
             .ToList();
