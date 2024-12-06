@@ -31,6 +31,14 @@ public class HttpOrderClient : IOrderService
         return Task.FromResult(orders);
     }
 
+    public Task<List<Order>?> GetOrdersAsync(int customerId)
+    {
+        var httpResponse = _httpClient.GetAsync($"/Order/{customerId}");
+        var content = httpResponse.Result.Content.ReadAsStringAsync();
+        var orders = JsonConvert.DeserializeObject<List<Order>>(content.Result);
+        return Task.FromResult(orders);
+    }
+
     public async Task RemoveOrderAsync(int id)
     {
         var httpResponse = await _httpClient.DeleteAsync($"/Order/{id}");

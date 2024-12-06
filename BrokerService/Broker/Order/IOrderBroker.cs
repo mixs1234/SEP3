@@ -12,6 +12,7 @@ namespace brokers.broker
         Task<Result<int>> CreateOrderAsync(CreateOrderDTO createOrderDto);
         Task<Result<Order>> GetOrderAsync(int id);
         Task<Result<IEnumerable<Order>>> GetAllOrdersAsync();
+        Task<Result<IEnumerable<Order>>> GetAllOrdersAsync(int customerId);
         Task<Result> UpdateOrderAsync(CreateOrderDTO createOrderDto);
         Task<Result> DeleteOrderAsync(int id);
     }

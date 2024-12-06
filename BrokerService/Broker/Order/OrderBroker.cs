@@ -82,6 +82,28 @@ namespace brokers.broker
             }
         }
 
+        public async Task<Result<IEnumerable<Order>>> GetAllOrdersAsync(int customerId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/orders/{customerId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var orders = await response.Content.ReadFromJsonAsync<IEnumerable<Order>>();
+                    return Result<IEnumerable<Order>>.Success(orders, "Orders retrieved successfully.");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    return Result<IEnumerable<Order>>.Failure((int)response.StatusCode, error);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Order>>.Failure(500, ex.Message);
+            }
+        }
+
         public async Task<Result> UpdateOrderAsync(CreateOrderDTO createOrderDto)
         {
             try

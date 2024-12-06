@@ -1,4 +1,3 @@
-
 window.showCartToast = (message) => {
     // Update the toast message if provided
     if (message) {

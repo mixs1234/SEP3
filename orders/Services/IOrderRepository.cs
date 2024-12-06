@@ -6,4 +6,6 @@ namespace sep3.orders.Services;
 public interface IOrderRepository
 {
     Task<Order> CreateOrderAsync(CreateOrderDTO createOrderDto);
+    
+    Task<List<Order>?> GetOrderAsync(int customerId);
 }

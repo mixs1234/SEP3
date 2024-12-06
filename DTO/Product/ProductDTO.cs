@@ -1,5 +1,7 @@
-﻿namespace sep3.DTO.Product;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using sep3.DTO.Product;
 
+[NotMapped]
 public class ProductDTO
 {
     public long Id { get; set; }

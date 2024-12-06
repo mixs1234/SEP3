@@ -23,3 +23,27 @@
         width: 20%;
    
     }
+
+    .receipt-card {
+        background-color: #f9f9f9;
+        border: 1px solid #fbb710;
+    }
+    .orange-text {
+        color: #fbb710;
+    }
+    .tracking-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .tracking-status .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .tracking-status .step .line {
+        height: 2px;
+        width: 100%;
+        background-color: #fbb710;
+    }

@@ -94,4 +94,14 @@ public class OrderRepository : IOrderRepository
             throw;
         }
     }
+
+    public Task<List<Order>> GetOrderAsync(int customerId)
+    {
+        return _context.Orders
+            .Include(o => o.ShoppingCart)
+            .ThenInclude(sc => sc.CartItems)
+            .Include(o => o.StatusHistories)
+            .Where(o => o.CustomerId == customerId)
+            .ToListAsync();
+    }
 }

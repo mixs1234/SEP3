@@ -9,6 +9,8 @@ public interface IOrderService
 {
     Task<List<Order>?> GetOrdersAsync();
     
+    Task<List<Order>?> GetOrdersAsync(int customerId);
+    
     Task RemoveOrderAsync(int id);
     
     Task<OrderResponse?> CreateOrderAsync(List<CartItem> cartItems);

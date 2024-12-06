@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using DTO.Cart;
+using sep3.broker.Model;
 using sep3.DTO.Order;
 
 namespace sep3.orders.Model;
