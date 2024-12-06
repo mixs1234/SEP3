@@ -94,4 +94,30 @@ public class OrderRepository : IOrderRepository
             throw;
         }
     }
+
+    public async Task<List<Order>> GetAllOrdersAsync()
+    {
+        return await _context.Orders
+            .Include(x => x.CurrentStatus)
+            .ToListAsync();
+    }
+
+    public async Task<Order> UpdateOrderStatusASync(int orderId, int statusId)
+    {
+        var order = await _context.Orders.Include(x => x.StatusHistories).FirstOrDefaultAsync(x => x.Id == orderId);
+        
+        var newStatus = _context.Status.FirstOrDefault(x => x.Id == statusId);
+        
+        order.StatusId = newStatus.Id;
+        
+        order.StatusHistories.Add(new StatusHistory()
+        {
+            StatusId = newStatus.Id,
+            ChangedAt = DateTime.UtcNow,
+        });
+        
+        await _context.SaveChangesAsync();
+
+        return order;
+    }
 }

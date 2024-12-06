@@ -5,14 +5,21 @@ using sep3.orders.Services;
 namespace sep3.orders.Controllers;
 
 [ApiController]
-public class OrderController :Controller
+public class OrderController : Controller
 {
     private readonly IOrderRepository _orderRepository;
-    
+
     public OrderController(IOrderRepository orderRepository)
     {
         _orderRepository = orderRepository;
     }
+
+    [HttpGet]
+    [Route(("api/orders"))]
+    
+    
+    
+    
     
     [HttpPost]
     [Route("api/orders")]
@@ -21,6 +28,14 @@ public class OrderController :Controller
         Console.WriteLine("Creating order");
         var createdOrder = await _orderRepository.CreateOrderAsync(order);
         return Ok(createdOrder.Id.ToString());
+    }
+
+    [HttpPut]
+    [Route("api/orders/{orderId}")]
+    public async Task<IActionResult> UpdateOrderAsync([FromBody] int statusId, [FromRoute] int orderId)
+    {
+        var updatedOrder = _orderRepository.UpdateOrderStatusASync(orderId, statusId);
+        return Ok(updatedOrder);
     }
     
     

@@ -6,4 +6,6 @@ namespace sep3.orders.Services;
 public interface IOrderRepository
 {
     Task<Order> CreateOrderAsync(CreateOrderDTO createOrderDto);
+    Task<List<Order>> GetAllOrdersAsync();
+    Task<Order> UpdateOrderStatusASync(int orderId, int statusId);
 }
