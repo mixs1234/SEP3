@@ -13,18 +13,13 @@ public class Order
     public int ShoppingCartId { get; set; }
     public int CustomerId { get; set; }
     
-    [JsonIgnore]
     public Customer Customer { get; set; }
     public ShoppingCart ShoppingCart { get; set; }
     
-    [JsonIgnore]
     public Status CurrentStatus { get; set; }
     
-    
-    [JsonIgnore]
     public ICollection<StatusHistory> StatusHistories { get; set; }
     
-
     public static Order ToModel(CreateOrderDTO createOrderDto)
     {
         return new Order()

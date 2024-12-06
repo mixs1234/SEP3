@@ -1,4 +1,6 @@
-﻿namespace DTO.Cart;
+﻿using sep3.DTO.Product;
+
+namespace DTO.Cart;
 
 public class CartItemDto
 {
@@ -9,4 +11,7 @@ public class CartItemDto
     public double Price { get; set; }
     public string Size { get; set; }
     public int Quantity { get; set; }
+    
+    public ProductDTO Product { get; set; }
+    public ProductVariantDTO Variant { get; set; }
 }

@@ -39,7 +39,12 @@ public class ProductBroker : IProductBroker
             return Result<ProductDTO>.Failure(500, ex.Message);
         }
     }
-    
+
+    public Task<Result<ProductDTO>> GetProductAsync(long id)
+    {
+        return GetProductAsync((int)id);
+    }
+
 
     public async Task<Result<List<ProductDTO>>> GetAllProductsAsync()
     {

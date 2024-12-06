@@ -7,4 +7,5 @@ public class Product
     public string ProductDescription { get; set; }
     public double ProductPrice { get; set; }
     public string ProductImagePath { get; set; }
+    public List<ProductVariant> ProductVariants { get; set; }
 }

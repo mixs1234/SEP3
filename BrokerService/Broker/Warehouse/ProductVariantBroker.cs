@@ -43,6 +43,11 @@ public class ProductVariantBroker : IProductVariantBroker
         }
     }
 
+    public Task<Result<ProductVariantDTO>> GetProductVariantAsync(long id)
+    {
+        return GetProductVariantAsync((int)id);
+    }
+
     public async Task<Result<ProductVariantDTO>> CreateProductVariantAsync(CreateProductVariantDTO createDTO)
     {
         var response = await _httpClient.PostAsJsonAsync("api/variants", createDTO);

@@ -1,9 +1,7 @@
-﻿
-using sep3.broker.Services;
+﻿using sep3.broker.Services;
 using sep3.DTO.Order;
 using Microsoft.AspNetCore.Mvc;
 using sep3.broker.Model;
-
 
 namespace brokers.broker
 {
@@ -39,7 +37,7 @@ namespace brokers.broker
                 return Result<int>.Failure(500, ex.Message);
             }
         }
-
+        
         public async Task<Result<Order>> GetOrderAsync(int id)
         {
             try
