@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using sep3.broker.Model;
 using web.Model;
 
 namespace web.Services;
@@ -10,7 +11,7 @@ public interface IOrderService
     
     Task RemoveOrderAsync(int id);
     
-    Task<Order?> CreateOrderAsync(List<CartItem> cartItems);
+    Task<OrderResponse?> CreateOrderAsync(List<CartItem> cartItems);
     
 
 }
