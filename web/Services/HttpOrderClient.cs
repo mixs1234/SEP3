@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using DTO.Cart;
 using sep3.DTO.Order;
 using Newtonsoft.Json;
-using orders.Migrations;
 using sep3.broker.Model;
-using web.Model;
+using web.Model.Order;
 using web.Services;
+using CartItem = web.Model.CartItem;
 
 namespace sep3web.Services;
 
@@ -27,22 +27,17 @@ public class HttpOrderClient : IOrderService
     {
         var httpResponse = _httpClient.GetAsync("/Order");
         var content = httpResponse.Result.Content.ReadAsStringAsync();
-        var orders = JsonConvert.DeserializeObject<List<Order>>(content.Result);
+        
+        var settings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore
+        };
+        
+        var orders = JsonConvert.DeserializeObject<List<Order>>(content.Result, settings);
         return Task.FromResult(orders);
     }
-
-    public async Task RemoveOrderAsync(int id)
-    {
-        var httpResponse = await _httpClient.DeleteAsync($"/Order/{id}");
-        if (!httpResponse.IsSuccessStatusCode)
-        {
-            throw new Exception($"Failed to delete order with ID {id}: {httpResponse.ReasonPhrase}");
-        }
-
-        Console.WriteLine($"Order with ID {id} deleted");
-    }
-
-
+    
     public async Task<OrderResponse?> CreateOrderAsync(List<CartItem> cartItems)
     {
         var cartItemsDto = cartItems.Select(item => new CreateCartItemDto()
@@ -76,5 +71,21 @@ public class HttpOrderClient : IOrderService
         
         //Order creation failed add more in the future if needed like error messages
         return new OrderResponse(orderStatus.IsSuccessStatusCode,response,orderStatus.StatusCode);
+    }
+
+    public Task<Order?> UpdateOrderAsync(int orderId, int statusId)
+    {
+        var httpResponse = _httpClient.PutAsync($"/Order/{orderId}?statusId={statusId}", null);
+        var content = httpResponse.Result.Content.ReadAsStringAsync();
+        
+        var settings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore
+        };
+        
+        var order = JsonConvert.DeserializeObject<Order>(content.Result, settings);
+        
+        return Task.FromResult(order);
     }
 }

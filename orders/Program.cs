@@ -23,6 +23,7 @@ public class Program
             options.UseNpgsql(configuration.GetConnectionString("OrderContext")));
         OrderDbContext.GetInstance(configuration);
         builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+        builder.Services.AddTransient<IStatusRepository, StatusRepository>();
         builder.Services.AddScoped<OrderPublisher>();
         
         var app = builder.Build();

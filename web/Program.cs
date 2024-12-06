@@ -33,6 +33,7 @@ public class Program
         builder.Services.AddScoped<IVariantService, HttpVariantClient>();
         builder.Services.AddScoped<IBrandService, HttpBrandClient>();
         builder.Services.AddSingleton<ICartItemService, CartItemItemService>();
+        builder.Services.AddScoped<IStatusService, HttpStatusClient>();
 
         builder.Services.AddAuthentication(options =>
             {

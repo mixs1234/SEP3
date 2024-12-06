@@ -16,30 +16,6 @@ namespace sep3.brokers.controllers
             _orderBroker = orderBroker;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDTO createOrderDto)
-        {
-            var result = await _orderBroker.CreateOrderAsync(createOrderDto);
-            if (result.IsSuccess)
-            {
-                return Ok(new { OrderId = result.Data, result.Message });
-            }
-
-            return StatusCode(result.StatusCode, result.Message);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetOrder(int id)
-        {
-            var result = await _orderBroker.GetOrderAsync(id);
-            if (result.IsSuccess)
-            {
-                return Ok(result.Data);
-            }
-
-            return StatusCode(result.StatusCode, result.Message ?? "Failed to retrieve order.");
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAllOrders()
         {
@@ -51,29 +27,31 @@ namespace sep3.brokers.controllers
 
             return StatusCode(result.StatusCode, result.Message);
         }
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateOrder([FromBody] CreateOrderDTO createOrderDto)
+        
+        
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDTO createOrderDto)
         {
-            var result = await _orderBroker.UpdateOrderAsync(createOrderDto);
+            var result = await _orderBroker.CreateOrderAsync(createOrderDto);
             if (result.IsSuccess)
             {
-                return Ok(result.Message);
+                return Ok(new { OrderId = result.Data, result.Message });
             }
 
             return StatusCode(result.StatusCode, result.Message);
         }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrder(int id)
+        
+        [HttpPut("{orderId}")]
+        public async Task<IActionResult> UpdateOrder(int orderId, [FromQuery] int statusId)
         {
-            var result = await _orderBroker.DeleteOrderAsync(id);
+            var result = await _orderBroker.UpdateOrderAsync(orderId, statusId);
             if (result.IsSuccess)
             {
-                return Ok(result.Message);
+                return Ok(result.Data);
             }
 
             return StatusCode(result.StatusCode, result.Message);
         }
+        
     }
 }

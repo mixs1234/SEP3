@@ -29,7 +29,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DTO\DTO.csproj" />
-      <ProjectReference Include="..\orders\orders.csproj" />
     </ItemGroup>
 
     <ItemGroup>

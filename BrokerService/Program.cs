@@ -23,6 +23,13 @@ public class Program
             client.DefaultRequestHeaders.Accept.Add(
                 new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         });
+        
+        builder.Services.AddHttpClient<IStatusBroker, StatusBroker>(client =>
+        {
+            client.BaseAddress = new Uri("http://localhost:5110/");
+            client.DefaultRequestHeaders.Accept.Add(
+                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        });
 
         builder.Services.AddHttpClient<IProductVariantBroker, ProductVariantBroker>(client =>
         {
