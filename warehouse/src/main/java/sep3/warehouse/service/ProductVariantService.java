@@ -75,6 +75,12 @@ public class ProductVariantService {
         productVariantService.save(productVariant);
 
         return ProductVariantDTO.mapFromProductVariantToDTO(productVariant);
+    }
 
+    public void removeVariantById(long productVariantId) {
+        ProductVariant variant = productVariantService.findById(productVariantId)
+                .orElseThrow(() -> new EntityNotFoundException("Product variant not found with ID: " + productVariantId));
+
+        productVariantService.delete(variant);
     }
 }
