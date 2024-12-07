@@ -27,7 +27,6 @@ public class ProductService {
 
     public List<ProductDTO> findAll() {
         List<Product> products = productService.findAll();
-
         return products.stream().map(ProductDTO::mapProductToDTONoVariants).toList();
     }
 

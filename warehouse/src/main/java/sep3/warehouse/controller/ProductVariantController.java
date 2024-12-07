@@ -35,4 +35,9 @@ public class ProductVariantController {
         return ResponseEntity.ok(productVariantService.updateProductVariant(productVariantDTO));
     }
 
+    @DeleteMapping("/{productVariantId}")
+    public ResponseEntity<?> deleteProductVariant(@PathVariable long productVariantId) {
+        productVariantService.removeVariantById(productVariantId);
+        return ResponseEntity.ok("Product variant deleted successfully.");
+    }
 }

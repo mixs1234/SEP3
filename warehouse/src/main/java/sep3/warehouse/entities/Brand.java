@@ -16,7 +16,6 @@ import java.util.List;
 @Getter
 @Table(name = "brand")
 public class Brand {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,6 +25,5 @@ public class Brand {
 
     @OneToMany(mappedBy = "brand", fetch = FetchType.LAZY)
     private List<Product> products;
-
 }
 
