@@ -1,4 +1,5 @@
 ﻿using DTO.Cart;
+using System.Text.Json.Serialization;
 
 namespace sep3.orders.Model;
 
@@ -9,6 +10,7 @@ public class CartItem
     public long ProductId { get; set; }
     public int Quantity { get; set; }
 
+    [JsonIgnore]
     public ShoppingCart ShoppingCart { get; set; }
     public int ShoppingCartId { get; set; }
 
