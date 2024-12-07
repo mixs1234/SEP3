@@ -6,6 +6,6 @@ import sep3.warehouse.entities.ProductVariant;
 
 import java.util.List;
 
-public interface IProductVariantService extends JpaRepository<ProductVariant, Long> {
+public interface ProductVariantRepo extends JpaRepository<ProductVariant, Long> {
     List<ProductVariant> findAllByProductId(long productId);
 }

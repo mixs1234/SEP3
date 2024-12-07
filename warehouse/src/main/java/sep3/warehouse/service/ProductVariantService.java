@@ -6,17 +6,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sep3.warehouse.DTO.productVariants.CreateProductVariantDto;
 import sep3.warehouse.DTO.productVariants.ProductVariantDTO;
+import sep3.warehouse.entities.ArchiveStatus;
 import sep3.warehouse.entities.ProductVariant;
-import sep3.warehouse.service.IProductVariantService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductVariantService {
-    private final IProductVariantService productVariantService;
-    private final IProductService productService;
+    private final ProductVariantRepo productVariantService;
+    private final ProductRepo productService;
+    protected final ArchiveStatusService archiveStatus;
+    private final ArchiveStatusService archiveStatusService;
+    private final ArchiveStatusHistoryService archiveStatusHistoryService;
 
     public ProductVariantDTO findById(long id) {
 
@@ -55,6 +57,7 @@ public class ProductVariantService {
 
         ProductVariant productVariant = CreateProductVariantDto.mapCreateProductVariantDtotoProductVariant(createProductVariantDto);
         productVariant.setProduct(productService.findById(createProductVariantDto.getProductId()).orElseThrow());
+        productVariant.setArchiveStatus(archiveStatus.getArchiveStatusById(2));
         productVariantService.save(productVariant);
 
         return ProductVariantDTO.mapFromProductVariantToDTO(productVariant);
@@ -77,10 +80,16 @@ public class ProductVariantService {
         return ProductVariantDTO.mapFromProductVariantToDTO(productVariant);
     }
 
-    public void removeVariantById(long productVariantId) {
+    public ProductVariantDTO updateVariantArchiveStatusById(long productVariantId, long archiveStatusId) {
         ProductVariant variant = productVariantService.findById(productVariantId)
                 .orElseThrow(() -> new EntityNotFoundException("Product variant not found with ID: " + productVariantId));
 
-        productVariantService.delete(variant);
+        ArchiveStatus archiveStatus = archiveStatusService.getArchiveStatusById(archiveStatusId);
+
+        variant.setArchiveStatus(archiveStatus);
+
+        archiveStatusHistoryService.createArchiveStatusHistory(archiveStatus, variant);
+        productVariantService.save(variant);
+        return ProductVariantDTO.mapFromProductVariantToDTO(variant);
     }
 }
