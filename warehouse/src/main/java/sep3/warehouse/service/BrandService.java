@@ -9,13 +9,12 @@ import sep3.warehouse.DTO.brands.BrandDTO;
 import sep3.warehouse.entities.Brand;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BrandService {
-    private final IBrandService brandService;
+    private final BrandRepo brandService;
 
     public BrandDTO findById(Long id) {
         Brand brand = brandService.findById(id).orElseThrow(()-> new EntityNotFoundException("brand with " + id +  "not found"));

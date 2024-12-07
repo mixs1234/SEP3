@@ -7,17 +7,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sep3.warehouse.DTO.products.CreateProductDto;
 import sep3.warehouse.DTO.products.ProductDTO;
-import sep3.warehouse.entities.Brand;
 import sep3.warehouse.entities.Product;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    private final IProductService productService;
-    private final IBrandService brandService;
+    private final ProductRepo productService;
+    private final BrandRepo brandService;
 
     public ProductDTO findById(Long id) {
         Product product = productService.findById(id).orElseThrow(()-> new EntityNotFoundException("product with " + id +  "not found"));

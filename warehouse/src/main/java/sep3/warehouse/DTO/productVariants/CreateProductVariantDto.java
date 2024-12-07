@@ -22,8 +22,4 @@ public class CreateProductVariantDto {
         productVariant.setProduct(null);
         return productVariant;
     }
-
-    public long getProductId() {
-        return productId;
-    }
 }

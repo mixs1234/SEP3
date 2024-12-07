@@ -27,7 +27,7 @@ public class ProductVariantController {
 
     @PostMapping
     public ResponseEntity<ProductVariantDTO> createProductVariant(@RequestBody CreateProductVariantDto createProductVariantDto) {
-        return new ResponseEntity <>(productVariantService.createProductVariant(createProductVariantDto), HttpStatus.CREATED);
+        return ResponseEntity.ok(productVariantService.createProductVariant(createProductVariantDto));
     }
 
     @PutMapping
@@ -35,9 +35,8 @@ public class ProductVariantController {
         return ResponseEntity.ok(productVariantService.updateProductVariant(productVariantDTO));
     }
 
-    @DeleteMapping("/{productVariantId}")
-    public ResponseEntity<?> deleteProductVariant(@PathVariable long productVariantId) {
-        productVariantService.removeVariantById(productVariantId);
-        return ResponseEntity.ok("Product variant deleted successfully.");
+    @PutMapping("/{productVariantId}")
+    public ResponseEntity<ProductVariantDTO> archiveVariant(@PathVariable long productVariantId, @RequestParam Long archiveStatusId) {
+        return ResponseEntity.ok(productVariantService.updateVariantArchiveStatusById(productVariantId, archiveStatusId));
     }
 }

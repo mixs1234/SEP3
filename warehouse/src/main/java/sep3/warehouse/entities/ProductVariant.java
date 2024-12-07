@@ -30,4 +30,8 @@ public class ProductVariant {
     @JoinColumn(name = "product_id")
     @JsonIgnore
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "Archive_Status", referencedColumnName = "id")
+    private ArchiveStatus archiveStatus;
 }
