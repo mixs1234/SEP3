@@ -73,14 +73,15 @@ values (default, 'Nike T-shirt', 'Nike tee', 120, 'https://img01.ztat.net/articl
 insert into product
 values (default, 'Adidas', 'Adidas tee', 10, 'https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/825d33b9f25a4a69b2baac4600ea0e04_9366/Essentials_Big_Logo_T-shirt_Sort_GK9120_01_laydown.jpg', 2);
 
+insert into archive_status
+values (default,'Archived');
+
+insert into archive_status
+values (default, 'Active');
+
 insert into product_variant
 values (default, 'M', '100% cotton', 52, 1);
 
 insert into product_variant
 values (default, 'XL', '100% cotton', 67, 1);
 
-insert into archive_status
-values (default,'Archived');
-
-insert into archive_status
-values (default, 'Active')

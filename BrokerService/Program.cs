@@ -51,6 +51,13 @@ public class Program
             client.DefaultRequestHeaders.Accept.Add(
                 new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         });
+        
+        builder.Services.AddHttpClient<IArchiveStatusBroker, ArchiveStatusBroker>(client =>
+        {
+            client.BaseAddress = new Uri("http://localhost:8080/");
+            client.DefaultRequestHeaders.Accept.Add(
+                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        });
 
         var app = builder.Build();
 

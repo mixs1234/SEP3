@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sep3.warehouse.DTO.productVariants.CreateProductVariantDto;
 import sep3.warehouse.DTO.productVariants.ProductVariantDTO;
+import sep3.warehouse.DTO.productVariants.UpdateProductVariantDto;
 import sep3.warehouse.entities.ProductVariant;
 import sep3.warehouse.service.ProductVariantService;
 
@@ -31,7 +32,7 @@ public class ProductVariantController {
     }
 
     @PutMapping
-    public ResponseEntity<ProductVariantDTO> updateProductVariant(@RequestBody ProductVariantDTO productVariantDTO){
+    public ResponseEntity<ProductVariantDTO> updateProductVariant(@RequestBody UpdateProductVariantDto productVariantDTO){
         return ResponseEntity.ok(productVariantService.updateProductVariant(productVariantDTO));
     }
 

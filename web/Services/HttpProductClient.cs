@@ -23,6 +23,7 @@ public class HttpProductClient :  IProductService
     {
         var httpResponse = _httpClient.GetAsync("/Product");
         var content = httpResponse.Result.Content.ReadAsStringAsync();
+        
         var products = JsonConvert.DeserializeObject<List<Product>>(content.Result);
         return Task.FromResult(products);
     }
@@ -35,12 +36,12 @@ public class HttpProductClient :  IProductService
         return Task.FromResult(product);
     }
 
-    public Task<List<ProductVariant>?> GetProductVariantsAsync(int id)
+    public async Task<List<ProductVariant>?> GetProductVariantsAsync(int id)
     {
-        var httpResponse = _httpClient.GetAsync($"/Product/{id}/Variants");
-        var content = httpResponse.Result.Content.ReadAsStringAsync();
-        var variants = JsonConvert.DeserializeObject<List<ProductVariant>>(content.Result);
-        return Task.FromResult(variants);
+        var httpResponse =  await _httpClient.GetAsync($"/Product/{id}/Variants");
+        var content = await httpResponse.Content.ReadAsStringAsync();
+        var variants = JsonConvert.DeserializeObject<List<ProductVariant>>(content);
+        return variants;
     }
 
     // Admin only

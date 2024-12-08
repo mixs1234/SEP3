@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sep3.warehouse.DTO.productVariants.CreateProductVariantDto;
 import sep3.warehouse.DTO.productVariants.ProductVariantDTO;
+import sep3.warehouse.DTO.productVariants.UpdateProductVariantDto;
 import sep3.warehouse.entities.ArchiveStatus;
 import sep3.warehouse.entities.ProductVariant;
 
@@ -63,18 +64,18 @@ public class ProductVariantService {
         return ProductVariantDTO.mapFromProductVariantToDTO(productVariant);
     }
 
-    public ProductVariantDTO updateProductVariant(ProductVariantDTO productVariantDTO){
-        if(productVariantDTO == null){
+    public ProductVariantDTO updateProductVariant(UpdateProductVariantDto updateProductVariantDto){
+        if(updateProductVariantDto == null){
             throw  new IllegalArgumentException("productVariantDTO");
         }
 
-        ProductVariant productVariant = productVariantService.findById(productVariantDTO.getId()).orElseThrow(() ->
+        ProductVariant productVariant = productVariantService.findById(updateProductVariantDto.getId()).orElseThrow(() ->
                 new IllegalArgumentException("Id not in DB"));
 
-        productVariant.setMaterial(productVariantDTO.getMaterial());
-        productVariant.setSize(productVariantDTO.getSize());
-        productVariant.setStock(productVariantDTO.getStock());
-
+        productVariant.setMaterial(updateProductVariantDto.getMaterial());
+        productVariant.setSize(updateProductVariantDto.getSize());
+        productVariant.setStock(updateProductVariantDto.getStock());
+        productVariant.setArchiveStatus(archiveStatus.getArchiveStatusById(updateProductVariantDto.getArchiveStatusId()));
         productVariantService.save(productVariant);
 
         return ProductVariantDTO.mapFromProductVariantToDTO(productVariant);
