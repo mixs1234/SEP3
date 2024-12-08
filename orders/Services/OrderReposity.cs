@@ -137,9 +137,14 @@ public class OrderRepository : IOrderRepository
             .Include(x => x.CurrentStatus)
             .Where(o => o.CustomerId == customerId)
             .ToListAsync();
-        
-        //set the status of the order
-        
-        
     }
+    
+    public async Task<int> GetOrderStatusAsync(int orderId)
+    {
+        var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == orderId);
+        if (order == null) return -1; // Handle if order is not found
+        return order.StatusId;
+    }
+    
+    
 }

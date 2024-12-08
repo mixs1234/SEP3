@@ -68,6 +68,19 @@ namespace sep3.brokers.controllers
 
             return StatusCode(result.StatusCode, result.Message);
         }
-        
+
+
+        [HttpGet("{orderId}/status")]
+        public async Task<IActionResult> GetOrderStatus(int orderId)
+        {
+            var result = await _orderBroker.GetOrderStatusAsync(orderId);
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+
+            return StatusCode(result.StatusCode, result.Message);
+        }
+
     }
 }
