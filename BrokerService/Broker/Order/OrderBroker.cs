@@ -72,7 +72,7 @@ namespace brokers.broker
         {
             try
             {
-                var response = await _httpClient.GetAsync($"api/orders/{customerId}");
+                var response = await _httpClient.GetAsync($"api/customers/{customerId}/orders");
                 if (response.IsSuccessStatusCode)
                 {
                     var orders = await response.Content.ReadFromJsonAsync<IEnumerable<Order>>();
