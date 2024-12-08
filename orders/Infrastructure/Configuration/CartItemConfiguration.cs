@@ -21,5 +21,10 @@ public class CartItemConfiguration : IEntityTypeConfiguration<CartItem>
         builder.HasOne(x => x.ShoppingCart)
             .WithMany(x => x.CartItems)
             .HasForeignKey(x => x.ShoppingCartId);
+        builder.Property(x => x.Price)
+            .IsRequired();
+        builder.Property(x => x.Size);
+        builder.Property(x => x.Materials);
+        builder.Property(x => x.ProductName);
     }
 }

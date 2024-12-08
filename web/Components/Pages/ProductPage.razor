@@ -165,7 +165,7 @@
 @code {
     [Parameter] public int ProductId { get; set; }
 
-    private List<ProductVariant> variantsForProduct { get; set; }
+    private List<ProductVariant> variantsForProduct { get; set; } = new List<ProductVariant>();
 
     private string selectedSize = "M";
 

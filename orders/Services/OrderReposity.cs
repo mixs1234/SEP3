@@ -129,13 +129,17 @@ public class OrderRepository : IOrderRepository
         return order;
     }
 
-    public Task<List<Order>> GetOrderAsync(int customerId)
+    public async Task<List<Order>> GetOrderAsync(int customerId)
     {
-        return _context.Orders
+        return await _context.Orders
             .Include(o => o.ShoppingCart)
             .ThenInclude(sc => sc.CartItems)
-            .Include(o => o.StatusHistories)
+            .Include(x => x.CurrentStatus)
             .Where(o => o.CustomerId == customerId)
             .ToListAsync();
+        
+        //set the status of the order
+        
+        
     }
 }

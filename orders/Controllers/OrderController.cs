@@ -39,7 +39,7 @@ public class OrderController : Controller
         return Ok(updatedOrder);
     }
     
-    [HttpGet("{customerId}")]
+    [HttpGet("api/orders/{customerId}")]
     public async Task<IActionResult> GetOrdersAsync(int customerId)
     {
         var orders = await _orderRepository.GetOrderAsync(customerId);
