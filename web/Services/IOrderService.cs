@@ -9,6 +9,7 @@ namespace web.Services;
 public interface IOrderService
 {
     Task<List<Order>?> GetOrdersAsync();
+    Task<List<Order>?> GetOrdersAsync(int customerId);
     Task<OrderResponse?> CreateOrderAsync(List<CartItem> cartItems);
     Task<Order?> UpdateOrderAsync(int orderId, int statusId);
     

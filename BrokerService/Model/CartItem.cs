@@ -1,41 +1,29 @@
-﻿using DTO.Cart;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using DTO.Cart;
+using sep3.DTO.Product;
 
 namespace sep3.orders.Model;
 
 public class CartItem
 {
     public int Id { get; set; }
-    
-    public string ProductName { get; set; }
-    
-    public long ProductId { get; set; }
     public long VariantId { get; set; }
-    
-    public string Materials { get; set; }
-    public string Size { get; set; }
+    public long ProductId { get; set; }
     public int Quantity { get; set; }
-    public double Price { get; set; }
 
-    [JsonIgnore]
+    public ProductDTO Product { get; set; }
+    public ProductVariantDTO Variant { get; set; }
     public ShoppingCart ShoppingCart { get; set; }
     public int ShoppingCartId { get; set; }
-
 
     public static List<CartItem> ToModel(List<CreateCartItemDto> createCartItemDtos)
     {
         return createCartItemDtos
             .Select(cartItem => new CartItem
             {
-                ProductId = cartItem.ProductId,
-                ProductName = cartItem.ProductName,
                 VariantId = cartItem.VariantId,
-                Materials = cartItem.Materials,
-                Size = cartItem.Size,
+                ProductId = cartItem.ProductId,
                 Quantity = cartItem.Quantity,
-                Price = cartItem.Price,
-                
-                
             })
             .ToList();
     }

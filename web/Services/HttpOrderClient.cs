@@ -37,7 +37,15 @@ public class HttpOrderClient : IOrderService
         var orders = JsonConvert.DeserializeObject<List<Order>>(content.Result, settings);
         return Task.FromResult(orders);
     }
-    
+
+    public Task<List<Order>?> GetOrdersAsync(int customerId)
+    {
+        var httpResponse = _httpClient.GetAsync($"/Order/{customerId}");
+        var content = httpResponse.Result.Content.ReadAsStringAsync();
+        var orders = JsonConvert.DeserializeObject<List<Order>>(content.Result);
+        return Task.FromResult(orders);
+    }
+
     public async Task<OrderResponse?> CreateOrderAsync(List<CartItem> cartItems)
     {
         var cartItemsDto = cartItems.Select(item => new CreateCartItemDto()
