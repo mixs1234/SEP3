@@ -11,14 +11,10 @@ namespace sep3.brokers.controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderBroker _orderBroker;
-        private readonly IProductBroker _productBroker;
-        private readonly IProductVariantBroker _productVariantBroker;
 
         public OrderController(IOrderBroker orderBroker, IProductVariantBroker productVariantBroker, IProductBroker productBroker)
         {
             _orderBroker = orderBroker;
-            _productBroker = productBroker;
-            _productVariantBroker = productVariantBroker;
         }
 
         [HttpGet]
@@ -44,30 +40,6 @@ namespace sep3.brokers.controllers
 
             var orders = result.Data;
             
-            
-            foreach (var order in orders)
-            {
-                if (order.ShoppingCart?.CartItems == null) continue; 
-
-                foreach (var cartItem in order.ShoppingCart.CartItems)
-                {
-                    if (cartItem == null) continue; 
-
-                    // Fetch Product
-                    var productResult = await _productBroker.GetProductAsync((int)cartItem.ProductId);
-                    if (productResult?.IsSuccess == true && productResult.Data != null)
-                    {
-                        cartItem.Product = productResult.Data;
-                    }
-
-                    // Fetch Variant
-                    var variantResult = await _productVariantBroker.GetProductVariantAsync((int)cartItem.VariantId);
-                    if (variantResult?.IsSuccess == true && variantResult.Data != null)
-                    {
-                        cartItem.Variant = variantResult.Data;
-                    }
-                }
-            }
 
             return Ok(orders);
         }

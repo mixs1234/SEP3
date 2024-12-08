@@ -40,7 +40,7 @@ public class HttpOrderClient : IOrderService
 
     public Task<List<Order>?> GetOrdersAsync(int customerId)
     {
-        var httpResponse = _httpClient.GetAsync($"/Order/{customerId}");
+        var httpResponse = _httpClient.GetAsync($"/Order/customer/{customerId}");
         var content = httpResponse.Result.Content.ReadAsStringAsync();
         var orders = JsonConvert.DeserializeObject<List<Order>>(content.Result);
         return Task.FromResult(orders);
@@ -52,7 +52,11 @@ public class HttpOrderClient : IOrderService
         {
             Quantity = item.Quantity,
             ProductId = item.ProductId,
-            VariantId = item.VariantId
+            VariantId = item.VariantId,
+            Materials = item.Materials,
+            Size = item.Size,
+            Price = item.Price,
+            ProductName = item.Name
         }).ToList();
 
         if (!cartItemsDto.Any())
