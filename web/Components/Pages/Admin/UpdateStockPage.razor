@@ -6,10 +6,25 @@
 @inject IVariantService VariantService
 @inject IArchiveStatusService ArchiveStatusService
 @rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
 
 <div class="container my-5">
     <h1 class="mb-4">Admin Panel - Update Variant</h1>
-
+    <!-- Purchase Popup -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Product Notification</strong>
+                    <small class="text-muted">Just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Item added to your cart!
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="mb-3">
         <input
             type="text"
@@ -218,8 +233,9 @@
 
         await VariantService.UpdateProductVariantAsync(variant.Id, updatedVariantDTO);
 
-
+        
         _productVariants = await ProductService.GetProductVariantsAsync(_selectedProduct.Id);
+        await JSRuntime.InvokeVoidAsync("showCartToast", $"#{variant.Id} is {GetNameFromStatusId(variant.ArchiveStatus.Id)} with stock: {updatedVariantDTO.Stock}!");
     }
     
 

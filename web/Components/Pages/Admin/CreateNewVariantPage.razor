@@ -5,10 +5,26 @@
 @inject IProductService ProductService
 @inject IVariantService VariantService
 @rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
 
 <div class="single-product-area section-padding-100 clearfix">
     <PageTitle>Admin Panel - Create Variant</PageTitle>
-
+    <!-- Purchase Popup -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Variant Notification</strong>
+                    <small class="text-muted">Just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Item added to your cart!
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <h1>Create Variant</h1>
     
     <EditForm Model="newVariant" OnValidSubmit="HandleSubmit">
@@ -73,9 +89,11 @@
         {
             await VariantService.CreateProductVariantAsync(newVariant);
             Console.WriteLine("Created variant successfully");
+            await JSRuntime.InvokeVoidAsync("showCartToast", $"New variant created successfully!");
         }
         catch (Exception ex)
         {
+            await JSRuntime.InvokeVoidAsync("showCartToast", $"Error creating variant: {ex.Message}");
             Console.WriteLine($"Error creating variant: {ex.Message}");
         }
     }

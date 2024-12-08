@@ -89,5 +89,27 @@ namespace brokers.broker
                 return Result<IEnumerable<Order>>.Failure(500, ex.Message);
             }
         }
+
+        public async Task<Result<string>> GetOrderStatusAsync(int orderId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/orders/{orderId}/status");
+                if (response.IsSuccessStatusCode)
+                {
+                    var status = await response.Content.ReadAsStringAsync();
+                    return Result<string>.Success(status, "Order status retrieved successfully.");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    return Result<string>.Failure((int)response.StatusCode, error);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<string>.Failure(500, ex.Message);
+            }
+        }
     }
 }

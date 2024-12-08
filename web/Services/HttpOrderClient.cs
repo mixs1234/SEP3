@@ -100,4 +100,12 @@ public class HttpOrderClient : IOrderService
         
         return Task.FromResult(order);
     }
+    
+    public Task<int> GetOrderStatusAsync(int orderId)
+    {
+        var httpResponse = _httpClient.GetAsync($"/Order/{orderId}/status");
+        var content = httpResponse.Result.Content.ReadAsStringAsync();
+        var status = JsonConvert.DeserializeObject<int>(content.Result);
+        return Task.FromResult(status);
+    }
 }

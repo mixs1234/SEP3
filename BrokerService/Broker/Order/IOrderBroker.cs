@@ -14,5 +14,7 @@ namespace brokers.broker
         Task<Result<string>> UpdateOrderAsync(int orderId, int statusId);
         
         Task<Result<IEnumerable<Order>>> GetAllOrdersAsync(int customerId);
+        
+        Task<Result<string>> GetOrderStatusAsync(int orderId);
     }
 }

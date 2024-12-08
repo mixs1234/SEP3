@@ -46,4 +46,11 @@ public class OrderController : Controller
         return Ok(orders);
     }
     
+    [HttpGet("api/orders/{orderId}/status")]
+    public async Task<IActionResult> GetOrderStatusAsync(int orderId)
+    {
+        var status = await _orderRepository.GetOrderStatusAsync(orderId);
+        return Ok(status);
+    }
+    
 }
