@@ -1,8 +1,10 @@
 ﻿@page "/admin/update-variant"
+@using sep3.DTO.Product
 @using web.Model
 @using web.Services
 @inject IProductService ProductService
 @inject IVariantService VariantService
+@inject IArchiveStatusService ArchiveStatusService
 @rendermode InteractiveServer
 
 <div class="container my-5">
@@ -104,20 +106,19 @@
                             }
                         </td>
                         <td>
-                            <select class="form-select form-select-sm" @onchange="(e) => ChangeVariantStatus(variant.Id, ((ChangeEventArgs)e).Value.ToString())">
-                                <option value="" disabled selected>Select status</option>
-                                @foreach (var status in availableStatuses)
+                            <select class="form-select form-select-sm" @bind="variant.ArchiveStatus.Id">
+                                <option value="" disabled>Select status</option>
+                                @foreach (var status in _availableStatuses)
                                 {
-                                <option value="@status.Status">@status.Status</option>
+                                    <option value="@status.Id">@status.Status</option>
                                 }
                             </select>
                         </td>
                         <td>
-                            @if (_editableVariant == variant)
-                            {
-                                <button class="btn btn-sm btn-success" @onclick="() => SaveChanges(variant)">Save</button>
-                                <button class="btn btn-sm btn-secondary" @onclick="CancelEditing">Cancel</button>
-                            }
+
+                            <button class="btn btn-sm btn-success" @onclick="() => SaveChanges(variant)">Save</button>
+                            <button class="btn btn-sm btn-secondary" @onclick="CancelEditing">Cancel</button>
+
                         </td>
                     </tr>
                 }
@@ -139,12 +140,13 @@
     private List<Product> _products = [];
     private List<ProductVariant>? _productVariants = [];
     private List<Product> _filteredProducts = [];
+    private List<ArchiveStatus> _availableStatuses = [];
     private Product _selectedProduct;
     private ProductVariant? _editableVariant;
     private string _editableField = "";
     private string _searchTerm = string.Empty;
-    private List<ArchiveStatus> availableStatuses = [];
     private bool statusChanged;
+
     private string SearchTerm
     {
         get => _searchTerm;
@@ -159,16 +161,7 @@
     {
         _products = await ProductService.GetProductsAsync();
         _filteredProducts = _products;
-        availableStatuses.Add(new ArchiveStatus
-        {
-            Id = 2,
-            Status = "Active"
-        });
-        availableStatuses.Add(new ArchiveStatus
-        {
-            Id = 1,
-            Status = "Archived"
-        });
+        _availableStatuses = await ArchiveStatusService.GetArchiveStatusesAsync();
     }
 
     private void FilterProducts()
@@ -190,6 +183,11 @@
     {
         _selectedProduct = product;
         _productVariants = await ProductService.GetProductVariantsAsync(product.Id);
+        
+        foreach(var variant in _productVariants)
+        {
+            Console.WriteLine(variant.ArchiveStatus);
+        }
     }
 
     private void StartEditing(ProductVariant variant, string field)
@@ -209,33 +207,36 @@
         _editableVariant = null;
         _editableField = "";
 
+        var updatedVariantDTO = new ProductVariantDTO()
+        {
+            Id = variant.Id,
+            Material = variant.Material,
+            Size = variant.Size,
+            Stock = variant.Stock,
+            ArchiveStatusId = variant.ArchiveStatus.Id
+        };
 
-        await VariantService.UpdateProductVariantAsync(variant.Id, variant);
+        await VariantService.UpdateProductVariantAsync(variant.Id, updatedVariantDTO);
 
 
         _productVariants = await ProductService.GetProductVariantsAsync(_selectedProduct.Id);
     }
-
-
-    private void ChangeVariantStatus(int variantId, string newStatus)
-    {
-        var statusId = GetStatusFromName(newStatus);
-
-        var variant = _productVariants.FirstOrDefault(v => v.Id == variantId);
-        if (variant != null && variant.ArchiveStatusId != statusId)
-        {
-            variant.ArchiveStatusId = statusId;
-            statusChanged = true;  // Indicate that the status has changed
-        }
-        else
-        {
-            statusChanged = false; // Reset if the status is not changed
-        }
-    }
+    
 
     private long GetStatusFromName(string statusName)
     {
-        return availableStatuses.FirstOrDefault(s => s.Status == statusName)!.Id;
+        var status = _availableStatuses?.FirstOrDefault(s => s.Status == statusName);
+        if (status == null)
+        {
+            throw new InvalidOperationException($"Status '{statusName}' not found.");
+        }
+
+        return status.Id;
+    }
+
+    private string GetNameFromStatusId(long statusId)
+    {
+        return _availableStatuses.FirstOrDefault(s => s.Id == statusId)!.Status;
     }
 
 }

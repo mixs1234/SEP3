@@ -6,7 +6,7 @@ namespace sep3.brokers.broker;
 
 public interface IProductVariantBroker
 {
-    Task<Result<ProductVariantDTO>> GetProductVariantAsync(int id);
+    Task<Result<string>> GetProductVariantAsync(int id);
     Task<Result<ProductVariantDTO>> CreateProductVariantAsync(CreateProductVariantDTO createDTO);
     Task<Result<ProductVariantDTO>> UpdateProductVariantAsync(ProductVariantDTO variant);
     

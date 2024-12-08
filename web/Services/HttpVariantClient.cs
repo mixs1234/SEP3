@@ -20,12 +20,12 @@ public class HttpVariantClient : IVariantService
         _httpClient = httpClient;
     }
 
-    public Task<List<ProductVariant>?> GetProductVariantsAsync()
+    public async Task<List<ProductVariant>?> GetProductVariantsAsync()
     {
-        var httpResponse = _httpClient.GetAsync("/ProductVariant");
-        var content = httpResponse.Result.Content.ReadAsStringAsync();
-        var variants = JsonConvert.DeserializeObject<List<ProductVariant>>(content.Result);
-        return Task.FromResult(variants);
+        var httpResponse = await _httpClient.GetAsync("/ProductVariant");
+        var content = await httpResponse.Content.ReadAsStringAsync();
+        var variants = JsonConvert.DeserializeObject<List<ProductVariant>>(content);
+        return variants;
     }
 
     public async Task<ProductVariant> CreateProductVariantAsync(CreateProductVariantDTO variant)
@@ -36,7 +36,7 @@ public class HttpVariantClient : IVariantService
         return new ProductVariant();
     }
 
-    public Task<ProductVariant?> UpdateProductVariantAsync(int id, ProductVariant variant)
+    public Task<ProductVariant?> UpdateProductVariantAsync(int id, ProductVariantDTO variant)
     {
         var httpResponse = _httpClient.PutAsJsonAsync($"/ProductVariant/{id}", variant);
         var content = httpResponse.Result.Content.ReadAsStringAsync();

@@ -10,5 +10,5 @@ public class ProductVariant
     
     public int Stock { get; set; }
 
-    public long ArchiveStatusId { get; set; }
+    public ArchiveStatus ArchiveStatus { get; set; }
 }

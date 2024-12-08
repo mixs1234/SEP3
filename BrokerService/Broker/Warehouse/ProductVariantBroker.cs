@@ -15,7 +15,7 @@ public class ProductVariantBroker : IProductVariantBroker
         _httpClient = httpClient;
     }
     
-    public async Task<Result<ProductVariantDTO>> GetProductVariantAsync(
+    public async Task<Result<string>> GetProductVariantAsync(
         int id
         )
     {
@@ -27,19 +27,14 @@ public class ProductVariantBroker : IProductVariantBroker
             Console.WriteLine($"Response Status: {response.StatusCode}, Content: {responseContent}");
             
             if (!response.IsSuccessStatusCode)
-                return Result<ProductVariantDTO>.Failure((int)response.StatusCode, responseContent);
+                return Result<string>.Failure((int)response.StatusCode, responseContent);
             
-            var productVariants = JsonSerializer.Deserialize<ProductVariantDTO>(responseContent, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-            return productVariants != null ? Result<ProductVariantDTO>.Success(productVariants, "Product variants retrieved successfully.") 
-                : Result<ProductVariantDTO>.Failure(500, "Failed to parse product variants from response.");
+            return Result<string>.Success(responseContent, "Product variant retrieved successfully.");
             
         }
         catch (Exception ex)
         {
-            return Result<ProductVariantDTO>.Failure(500, ex.Message);
+            return Result<string>.Failure(500, ex.Message);
         }
     }
 
