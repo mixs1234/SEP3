@@ -90,11 +90,20 @@
             await VariantService.CreateProductVariantAsync(newVariant);
             Console.WriteLine("Created variant successfully");
             await JSRuntime.InvokeVoidAsync("showCartToast", $"New variant created successfully!");
+            HandleValidSubmit();
         }
         catch (Exception ex)
         {
             await JSRuntime.InvokeVoidAsync("showCartToast", $"Error creating variant: {ex.Message}");
             Console.WriteLine($"Error creating variant: {ex.Message}");
         }
+    }
+
+    private void HandleValidSubmit()
+    {
+        newVariant.Material = "";
+        newVariant.Size = "";
+        newVariant.Stock = 0;
+        StateHasChanged();
     }
 }
