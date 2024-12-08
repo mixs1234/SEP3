@@ -9,4 +9,6 @@ public class ProductVariant
     public string Material { get; set; }
     
     public int Stock { get; set; }
+
+    public long ArchiveStatusId { get; set; }
 }

@@ -60,6 +60,7 @@
                 <th scope="col">Variant Material</th>
                 <th scope="col">Variant Size</th>
                 <th scope="col">Variant Stock</th>
+                <th scope="col">Archive Product</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -73,21 +74,21 @@
                         <td>
                             @if (_editableVariant == variant && _editableField == "Material")
                             {
-                                <input type="text" class="form-control" @bind="variant.Material" @bind:event="oninput" />
+                                <input type="text" class="form-control" @bind="variant.Material" @bind:event="oninput"/>
                             }
                             else
                             {
-                                <span @ondblclick="@(() => StartEditing(variant,"Material"))">@variant.Material</span>
+                                <span @ondblclick="@(() => StartEditing(variant, "Material"))">@variant.Material</span>
                             }
                         </td>
                         <td>
                             @if (_editableVariant == variant && _editableField == "Size")
                             {
-                                <input type="text" class="form-control" @bind="variant.Size" @bind:event="oninput" />
+                                <input type="text" class="form-control" @bind="variant.Size" @bind:event="oninput"/>
                             }
                             else
                             {
-                                <span @ondblclick="@(() => StartEditing(variant,"Size"))">
+                                <span @ondblclick="@(() => StartEditing(variant, "Size"))">
                                     @variant.Size
                                 </span>
                             }
@@ -99,8 +100,17 @@
                             }
                             else
                             {
-                                <span @ondblclick="@(() => StartEditing(variant,"Stock"))">@variant.Stock</span>
+                                <span @ondblclick="@(() => StartEditing(variant, "Stock"))">@variant.Stock</span>
                             }
+                        </td>
+                        <td>
+                            <select class="form-select form-select-sm" @onchange="(e) => ChangeVariantStatus(variant.Id, ((ChangeEventArgs)e).Value.ToString())">
+                                <option value="" disabled selected>Select status</option>
+                                @foreach (var status in availableStatuses)
+                                {
+                                <option value="@status.Status">@status.Status</option>
+                                }
+                            </select>
                         </td>
                         <td>
                             @if (_editableVariant == variant)
@@ -133,7 +143,8 @@
     private ProductVariant? _editableVariant;
     private string _editableField = "";
     private string _searchTerm = string.Empty;
-
+    private List<ArchiveStatus> availableStatuses = [];
+    private bool statusChanged;
     private string SearchTerm
     {
         get => _searchTerm;
@@ -147,7 +158,17 @@
     protected override async Task OnInitializedAsync()
     {
         _products = await ProductService.GetProductsAsync();
-        _filteredProducts = _products; 
+        _filteredProducts = _products;
+        availableStatuses.Add(new ArchiveStatus
+        {
+            Id = 2,
+            Status = "Active"
+        });
+        availableStatuses.Add(new ArchiveStatus
+        {
+            Id = 1,
+            Status = "Archived"
+        });
     }
 
     private void FilterProducts()
@@ -170,7 +191,7 @@
         _selectedProduct = product;
         _productVariants = await ProductService.GetProductVariantsAsync(product.Id);
     }
-    
+
     private void StartEditing(ProductVariant variant, string field)
     {
         _editableVariant = variant;
@@ -188,11 +209,33 @@
         _editableVariant = null;
         _editableField = "";
 
-        
+
         await VariantService.UpdateProductVariantAsync(variant.Id, variant);
 
-        
+
         _productVariants = await ProductService.GetProductVariantsAsync(_selectedProduct.Id);
+    }
+
+
+    private void ChangeVariantStatus(int variantId, string newStatus)
+    {
+        var statusId = GetStatusFromName(newStatus);
+
+        var variant = _productVariants.FirstOrDefault(v => v.Id == variantId);
+        if (variant != null && variant.ArchiveStatusId != statusId)
+        {
+            variant.ArchiveStatusId = statusId;
+            statusChanged = true;  // Indicate that the status has changed
+        }
+        else
+        {
+            statusChanged = false; // Reset if the status is not changed
+        }
+    }
+
+    private long GetStatusFromName(string statusName)
+    {
+        return availableStatuses.FirstOrDefault(s => s.Status == statusName)!.Id;
     }
 
 }
