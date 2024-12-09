@@ -108,7 +108,8 @@ public class OrderRepository : IOrderRepository
     public async Task<Order> UpdateOrderStatusASync(int orderId, int statusId)
     {
         var order = await _context.Orders.Include(x => x.StatusHistories).FirstOrDefaultAsync(x => x.Id == orderId);
-        if (order == null) return null; // Handle if order is not found
+        if (order == null) 
+            throw new InvalidOperationException($"Order with id {orderId} could not be found"); // Handle if order is not found
 
         var newStatus = await _context.Status.FirstOrDefaultAsync(x => x.Id == statusId);
         if (newStatus == null) 

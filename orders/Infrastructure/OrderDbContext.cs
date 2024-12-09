@@ -7,17 +7,13 @@ namespace sep3.orders.Infrastructure;
 public class OrderDbContext : DbContext
 {
     private static OrderDbContext? _instance = null;
-    protected readonly IConfiguration Configuration;
+    private readonly IConfiguration Configuration;
     
-    public OrderDbContext(IConfiguration configuration)
+    
+    public OrderDbContext(DbContextOptions<OrderDbContext> options, IConfiguration? configuration)
+        : base(options)
     {
         Configuration = configuration;
-        Database.Migrate();
-    }
-    
-    public static OrderDbContext GetInstance(IConfiguration configuration)
-    {
-        return _instance ??= new OrderDbContext(configuration);
     }
     
     public DbSet<Order> Orders { get; set; }
@@ -26,11 +22,6 @@ public class OrderDbContext : DbContext
     public DbSet<Status> Status { get; set; }
     public DbSet<StatusHistory> StatusHistory { get; set; }
     public DbSet<Customer> Customer { get; set; }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql(Configuration.GetConnectionString("OrderContext"));
-    }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

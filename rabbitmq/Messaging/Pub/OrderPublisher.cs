@@ -11,7 +11,7 @@ public class OrderPublisher
 {
     private const string ExchangeName = "order_topic_exchange";
 
-    public async Task PublishOrder(CreateOrderConfirmationDTO createOrderConfirmation)
+    public virtual async Task PublishOrder(CreateOrderConfirmationDTO createOrderConfirmation)
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
         using var connection = await factory.CreateConnectionAsync();

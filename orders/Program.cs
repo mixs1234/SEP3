@@ -19,11 +19,16 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        
+        // Register DbContext with Npgsql
         builder.Services.AddDbContext<OrderDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("OrderContext")));
-        OrderDbContext.GetInstance(configuration);
+        
+        // Register repositories
         builder.Services.AddTransient<IOrderRepository, OrderRepository>();
         builder.Services.AddTransient<IStatusRepository, StatusRepository>();
+        
+        // Register other services
         builder.Services.AddScoped<OrderPublisher>();
         
         var app = builder.Build();
@@ -46,7 +51,6 @@ public class Program
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddEnvironmentVariables();
-        var config = builder.Build();
         return builder.Build();
     }
 }
