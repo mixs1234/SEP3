@@ -114,29 +114,31 @@
                                     <a href="#">Write A Review</a>
                                 </div>
                             </div>
-                            <!-- Avaiable -->
-                            <p class="avaibility"><i class="fa fa-circle"></i> In Stock</p>
+                            <!-- Availability -->
+                            <p class="avaibility">
+                                <i class="fa fa-circle" style="@GetAvailabilityIndicatorColor()"></i> 
+                                @(selectedVariant?.Stock > 0 ? "In Stock" : "Out of Stock")
+                            </p>
                         </div>
 
                         <div class="short_overview my-5">
                             <p>@product?.Description</p>
                         </div>
 
-                        <div class="mb-2">
-                            <select @bind="selectedSize">
-                                @if (variantsForProduct.Any())
-                                {
-                                    @foreach (var variant in variantsForProduct)
-                                    {
-                                        <option value="@variant.Size">@variant.Size</option>
-                                    }
-                                }
-                                else
-                                {
-                                    <option disabled selected>Please select a size</option>
-                                }
-                            </select>
-                        </div>
+                        <select @bind-value="selectedSize" @bind-value:event="onchange" @bind-value:after="SelectedSizeChanged">
+                            @if (variantsForProduct.Any(v => v.ArchiveStatus?.Status != "Archived"))
+                            {
+                            @foreach (var variant in variantsForProduct.Where(v => v.ArchiveStatus?.Status != "Archived"))
+                            {
+                            <option value="@variant.Size">@variant.Size</option>
+                            }
+                            }
+                            else
+                            {
+                            <option disabled selected>No variants available</option>
+                            }
+                        </select>
+
 
                         <!-- Add to Cart Form -->
                         <form class="cart clearfix" method="post">
@@ -152,7 +154,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <button type="button" @onclick="AddProductToCartAsync" class="btn amado-btn">Add To Cart</button>
+                            <button type="button" @onclick="AddProductToCartAsync" class="btn amado-btn" disabled="@(!CanAddToCart())">Add To Cart</button>
                         </form>
                     </div>
                 </div>
@@ -161,16 +163,12 @@
     }
 </div>
 
-
 @code {
     [Parameter] public int ProductId { get; set; }
 
     private List<ProductVariant> variantsForProduct { get; set; } = new List<ProductVariant>();
-
-    private string selectedSize = "M";
-
+    private string selectedSize;
     private ProductVariant selectedVariant;
-
     private Product? product;
     private bool isLoading = true;
     private int quantity = 1;
@@ -179,12 +177,31 @@
     {
         product = await ProductService.GetProductAsync(ProductId);
         variantsForProduct = await ProductService.GetProductVariantsAsync(ProductId) ?? new List<ProductVariant>();
+        
+        // Initialize the selectedVariant to a non-archived variant if available
+        var initialVariant = variantsForProduct.FirstOrDefault(v => v.ArchiveStatus?.Status != "Archived");
+        if (initialVariant != null)
+        {
+            selectedSize = initialVariant.Size;
+            SetSelectedVariant();
+        }
+
         isLoading = false;
+    }
+
+    private void SelectedSizeChanged()
+    {
+        SetSelectedVariant();
+        StateHasChanged();
     }
 
     public void SetSelectedVariant()
     {
-        selectedVariant = variantsForProduct.FirstOrDefault(v => v.Size == selectedSize) ?? throw new InvalidOperationException("Variant cannot be null");
+        selectedVariant = variantsForProduct
+            .Where(v => v.ArchiveStatus?.Status != "Archived")
+            .FirstOrDefault(v => v.Size == selectedSize);
+
+        StateHasChanged();
     }
 
     private void DecreaseQuantity()
@@ -200,18 +217,26 @@
         quantity++;
     }
 
+    private bool CanAddToCart()
+    {
+        return selectedVariant != null && selectedVariant.Stock >= quantity;
+    }
+
     private async Task AddProductToCartAsync()
     {
-        SetSelectedVariant();
-
         if (product == null || selectedVariant == null)
         {
             throw new Exception("Product or variant is null.");
         }
 
         await CartItemService.AddToCartASync(selectedVariant, product, quantity);
-        
         await JSRuntime.InvokeVoidAsync("showCartToast", $"{product.Name} added to your cart!");
     }
 
+    private string GetAvailabilityIndicatorColor()
+    {
+        if (selectedVariant?.Stock > 0)
+            return "color: green;";
+        return "color: red;";
+    }
 }
