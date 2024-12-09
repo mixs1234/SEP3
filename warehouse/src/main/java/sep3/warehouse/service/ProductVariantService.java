@@ -72,10 +72,14 @@ public class ProductVariantService {
         ProductVariant productVariant = productVariantService.findById(updateProductVariantDto.getId()).orElseThrow(() ->
                 new IllegalArgumentException("Id not in DB"));
 
+        ArchiveStatus archiveStatus = archiveStatusService.getArchiveStatusById(updateProductVariantDto.getArchiveStatusId());
+
         productVariant.setMaterial(updateProductVariantDto.getMaterial());
         productVariant.setSize(updateProductVariantDto.getSize());
         productVariant.setStock(updateProductVariantDto.getStock());
-        productVariant.setArchiveStatus(archiveStatus.getArchiveStatusById(updateProductVariantDto.getArchiveStatusId()));
+        productVariant.setArchiveStatus(archiveStatus);
+
+        archiveStatusHistoryService.createArchiveStatusHistory(archiveStatus, productVariant);
         productVariantService.save(productVariant);
 
         return ProductVariantDTO.mapFromProductVariantToDTO(productVariant);
