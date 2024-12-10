@@ -26,5 +26,6 @@ public class CartItemConfiguration : IEntityTypeConfiguration<CartItem>
         builder.Property(x => x.Size);
         builder.Property(x => x.Materials);
         builder.Property(x => x.ProductName);
+        
     }
 }

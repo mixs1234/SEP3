@@ -12,6 +12,6 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         builder.Property(x => x.Id)
             .IsRequired()
             .ValueGeneratedOnAdd();
-        
+
     }
 }

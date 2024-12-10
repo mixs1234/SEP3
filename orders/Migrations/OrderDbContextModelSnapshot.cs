@@ -62,6 +62,32 @@ namespace orders.Migrations
                     b.HasIndex("ShoppingCartId");
 
                     b.ToTable("CartItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Materials = "Polyester",
+                            Price = 100.0,
+                            ProductId = 1L,
+                            ProductName = "Product 1",
+                            Quantity = 1,
+                            ShoppingCartId = 1,
+                            Size = "L",
+                            VariantId = 1L
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Materials = "Polyester",
+                            Price = 200.0,
+                            ProductId = 2L,
+                            ProductName = "Product 2",
+                            Quantity = 2,
+                            ShoppingCartId = 2,
+                            Size = "M",
+                            VariantId = 2L
+                        });
                 });
 
             modelBuilder.Entity("sep3.orders.Model.Customer", b =>
@@ -75,6 +101,16 @@ namespace orders.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customer");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1
+                        },
+                        new
+                        {
+                            Id = -2
+                        });
                 });
 
             modelBuilder.Entity("sep3.orders.Model.Order", b =>
@@ -104,6 +140,22 @@ namespace orders.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerId = 1,
+                            ShoppingCartId = 1,
+                            StatusId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CustomerId = 2,
+                            ShoppingCartId = 2,
+                            StatusId = 2
+                        });
                 });
 
             modelBuilder.Entity("sep3.orders.Model.ShoppingCart", b =>
@@ -117,6 +169,16 @@ namespace orders.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ShoppingCarts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1
+                        },
+                        new
+                        {
+                            Id = 2
+                        });
                 });
 
             modelBuilder.Entity("sep3.orders.Model.Status", b =>
@@ -193,6 +255,22 @@ namespace orders.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("StatusHistory");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ChangedAt = new DateTime(2024, 12, 10, 22, 2, 55, 157, DateTimeKind.Utc).AddTicks(8962),
+                            OrderId = 1,
+                            StatusId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ChangedAt = new DateTime(2024, 12, 10, 22, 2, 55, 157, DateTimeKind.Utc).AddTicks(8964),
+                            OrderId = 2,
+                            StatusId = 2
+                        });
                 });
 
             modelBuilder.Entity("sep3.orders.Model.CartItem", b =>

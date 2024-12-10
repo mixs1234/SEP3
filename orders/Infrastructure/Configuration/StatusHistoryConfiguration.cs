@@ -21,5 +21,6 @@ public class StatusHistoryConfiguration : IEntityTypeConfiguration<StatusHistory
             .WithMany()
             .HasForeignKey(sh => sh.StatusId)
             .OnDelete(DeleteBehavior.Restrict);
+        
     }
 }
