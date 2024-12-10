@@ -15,9 +15,7 @@ public class ProductVariantBroker : IProductVariantBroker
         _httpClient = httpClient;
     }
     
-    public async Task<Result<ProductVariantDTO>> GetProductVariantAsync(
-        int id
-    )
+    public async Task<Result<ProductVariantDTO>> GetProductVariantAsync(int id)
     {
         try
         {
