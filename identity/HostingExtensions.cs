@@ -8,6 +8,7 @@ using sep3.identity.Pages.Admin.Clients;
 using sep3.identity.Pages.Admin.IdentityScopes;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using Npgsql.EntityFrameworkCore;
 using sep3.identity.Infrastructure;
@@ -21,8 +22,6 @@ internal static class HostingExtensions
         builder.Services.AddRazorPages();
 
         var connectionString = builder.Configuration.GetConnectionString("Postgres");
-
-        builder.Services.AddScoped<UserClaimsPrincipalFactory<User>>();
         
         builder.Services.AddDbContext<UserContext>(options =>
             options.UseNpgsql(connectionString));
@@ -42,7 +41,6 @@ internal static class HostingExtensions
                 // see https://docs.duendesoftware.com/identityserver/v5/fundamentals/resources/
                 options.EmitStaticAudienceClaim = true;
             })
-            .AddAspNetIdentity<IdentityUser>()
             // this adds the config data from DB (clients, resources, CORS)
             .AddConfigurationStore(options =>
             {
@@ -60,6 +58,7 @@ internal static class HostingExtensions
                     b.UseNpgsql(connectionString,
                         dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
             })
+            .AddAspNetIdentity<IdentityUser>()
             .AddDeveloperSigningCredential();
 
         // builder.Services.AddAuthentication()
@@ -79,7 +78,7 @@ internal static class HostingExtensions
         {
             builder.Services.AddAuthorization(options =>
                 options.AddPolicy("admin",
-                    policy => policy.RequireClaim("sub", "1"))
+                    policy => policy.RequireClaim("role", "admin"))
             );
 
             builder.Services.Configure<RazorPagesOptions>(options =>
