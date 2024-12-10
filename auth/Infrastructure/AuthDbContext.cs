@@ -7,13 +7,17 @@ namespace auth.Infrastructure;
 
 public class AuthDbContext : DbContext
 {
-    private static AuthDbContext? _instance = null;
     
-    public AuthDbContext(DbContextOptions<AuthDbContext> options, IConfiguration? configuration)
+    public AuthDbContext()
     {
     }
     
-    public DbSet<User> Users { get; set; }
+    public AuthDbContext(DbContextOptions<AuthDbContext> options)
+        : base(options)
+    {
+    }
+    
+    public virtual DbSet<User> Users { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
