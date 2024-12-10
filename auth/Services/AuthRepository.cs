@@ -14,7 +14,7 @@ public class AuthRepository : IAuthRepository
         _context = context;
     }
 
-    public async Task<User> GetUserByIdAsync(int id)
+    public async Task<UserDto> GetUserByIdAsync(int id)
     {
         try
         {
@@ -25,7 +25,7 @@ public class AuthRepository : IAuthRepository
                 throw new Exception($"Could not find user with id {id}.");
             }
             
-            return user;
+            return User.ToDto(user);
         }
         catch (Exception e)
         {
@@ -33,7 +33,7 @@ public class AuthRepository : IAuthRepository
         }
     }
 
-    public async Task<User> GetUserByUsernameAndPasswordAsync(string username, string password)
+    public async Task<UserDto> GetUserByUsernameAndPasswordAsync(string username, string password)
     {
         try
         {
@@ -45,7 +45,7 @@ public class AuthRepository : IAuthRepository
                 throw new Exception($"Could not find user with username {username} and password {password}.");
             }
             
-            return user;
+            return User.ToDto(user);
         }
         catch (Exception e)
         {
@@ -53,7 +53,7 @@ public class AuthRepository : IAuthRepository
         }
     }
 
-    public Task<User> CreateUserAsync(CreateUserDto createUserDto)
+    public async Task<UserDto> CreateUserAsync(CreateUserDto createUserDto)
     {
         try
         {
@@ -64,10 +64,10 @@ public class AuthRepository : IAuthRepository
                 Role = "CUSTOMER"
             };
             
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
             
-            return Task.FromResult(user);
+            return User.ToDto(user);
         }
         catch (Exception e)
         {

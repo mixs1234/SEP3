@@ -13,8 +13,7 @@ public class User
     {
         return new UserDto
         {
-            Username = user.Username,
-            Password = user.Password,
+            Id = user.Id,
             Role = user.Role
         };
     }

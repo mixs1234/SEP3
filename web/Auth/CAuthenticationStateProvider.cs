@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 
-namespace web.Services.Auth;
+namespace web.Auth;
 
 public class CAuthenticationStateProvider : AuthenticationStateProvider
 {

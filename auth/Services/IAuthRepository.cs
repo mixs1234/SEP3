@@ -5,7 +5,7 @@ namespace auth.Services;
 
 public interface IAuthRepository
 {
-    Task<User> GetUserByIdAsync(int id);
-    Task<User> GetUserByUsernameAndPasswordAsync(string username, string password);
-    Task<User> CreateUserAsync(CreateUserDto createUserDto);
+    Task<UserDto> GetUserByIdAsync(int id);
+    Task<UserDto> GetUserByUsernameAndPasswordAsync(string username, string password);
+    Task<UserDto> CreateUserAsync(CreateUserDto createUserDto);
 }

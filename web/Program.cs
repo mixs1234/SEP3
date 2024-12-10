@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Identity;
 using sep3web.Services;
 using web.Components;
 using web.Services;
-using web.Services.Auth;
+using web.Auth;
 
 namespace web;
 
