@@ -1,12 +1,14 @@
 using System;
 using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity;
 using sep3web.Services;
 using web.Components;
 using web.Services;
+using web.Services.Auth;
 
 namespace web;
 
@@ -35,13 +37,10 @@ public class Program
         builder.Services.AddSingleton<ICartItemService, CartItemItemService>();
         builder.Services.AddScoped<IStatusService, HttpStatusClient>();
         builder.Services.AddScoped<IArchiveStatusService, HttpArchiveStatusClient>();
+        builder.Services.AddScoped<AuthenticationStateProvider, CAuthenticationStateProvider>();
+        builder.Services.AddAuthorizationCore();
 
-        builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-            })
-            .AddIdentityCookies();
+
 
         var app = builder.Build();
 

@@ -7,13 +7,11 @@ namespace sep3.orders.Infrastructure;
 public class OrderDbContext : DbContext
 {
     private static OrderDbContext? _instance = null;
-    private readonly IConfiguration Configuration;
-    
-    
+
+
     public OrderDbContext(DbContextOptions<OrderDbContext> options, IConfiguration? configuration)
         : base(options)
     {
-        Configuration = configuration;
     }
     
     public DbSet<Order> Orders { get; set; }
