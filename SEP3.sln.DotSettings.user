@@ -9,7 +9,13 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AServiceProvider_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003F_002Econfig_003FJetBrains_003FRider2024_002E2_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Feb367f896c6844e48ca6beeea10bc10130400_003F5a_003F78d04b80_003FServiceProvider_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ATask_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E2_003Fresharper_002Dhost_003FSourcesCache_003F2e49d132ea68ff47071c64476ae29138fa965dc555ef7c3f4991586431de241_003FTask_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5f68f665_002D1991_002D472b_002Da98e_002Dde469ee26740/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="OrderRepositoryTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::66A49D25-9DD3-4555-B74E-252BC2ED7C99::net8.0::OrderTest.OrderRepositoryTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::66A49D25-9DD3-4555-B74E-252BC2ED7C99::net8.0::OrderTest.OrderRepositoryTests&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::F4950670-A4D0-4517-873D-19C4C113EF3C::net8.0::BrokerTest.ArchiveStatusBrokerTests&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::F4950670-A4D0-4517-873D-19C4C113EF3C::net8.0::BrokerTest.OrderBrokerServiceTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::F4950670-A4D0-4517-873D-19C4C113EF3C::net8.0::BrokerTest.ProductVariantBrokerServiceTest&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;Project Location="C:\Users\Bruger\Desktop\Github\Uni\SEP3\OrderServiceTest" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;OrderServiceTest&amp;gt;" /&gt;&#xD;
+  &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
