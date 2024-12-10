@@ -1,6 +1,7 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
+using System.Security.Claims;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
@@ -78,7 +79,7 @@ public class Index : PageModel
         if (ModelState.IsValid)
         {
             var user = _users.CreateUser(Input.Username, Input.Password, Input.Name, Input.Email);
-
+            user.Claims.Add(new Claim("role", "customer"));
             // issue authentication cookie with subject ID and username
             var isuser = new IdentityServerUser(user.SubjectId)
             {

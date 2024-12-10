@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.1.0-preview.1" />
         <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="7.0.4"/>
 
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.3"/>
@@ -27,6 +28,12 @@
 
     <ItemGroup>
         <Folder Include="wwwroot\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore">
+        <HintPath>..\..\..\..\..\.nuget\packages\microsoft.aspnetcore.identity.entityframeworkcore\8.0.8\lib\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

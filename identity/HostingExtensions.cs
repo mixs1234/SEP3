@@ -1,5 +1,8 @@
 using Duende.IdentityServer;
+using Duende.IdentityServer.Test;
+using Microsoft.AspNetCore.Identity;
 using sep3.identity;
+using sep3.identity.Models;
 using sep3.identity.Pages.Admin.ApiScopes;
 using sep3.identity.Pages.Admin.Clients;
 using sep3.identity.Pages.Admin.IdentityScopes;
@@ -7,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Npgsql.EntityFrameworkCore;
+using sep3.identity.Infrastructure;
 
 namespace sep3.identity;
 
@@ -18,6 +22,15 @@ internal static class HostingExtensions
 
         var connectionString = builder.Configuration.GetConnectionString("Postgres");
 
+        builder.Services.AddScoped<UserClaimsPrincipalFactory<User>>();
+        
+        builder.Services.AddDbContext<UserContext>(options =>
+            options.UseNpgsql(connectionString));
+        
+        builder.Services.AddIdentity<User, IdentityRole>()
+            .AddEntityFrameworkStores<UserContext>()
+            .AddDefaultTokenProviders();
+        
         var isBuilder = builder.Services
             .AddIdentityServer(options =>
             {
@@ -29,7 +42,7 @@ internal static class HostingExtensions
                 // see https://docs.duendesoftware.com/identityserver/v5/fundamentals/resources/
                 options.EmitStaticAudienceClaim = true;
             })
-            .AddTestUsers(TestUsers.Users)
+            .AddAspNetIdentity<IdentityUser>()
             // this adds the config data from DB (clients, resources, CORS)
             .AddConfigurationStore(options =>
             {
@@ -46,7 +59,8 @@ internal static class HostingExtensions
                 options.ConfigureDbContext = b =>
                     b.UseNpgsql(connectionString,
                         dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
-            });
+            })
+            .AddDeveloperSigningCredential();
 
         // builder.Services.AddAuthentication()
         //     .AddGoogle(options =>
@@ -75,6 +89,7 @@ internal static class HostingExtensions
             builder.Services.AddTransient<ClientRepository>();
             builder.Services.AddTransient<IdentityScopeRepository>();
             builder.Services.AddTransient<ApiScopeRepository>();
+            builder.Services.AddTransient<UserManager<User>>();
         }
 
         // if you want to use server-side sessions: https://blog.duendesoftware.com/posts/20220406_session_management/
