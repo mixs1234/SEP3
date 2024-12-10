@@ -4,39 +4,72 @@
 @using web.Components.Product
 @using web.Model
 @inject IProductService ProductService
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthProvider
+@rendermode InteractiveServer
 
 
 <PageTitle>Home</PageTitle>
 
-<head><meta http-equiv="refresh" content="delay_time; URL=new_website_url" /></head>
+<head>
+    <meta http-equiv="refresh" content="delay_time; URL=new_website_url"/>
+</head>
 
-<div class="products-catagories-area clearfix">
-    <div class="amado-pro-catagory clearfix">
-        
-        @if (products == null)
-        {
-            <p>Loading products...</p>
-        }
-        else if (products.Count == 0)
-        {
-            <p>No products found</p>
-        }
-        else
-        {
-            @foreach (var product in products)
-            {
-                <ProductOnHome ImageUrl="@product.ImagePath" ProductName="@product.Name" Price="@product.Price" ProductId="@product.Id" />
-            }
-        }
-    </div>
-</div>
+<AuthorizeView>
+    <Authorized>
+        <div class="products-catagories-area clearfix">
+            <div class="amado-pro-catagory clearfix">
+
+                @if (products == null)
+                {
+                    <p>Loading products...</p>
+                }
+                else if (products.Count == 0)
+                {
+                    <p>No products found</p>
+                }
+                else
+                {
+                    @foreach (var product in products)
+                    {
+                        <ProductOnHome ImageUrl="@product.ImagePath" ProductName="@product.Name" Price="@product.Price" ProductId="@product.Id"/>
+                    }
+                }
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="container text-center my-5">
+            <div class="alert alert-warning" role="alert">
+                <h3 class="mb-4">You are not authorized to view this page</h3>
+                <button class="btn btn-primary btn-lg" @onclick="ToLoginPage">
+                    <i class="bi bi-box-arrow-in-right"></i> Login to View Products
+                </button>
+            </div>
+        </div>
+    </NotAuthorized>
+
+</AuthorizeView>
 
 @code {
     private List<Product> products;
-
-    protected override async Task OnInitializedAsync()
+    
+    private bool isInitialized = false; 
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        products = await ProductService.GetProductsAsync();
+        if (firstRender && !isInitialized)
+        {
+            products = await ProductService.GetProductsAsync();
+            isInitialized = true;
+            StateHasChanged(); // Trigger a re-render after fetching data
+        }
+    }
+    
+
+    private void ToLoginPage()
+    {
+        Navigation.NavigateTo("/login");
     }
 
 }

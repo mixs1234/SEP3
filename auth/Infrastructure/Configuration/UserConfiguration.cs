@@ -24,7 +24,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
 
         builder.HasData(
-            new User { Id = 1, Username = "admin", Password = "admin", Role = "ADMIN" }
+            new User { Id = 1, Username = "admin", Password = "admin", Role = "ADMIN" },
+            new User { Id = 2, Username = "user", Password = "user", Role = "CUSTOMER" }
         );
     }
 }

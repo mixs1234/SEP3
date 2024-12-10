@@ -10,7 +10,7 @@ public interface IOrderService
 {
     Task<List<Order>?> GetOrdersAsync();
     Task<List<Order>?> GetOrdersAsync(int customerId);
-    Task<OrderResponse?> CreateOrderAsync(List<CartItem> cartItems);
+    Task<OrderResponse?> CreateOrderAsync(List<CartItem> cartItems, int customerId);
     Task<Order?> UpdateOrderAsync(int orderId, int statusId);
     Task<int> GetOrderStatusAsync(int orderId);
     

@@ -1,0 +1,47 @@
+﻿@page "/logout"
+@using System.Security.Claims
+@using web.Auth
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthProvider
+@rendermode InteractiveServer
+
+<div class="container my-5">
+    <AuthorizeView>
+        <Authorized>
+            <div class="container text-center my-5">
+                <div class="alert alert-warning" role="alert">
+                    <h3 class="mb-4">You are currently logged in as @context.User.Claims.First(claim => claim.Type.Equals(ClaimTypes.Role)).Value</h3>
+                    <button class="btn btn-primary btn-lg" @onclick="OnLogout">
+                        <i class="bi bi-box-arrow-in-right"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <div class="container text-center my-5">
+                <div class="alert alert-warning" role="alert">
+                    <h3 class="mb-4">You are not logged in</h3>
+                    <button class="btn btn-primary btn-lg" @onclick="ToLoginPage">
+                        <i class="bi bi-box-arrow-in-right"></i> To login page
+                    </button>
+                </div>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+@code {
+    
+    private void ToLoginPage()
+    {
+        Navigation.NavigateTo("/login");
+    }
+    
+
+    private async void OnLogout()
+    {
+        await ((CAuthenticationStateProvider)AuthProvider).Logout();
+        Navigation.NavigateTo("/");
+    }
+
+}

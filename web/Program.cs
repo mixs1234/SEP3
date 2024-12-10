@@ -16,7 +16,7 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
+        
         // Add services to the container.
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
@@ -27,7 +27,6 @@ public class Program
             BaseAddress = new Uri("http://localhost:5220")
         });
         
-        
         builder.Services.AddCascadingAuthenticationState();
         builder.Services.AddScoped<IOrderService, HttpOrderClient>();
         builder.Services.AddScoped<IProductService, HttpProductClient>();
@@ -36,11 +35,17 @@ public class Program
         builder.Services.AddSingleton<ICartItemService, CartItemItemService>();
         builder.Services.AddScoped<IStatusService, HttpStatusClient>();
         builder.Services.AddScoped<IArchiveStatusService, HttpArchiveStatusClient>();
+        builder.Services.AddScoped<IAuthService, HttpAuthClient>();
         builder.Services.AddScoped<AuthenticationStateProvider, CAuthenticationStateProvider>();
+        builder.Services.AddScoped<CAuthenticationStateProvider>();
+        
+        builder.Services.AddHttpClient<IAuthService, HttpAuthClient>(client =>
+        {
+            client.BaseAddress = new Uri("http://localhost:5000");
+        });
+        
         builder.Services.AddAuthorizationCore();
-
-
-
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

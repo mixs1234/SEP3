@@ -5,161 +5,177 @@
 @inject IProductService ProductService
 @inject ICartItemService CartItemService
 @inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
 @rendermode InteractiveServer
 
-<div class="single-product-area section-padding-100 clearfix">
-    @if (product == null)
-    {
-        <div class="loading-indicator">
-            <p>Loading...</p>
-        </div>
-    }
-    else
-    {
-        <div class="container-fluid">
+<AuthorizeView>
+    <Authorized>
+    <div class="single-product-area section-padding-100 clearfix">
+        @if (product == null)
+        {
+            <div class="loading-indicator">
+                <p>Loading...</p>
+            </div>
+        }
+        else
+        {
+            <div class="container-fluid">
 
-            <div aria-live="polite" aria-atomic="true" class="position-relative">
-                <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                    <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header">
-                            <strong class="me-auto">Cart Notification</strong>
-                            <small class="text-muted">Just now</small>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            Item added to your cart!
+                <div aria-live="polite" aria-atomic="true" class="position-relative">
+                    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                        <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                                <strong class="me-auto">Cart Notification</strong>
+                                <small class="text-muted">Just now</small>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">
+                                Item added to your cart!
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-12">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mt-50">
-                            <li class="breadcrumb-item">
-                                <a href="#">Home</a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <!-- Change to actual category and brand-->
-                                <a href="#">Category</a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a href="#">Brand</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">@product?.Name</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-12 col-lg-7">
-                    <div class="single_product_thumb">
-                        <div id="product_details_slider" class="carousel slide" data-ride="carousel">
-                            <ol class="carousel-indicators">
-                                <li class="active" data-target="#product_details_slider" data-slide-to="0" style="background-image: url(@product?.ImagePath);">
+                <div class="row">
+                    <div class="col-12">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mt-50">
+                                <li class="breadcrumb-item">
+                                    <a href="#">Home</a>
                                 </li>
-                                <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url(@product?.ImagePath);">
+                                <li class="breadcrumb-item">
+                                    <!-- Change to actual category and brand-->
+                                    <a href="#">Category</a>
                                 </li>
-                                <li data-target="#product_details_slider" data-slide-to="2" style="background-image: url(@product?.ImagePath);">
+                                <li class="breadcrumb-item">
+                                    <a href="#">Brand</a>
                                 </li>
-                                <li data-target="#product_details_slider" data-slide-to="3" style="background-image: url(@product?.ImagePath);">
-                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">@product?.Name</li>
                             </ol>
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <a class="gallery_img" href="@product?.ImagePath">
-                                        <img class="d-block w-100" src="@product?.ImagePath" alt="First slide">
-                                    </a>
-                                </div>
-                                <div class="carousel-item">
-                                    <a class="gallery_img" href="@product?.ImagePath">
-                                        <img class="d-block w-100" src="@product?.ImagePath" alt="Second slide">
-                                    </a>
-                                </div>
-                                <div class="carousel-item">
-                                    <a class="gallery_img" href="@product?.ImagePath">
-                                        <img class="d-block w-100" src="@product?.ImagePath" alt="Third slide">
-                                    </a>
-                                </div>
-                                <div class="carousel-item">
-                                    <a class="gallery_img" href="@product?.ImagePath">
-                                        <img class="d-block w-100" src="@product?.ImagePath" alt="Fourth slide">
-                                    </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-lg-7">
+                        <div class="single_product_thumb">
+                            <div id="product_details_slider" class="carousel slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    <li class="active" data-target="#product_details_slider" data-slide-to="0" style="background-image: url(@product?.ImagePath);">
+                                    </li>
+                                    <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url(@product?.ImagePath);">
+                                    </li>
+                                    <li data-target="#product_details_slider" data-slide-to="2" style="background-image: url(@product?.ImagePath);">
+                                    </li>
+                                    <li data-target="#product_details_slider" data-slide-to="3" style="background-image: url(@product?.ImagePath);">
+                                    </li>
+                                </ol>
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <a class="gallery_img" href="@product?.ImagePath">
+                                            <img class="d-block w-100" src="@product?.ImagePath" alt="First slide">
+                                        </a>
+                                    </div>
+                                    <div class="carousel-item">
+                                        <a class="gallery_img" href="@product?.ImagePath">
+                                            <img class="d-block w-100" src="@product?.ImagePath" alt="Second slide">
+                                        </a>
+                                    </div>
+                                    <div class="carousel-item">
+                                        <a class="gallery_img" href="@product?.ImagePath">
+                                            <img class="d-block w-100" src="@product?.ImagePath" alt="Third slide">
+                                        </a>
+                                    </div>
+                                    <div class="carousel-item">
+                                        <a class="gallery_img" href="@product?.ImagePath">
+                                            <img class="d-block w-100" src="@product?.ImagePath" alt="Fourth slide">
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-lg-5">
-                    <div class="single_product_desc">
-                        <!-- Product Meta Data -->
-                        <div class="product-meta-data">
-                            <div class="line"></div>
-                            <p class="product-price">@product?.Price Kr.</p>
-                            <a href="#">
-                                <h6>@product?.Name</h6>
-                            </a>
-                            <!-- Ratings & Review -->
-                            <div class="ratings-review mb-15 d-flex align-items-center justify-content-between">
-                                <div class="ratings">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <div class="col-12 col-lg-5">
+                        <div class="single_product_desc">
+                            <!-- Product Meta Data -->
+                            <div class="product-meta-data">
+                                <div class="line"></div>
+                                <p class="product-price">@product?.Price Kr.</p>
+                                <a href="#">
+                                    <h6>@product?.Name</h6>
+                                </a>
+                                <!-- Ratings & Review -->
+                                <div class="ratings-review mb-15 d-flex align-items-center justify-content-between">
+                                    <div class="ratings">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="review">
+                                        <a href="#">Write A Review</a>
+                                    </div>
                                 </div>
-                                <div class="review">
-                                    <a href="#">Write A Review</a>
-                                </div>
+                                <!-- Avaiable -->
+                                <p class="avaibility"><i class="fa fa-circle"></i> In Stock</p>
                             </div>
-                            <!-- Avaiable -->
-                            <p class="avaibility"><i class="fa fa-circle"></i> In Stock</p>
-                        </div>
 
-                        <div class="short_overview my-5">
-                            <p>@product?.Description</p>
-                        </div>
+                            <div class="short_overview my-5">
+                                <p>@product?.Description</p>
+                            </div>
 
-                        <div class="mb-2">
-                            <select @bind="selectedSize">
-                                @if (variantsForProduct.Any())
-                                {
-                                    @foreach (var variant in variantsForProduct)
+                            <div class="mb-2">
+                                <select @bind="selectedSize">
+                                    @if (variantsForProduct.Any())
                                     {
-                                        <option value="@variant.Size">@variant.Size</option>
+                                        @foreach (var variant in variantsForProduct)
+                                        {
+                                            <option value="@variant.Size">@variant.Size</option>
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    <option disabled selected>Please select a size</option>
-                                }
-                            </select>
-                        </div>
-
-                        <!-- Add to Cart Form -->
-                        <form class="cart clearfix" method="post">
-                            <div class="cart-btn d-flex mb-50">
-                                <p>Qty</p>
-                                <div class="quantity">
-                                    <span class="qty-minus" @onclick="DecreaseQuantity">
-                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
-                                    </span>
-                                    <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" @bind="quantity">
-                                    <span class="qty-plus" @onclick="IncreaseQuantity">
-                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
-                                    </span>
-                                </div>
+                                    else
+                                    {
+                                        <option disabled selected>Please select a size</option>
+                                    }
+                                </select>
                             </div>
-                            <button type="button" @onclick="AddProductToCartAsync" class="btn amado-btn">Add To Cart</button>
-                        </form>
+
+                            <!-- Add to Cart Form -->
+                            <form class="cart clearfix" method="post">
+                                <div class="cart-btn d-flex mb-50">
+                                    <p>Qty</p>
+                                    <div class="quantity">
+                                        <span class="qty-minus" @onclick="DecreaseQuantity">
+                                            <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                        </span>
+                                        <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" @bind="quantity">
+                                        <span class="qty-plus" @onclick="IncreaseQuantity">
+                                            <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <button type="button" @onclick="AddProductToCartAsync" class="btn amado-btn">Add To Cart</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
+        }
+    </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="container text-center my-5">
+            <div class="alert alert-warning" role="alert">
+                <h3 class="mb-4">You are not authorized to view this page</h3>
+                <button class="btn btn-primary btn-lg" @onclick="ToLoginPage">
+                    <i class="bi bi-box-arrow-in-right"></i> Login to View Products
+                </button>
+            </div>
         </div>
-    }
-</div>
+    </NotAuthorized>
+</AuthorizeView>
+
 
 
 @code {
@@ -212,6 +228,11 @@
         await CartItemService.AddToCartASync(selectedVariant, product, quantity);
         
         await JSRuntime.InvokeVoidAsync("showCartToast", $"{product.Name} added to your cart!");
+    }
+    
+    private void ToLoginPage()
+    {
+        Navigation.NavigateTo("/login");
     }
 
 }

@@ -6,44 +6,45 @@
 @rendermode InteractiveServer
 @inject IJSRuntime JSRuntime
 
-<div class="container my-5">
-    <h1 class="mb-4">Admin Panel - Update Order</h1>
+<AuthorizeView Roles="ADMIN">
+    <div class="container my-5">
+        <h1 class="mb-4">Admin Panel - Update Order</h1>
 
-    <!-- Purchase Popup -->
-    <div aria-live="polite" aria-atomic="true" class="position-relative">
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">Order Notification</strong>
-                    <small class="text-muted">Just now</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    Item added to your cart!
+        <!-- Purchase Popup -->
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">Order Notification</strong>
+                        <small class="text-muted">Just now</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Item added to your cart!
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     
-    <div class="mb-3">
-        <input
-            type="text"
-            class="form-control"
-            placeholder="Search orders by status..."
-            @bind="SearchTerm"
-            @bind:event="oninput" />
-    </div>
+        <div class="mb-3">
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Search orders by status..."
+                @bind="SearchTerm"
+                @bind:event="oninput" />
+        </div>
 
-    <table class="table table-striped table-bordered">
-        <thead class="thead-dark">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
             <tr>
                 <th scope="col">Order ID</th>
                 <th scope="col">Customer ID</th>
                 <th scope="col">Current Status</th>
                 <th scope="col">Actions</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             @if (_filteredOrders.Any())
             {
                 @foreach (var order in _filteredOrders)
@@ -71,9 +72,15 @@
                     <td colspan="4" class="text-center">No orders found</td>
                 </tr>
             }
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
+</AuthorizeView>
+
+<AuthorizeView Roles="CUSTOMER">
+    <img width="600" src="https://i.kym-cdn.com/entries/icons/original/000/002/144/You_Shall_Not_Pass!_0-1_screenshot.jpg"/>
+    <p>You'll have to log in!</p>
+</AuthorizeView>
 
 @code {
     private List<Order>? _orders = new();

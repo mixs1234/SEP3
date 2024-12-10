@@ -1,137 +1,175 @@
-﻿    @page "/orders"
-    @inject IOrderService OrderService
-    @using web.Model.Order
-    @using web.Services
-    @rendermode InteractiveServer
-    @inject IJSRuntime JSRuntime
+﻿@page "/orders"
+@inject IOrderService OrderService
+@using System.Security.Claims
+@using web.Auth
+@using web.Model.Order
+@using web.Services
+@rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+@inject CAuthenticationStateProvider AuthProvider
 
-    <PageTitle>Orders</PageTitle>
+<PageTitle>Orders</PageTitle>
 
-    <!-- Purchase Popup -->
-    <div aria-live="polite" aria-atomic="true" class="position-relative">
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">Order Notification</strong>
-                    <small class="text-muted">Just now</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    Item added to your cart!
+<AuthorizeView>
+    <Authorized>
+        <!-- Purchase Popup -->
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">Order Notification</strong>
+                        <small class="text-muted">Just now</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Item added to your cart!
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div class="container mt-5">
-        <h1 class="orange-text">My Orders</h1>
-        @if (orders == null)
-        {
-            <p>Loading orders...</p>
-        }
-        else if (!orders.Any())
-        {
-            <p>No orders found.</p>
-        }
-        else
-        {
-            @foreach (var order in orders)
+
+        <div class="container mt-5">
+            <h1 class="orange-text">My Orders</h1>
+            @if (orders == null)
             {
-                <div class="card receipt-card p-4 mb-4">
-                    <h2 class="orange-text">Order #@order.Id</h2>
-                    <p>Date: <span class="fw-bold">Coming soon</span></p>
-                    <p>Order No.: <span class="fw-bold">@order.Id</span></p>
-                    <hr/>
+                <p>Loading orders...</p>
+            }
+            else if (!orders.Any())
+            {
+                <p>No orders found.</p>
+            }
+            else
+            {
+                @foreach (var order in orders)
+                {
+                    <div class="card receipt-card p-4 mb-4">
+                        <h2 class="orange-text">Order #@order.Id</h2>
+                        <p>Date: <span class="fw-bold">Coming soon</span></p>
+                        <p>Order No.: <span class="fw-bold">@order.Id</span></p>
+                        <hr/>
 
-                    @if (order.ShoppingCart?.CartItems != null && order.ShoppingCart.CartItems.Any())
-                    {
-                        foreach (var cartItem in order.ShoppingCart.CartItems)
-                        {
-                            <div class="mb-3">
-                                <p>
-                                    @(cartItem.ProductName ?? "Unknown Product")
-                                    @(cartItem.Size != null ? $" ({cartItem.Size})" : "")
-                                    @(cartItem.Quantity > 0 ? $" x{cartItem.Quantity}" : "")
-                                    <span class="float-end">@($"{cartItem.Price * cartItem.Quantity}.-")</span>
-                                </p>
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <p>No items in this order.</p>
-                    }
-
-                    <hr/>
-                    <h4 class="text-end">
                         @if (order.ShoppingCart?.CartItems != null && order.ShoppingCart.CartItems.Any())
                         {
-                            var total = order.ShoppingCart.CartItems.Sum(ci => ci.Price * ci.Quantity);
-                            @($"{total:F2}.-")
+                            foreach (var cartItem in order.ShoppingCart.CartItems)
+                            {
+                                <div class="mb-3">
+                                    <p>
+                                        @(cartItem.ProductName ?? "Unknown Product")
+                                        @(cartItem.Size != null ? $" ({cartItem.Size})" : "")
+                                        @(cartItem.Quantity > 0 ? $" x{cartItem.Quantity}" : "")
+                                        <span class="float-end">@($"{cartItem.Price * cartItem.Quantity}.-")</span>
+                                    </p>
+                                </div>
+                            }
                         }
-                    </h4>
-                    <hr/>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="orange-text mb-0">Status: @order.CurrentStatus.StatusName</h5>
-                        @if (order.CurrentStatus.Id == 1)
+                        else
                         {
-                        <button class="btn btn-danger" @onclick="() => CancelOrder(order.Id)">
-                            Cancel
-                        </button>
+                            <p>No items in this order.</p>
                         }
+
+                        <hr/>
+                        <h4 class="text-end">
+                            @if (order.ShoppingCart?.CartItems != null && order.ShoppingCart.CartItems.Any())
+                            {
+                                var total = order.ShoppingCart.CartItems.Sum(ci => ci.Price * ci.Quantity);
+                                @($"{total:F2}.-")
+                            }
+                        </h4>
+                        <hr/>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="orange-text mb-0">Status: @order.CurrentStatus.StatusName</h5>
+                            @if (order.CurrentStatus.Id == 1)
+                            {
+                                <button class="btn btn-danger" @onclick="() => CancelOrder(order.Id)">
+                                    Cancel
+                                </button>
+                            }
+                        </div>
                     </div>
-                </div>
+                }
             }
-        }
-    </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="container text-center my-5">
+            <div class="alert alert-warning" role="alert">
+                <h3 class="mb-4">You are not authorized to view this page</h3>
+                <button class="btn btn-primary btn-lg" @onclick="ToLoginPage">
+                    <i class="bi bi-box-arrow-in-right"></i> Login to View Products
+                </button>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
-    @code {
-        private int customerId = 1; // Hardcoded ID
-        private List<Order> orders { get; set; }
-
-        private async Task LoadOrdersAsync()
+@code {
+    private int customerId;
+    private List<Order> orders { get; set; }
+    private bool isInitialized = false; 
+    
+    
+    private async Task LoadOrdersAsync()
+    {
+        if (OrderService == null)
         {
-            if (OrderService == null)
+            Console.WriteLine("OrderService is not injected.");
+            orders = new List<Order>(); // Prevent null reference
+            return;
+        }
+
+        try
+        {
+            orders = await OrderService.GetOrdersAsync(customerId) ?? new List<Order>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching orders: {ex.Message}");
+            orders = new List<Order>(); // Prevent null reference
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !isInitialized)
+        {
+            var authState = await AuthProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            
+            customerId = Int32.Parse(user.Claims.First(claim => claim.Type.Equals(ClaimTypes.NameIdentifier)).Value);
+            
+            await LoadOrdersAsync();
+            isInitialized = true;
+            StateHasChanged();
+        }
+    }
+    
+
+    private async Task CancelOrder(int orderId)
+    {
+        try
+        {
+            var currentStatus = await OrderService.GetOrderStatusAsync(orderId);
+            if (currentStatus != 1)
             {
-                Console.WriteLine("OrderService is not injected.");
-                orders = new List<Order>(); // Prevent null reference
+                await JSRuntime.InvokeVoidAsync("showCartToast", $"#{orderId} cannot be cancelled!");
+                Console.WriteLine("Order cannot be cancelled.");
+
                 return;
             }
 
-            try
-            {
-                orders = await OrderService.GetOrdersAsync(customerId) ?? new List<Order>();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error fetching orders: {ex.Message}");
-                orders = new List<Order>(); // Prevent null reference
-            }
+            await OrderService.UpdateOrderAsync(orderId, 5);
+            await LoadOrdersAsync();
         }
-        
-        protected override async Task OnInitializedAsync()
+        catch (Exception ex)
         {
-            LoadOrdersAsync();
-        }
-
-        private async Task CancelOrder(int orderId)
-        {
-            try
-            {
-                var currentStatus = await OrderService.GetOrderStatusAsync(orderId);
-                if (currentStatus != 1)
-                {
-                    await JSRuntime.InvokeVoidAsync("showCartToast", $"#{orderId} cannot be cancelled!");
-                    Console.WriteLine("Order cannot be cancelled.");
-                    
-                    return;
-                }
-               await OrderService.UpdateOrderAsync(orderId, 5);
-               await LoadOrdersAsync();
-
-            }catch (Exception ex)
-            {
-                Console.WriteLine($"Error cancelling order: {ex.Message}");
-            }
+            Console.WriteLine($"Error cancelling order: {ex.Message}");
         }
     }
+
+    private void ToLoginPage()
+    {
+        Navigation.NavigateTo("/login");
+    }
+
+}

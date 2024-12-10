@@ -34,36 +34,55 @@
     <!-- Amado Nav -->
     <nav class="amado-nav">
         <ul>
-            <li class="active">
+            <li>
                 <a href="">Home</a>
-            </li>
-            <li>
-                <a href="">Shop</a>
-            </li>
-            <li>
-                <a href="">Product</a>
             </li>
             <li>
                 <a href="/ShoppingCart">Cart</a>
             </li>
-            <li>
-                <a href="">Checkout</a>
-            </li>
+
+
+            <AuthorizeView Roles="ADMIN">
+                <li>
+                    <a href="/admin/create-product">Create Product</a>
+                </li>
+                <li>
+                    <a href="/admin/create-variant">Create Variant</a>
+                </li>
+                <li>
+                    <a href="/admin/update-variant">Update Variant</a>
+                </li>
+                <li>
+                    <a href="/admin/update-order">Update Order</a>
+                </li>
+            </AuthorizeView>
+            <AuthorizeView>
+                <Authorized>
+                    <li>
+                        <a href="/orders">Orders</a>
+                    </li>
+                    <li>
+                        <a href="/logout">Logout</a>
+                    </li>
+                </Authorized>
+                <NotAuthorized>
+                    <li>
+                        <a href="/login">Login</a>
+                    </li>
+                    <li>
+                        <a href="/register">Register</a>
+                    </li>
+                </NotAuthorized>
+            </AuthorizeView>
+            
         </ul>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler"/>
 
     </nav>
     <!-- Button Group -->
-    <div class="amado-btn-group mt-30 mb-100">
-        <a href="#" class="btn amado-btn mb-15">%Discount%</a>
-        <a href="#" class="btn amado-btn active">New this week</a>
-    </div>
     <!-- Cart Menu -->
     <div class="cart-fav-search mb-100">
         <a href="/Shoppingcart" class="cart-nav"><img src="img/core-img/cart.png" alt=""> Cart <span>(@cartItemCount)</span></a>
-        <a href="#" class="fav-nav"><img src="img/core-img/favorites.png" alt=""> Favourite</a>
-        <a href="#" class="search-nav"><img src="img/core-img/search.png" alt=""> Search</a>
     </div>
     <!-- Social Button -->
     <div class="social-info d-flex justify-content-between">
@@ -87,7 +106,7 @@
     private string? currentUrl;
     private int cartItemCount;
     private Action<int> _cartItemCountCallback;
-    
+
     protected override void OnInitialized()
     {
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
@@ -100,7 +119,7 @@
         CartItemService.SubscribeToChanges(_cartItemCountCallback);
         GetCartItemCount();
     }
-    
+
     private async void GetCartItemCount()
     {
         var cart = await CartItemService.GetCartASync();

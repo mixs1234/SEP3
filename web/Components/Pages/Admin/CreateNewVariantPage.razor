@@ -6,64 +6,70 @@
 @inject IVariantService VariantService
 @rendermode InteractiveServer
 @inject IJSRuntime JSRuntime
-
-<div class="single-product-area section-padding-100 clearfix">
-    <PageTitle>Admin Panel - Create Variant</PageTitle>
-    <!-- Purchase Popup -->
-    <div aria-live="polite" aria-atomic="true" class="position-relative">
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">Variant Notification</strong>
-                    <small class="text-muted">Just now</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    Item added to your cart!
+<AuthorizeView Roles="ADMIN">
+    <div class="single-product-area section-padding-100 clearfix">
+        <PageTitle>Admin Panel - Create Variant</PageTitle>
+        <!-- Purchase Popup -->
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">Variant Notification</strong>
+                        <small class="text-muted">Just now</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Item added to your cart!
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     
-    <h1>Create Variant</h1>
+        <h1>Create Variant</h1>
     
-    <EditForm Model="newVariant" OnValidSubmit="HandleSubmit">
-        <DataAnnotationsValidator/>
-        <ValidationSummary/>
+        <EditForm Model="newVariant" OnValidSubmit="HandleSubmit" Context="editFormContext">
+            <DataAnnotationsValidator/>
+            <ValidationSummary/>
 
-        <div class="form-group">
-            <label for="product">Product</label>
-            <InputSelect id="product" class="form-control" @bind-Value="_selectedProductId">
-                <option value="" disabled selected>Choose a product</option>
-                @foreach (var product in products)
-                {
-                    <option value="@product.Id">@product.Name</option>
-                }
-            </InputSelect>
-            <ValidationMessage For="@(() => _selectedProductId)"/>
-        </div>
+            <div class="form-group">
+                <label for="product">Product</label>
+                <InputSelect id="product" class="form-control" @bind-Value="_selectedProductId">
+                    <option value="" disabled selected>Choose a product</option>
+                    @foreach (var product in products)
+                    {
+                        <option value="@product.Id">@product.Name</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => _selectedProductId)"/>
+            </div>
         
-        <div class="form-group">
-            <label>Size</label>
-            <InputText class="form-control" @bind-Value="newVariant.Size"/>
-            <ValidationMessage For="@(() => newVariant.Size)"/>
-        </div>
+            <div class="form-group">
+                <label>Size</label>
+                <InputText class="form-control" @bind-Value="newVariant.Size"/>
+                <ValidationMessage For="@(() => newVariant.Size)"/>
+            </div>
         
-        <div class="form-group">
-            <label>Material</label>
-            <InputText class="form-control" @bind-Value="newVariant.Material"/>
-            <ValidationMessage For="@(() => newVariant.Material)"/>
-        </div>
+            <div class="form-group">
+                <label>Material</label>
+                <InputText class="form-control" @bind-Value="newVariant.Material"/>
+                <ValidationMessage For="@(() => newVariant.Material)"/>
+            </div>
         
-        <div class="form-group">
-            <label>Stock</label>
-            <InputNumber class="form-control" @bind-Value="newVariant.Stock"/>
-            <ValidationMessage For="@(() => newVariant.Stock)"/>
-        </div>
+            <div class="form-group">
+                <label>Stock</label>
+                <InputNumber class="form-control" @bind-Value="newVariant.Stock"/>
+                <ValidationMessage For="@(() => newVariant.Stock)"/>
+            </div>
         
-        <button type="submit" class="btn btn-primary mt-3">Create Variant</button>
-    </EditForm>
-</div>
+            <button type="submit" class="btn btn-primary mt-3">Create Variant</button>
+        </EditForm>
+    </div>
+</AuthorizeView>
+
+<AuthorizeView Roles="CUSTOMER">
+    <img width="600" src="https://i.kym-cdn.com/entries/icons/original/000/002/144/You_Shall_Not_Pass!_0-1_screenshot.jpg"/>
+    <p>You'll have to log in!</p>
+</AuthorizeView>
 
 @code {
     private List<Product> products = new();

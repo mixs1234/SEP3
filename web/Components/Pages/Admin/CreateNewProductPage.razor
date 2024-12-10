@@ -6,95 +6,102 @@
 @rendermode InteractiveServer
 @inject IJSRuntime JSRuntime
 
-<div class="single-product-area section-padding-100 clearfix">
-    <PageTitle>Admin Panel - Create Product</PageTitle>
+<AuthorizeView Roles="ADMIN">
+    <div class="single-product-area section-padding-100 clearfix">
+        <PageTitle>Admin Panel - Create Product</PageTitle>
 
-    <!-- Purchase Popup -->
-    <div aria-live="polite" aria-atomic="true" class="position-relative">
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">Product Notification</strong>
-                    <small class="text-muted">Just now</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    Item added to your cart!
+        <!-- Purchase Popup -->
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">Product Notification</strong>
+                        <small class="text-muted">Just now</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Item added to your cart!
+                    </div>
                 </div>
             </div>
         </div>
+
+        <h1>Create New Product</h1>
+
+        <EditForm Model="newProduct" OnValidSubmit="HandleSubmit" FormName="CreateProductForm" Context="editFormContext">
+            <DataAnnotationsValidator/>
+            <ValidationSummary/>
+
+            <div class="form-group">
+                <label for="name">Product Name</label>
+                <InputText id="name" class="form-control" @bind-Value="newProduct.Name"/>
+                <ValidationMessage For="@(() => newProduct.Name)"/>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <InputTextArea id="description" class="form-control" @bind-Value="newProduct.Description"/>
+                <ValidationMessage For="@(() => newProduct.Description)"/>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price</label>
+                <InputNumber id="price" class="form-control" @bind-Value="newProduct.Price"/>
+                <ValidationMessage For="@(() => newProduct.Price)"/>
+            </div>
+
+            <div class="form-group">
+                <label for="imagePath">Image Path</label>
+                <InputText id="imagePath" class="form-control" @bind-Value="newProduct.ImagePath"/>
+                <ValidationMessage For="@(() => newProduct.ImagePath)"/>
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Brand</label>
+                <InputSelect id="brand" class="form-control" @bind-Value="selectedBrandId">
+                    <option value="" disabled selected>Choose a brand</option>
+                    @foreach (var brand in brands)
+                    {
+                        <option value="@brand.Id">@brand.Name</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => selectedBrandId)"/>
+            </div>
+
+            <h3>Product Variants</h3>
+            @if (newProduct.ProductVariants.Count == 0)
+            {
+                <p>No variants added yet.</p>
+            }
+            @foreach (var variant in newProduct.ProductVariants)
+            {
+                <div class="variant-item">
+                    <div class="form-group">
+                        <label>Size</label>
+                        <InputText class="form-control" @bind-Value="variant.Size"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Material</label>
+                        <InputText class="form-control" @bind-Value="variant.Material"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Stock</label>
+                        <InputNumber class="form-control" @bind-Value="variant.Stock"/>
+                    </div>
+                    <button type="button" class="btn btn-danger" @onclick="() => RemoveVariant(variant)">Remove Variant</button>
+                </div>
+            }
+            <button type="button" class="btn btn-secondary mt-3" @onclick="AddVariant">Add Variant</button>
+
+            <button type="submit" class="btn btn-primary mt-3">Create Product</button>
+        </EditForm>
     </div>
-    
-    <h1>Create New Product</h1>
+</AuthorizeView>
 
-    <EditForm Model="newProduct" OnValidSubmit="HandleSubmit" FormName="CreateProductForm">
-        <DataAnnotationsValidator/>
-        <ValidationSummary/>
-
-        <div class="form-group">
-            <label for="name">Product Name</label>
-            <InputText id="name" class="form-control" @bind-Value="newProduct.Name"/>
-            <ValidationMessage For="@(() => newProduct.Name)"/>
-        </div>
-
-        <div class="form-group">
-            <label for="description">Description</label>
-            <InputTextArea id="description" class="form-control" @bind-Value="newProduct.Description"/>
-            <ValidationMessage For="@(() => newProduct.Description)"/>
-        </div>
-
-        <div class="form-group">
-            <label for="price">Price</label>
-            <InputNumber id="price" class="form-control" @bind-Value="newProduct.Price"/>
-            <ValidationMessage For="@(() => newProduct.Price)"/>
-        </div>
-
-        <div class="form-group">
-            <label for="imagePath">Image Path</label>
-            <InputText id="imagePath" class="form-control" @bind-Value="newProduct.ImagePath"/>
-            <ValidationMessage For="@(() => newProduct.ImagePath)"/>
-        </div>
-
-        <div class="form-group">
-            <label for="brand">Brand</label>
-            <InputSelect id="brand" class="form-control" @bind-Value="selectedBrandId">
-                <option value="" disabled selected>Choose a brand</option>
-                @foreach (var brand in brands)
-                {
-                    <option value="@brand.Id">@brand.Name</option>
-                }
-            </InputSelect>
-            <ValidationMessage For="@(() => selectedBrandId)"/>
-        </div>
-
-        <h3>Product Variants</h3>
-        @if (newProduct.ProductVariants.Count == 0)
-        {
-            <p>No variants added yet.</p>
-        }
-        @foreach (var variant in newProduct.ProductVariants)
-        {
-            <div class="variant-item">
-                <div class="form-group">
-                    <label>Size</label>
-                    <InputText class="form-control" @bind-Value="variant.Size"/>
-                </div>
-                <div class="form-group">
-                    <label>Material</label>
-                    <InputText class="form-control" @bind-Value="variant.Material"/>
-                </div>
-                <div class="form-group">
-                    <label>Stock</label>
-                    <InputNumber class="form-control" @bind-Value="variant.Stock"/>
-                </div>
-                <button type="button" class="btn btn-danger" @onclick="() => RemoveVariant(variant)">Remove Variant</button>
-            </div>
-        }
-        <button type="button" class="btn btn-secondary mt-3" @onclick="AddVariant">Add Variant</button>
-
-        <button type="submit" class="btn btn-primary mt-3">Create Product</button>
-    </EditForm>
-</div>
+<AuthorizeView Roles="CUSTOMER">
+    <img width="600" src="https://i.kym-cdn.com/entries/icons/original/000/002/144/You_Shall_Not_Pass!_0-1_screenshot.jpg"/>
+    <p>You'll have to log in!</p>
+</AuthorizeView>
 
 @code {
 
@@ -150,7 +157,6 @@
             await JSRuntime.InvokeVoidAsync("showCartToast", $"{newProduct.Name} created successfully!");
             Console.WriteLine("Product created successfully!");
             HandleValidSubmit();
-            
         }
         catch (Exception ex)
         {
@@ -158,7 +164,7 @@
             Console.WriteLine($"Error creating product: {ex.Message}");
         }
     }
-    
+
     private void HandleValidSubmit()
     {
         newProduct.Name = "";
@@ -167,7 +173,7 @@
         newProduct.ImagePath = "";
         newProduct.ProductVariants.Clear();
         selectedBrandId = null;
-        
+
         StateHasChanged();
     }
 

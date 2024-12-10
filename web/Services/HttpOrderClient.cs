@@ -46,7 +46,7 @@ public class HttpOrderClient : IOrderService
         return Task.FromResult(orders);
     }
 
-    public async Task<OrderResponse?> CreateOrderAsync(List<CartItem> cartItems)
+    public async Task<OrderResponse?> CreateOrderAsync(List<CartItem> cartItems, int customerId)
     {
         var cartItemsDto = cartItems.Select(item => new CreateCartItemDto()
         {
@@ -66,7 +66,7 @@ public class HttpOrderClient : IOrderService
 
         var createOrderDto = new CreateOrderDTO()
         {
-            CustomerId = 1, // HARDCODED
+            CustomerId = customerId, // HARDCODED
             CartItems = cartItemsDto
         };
         
