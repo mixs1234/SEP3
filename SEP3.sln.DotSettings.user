@@ -15,6 +15,7 @@
       &lt;TestId&gt;xUnit::F4950670-A4D0-4517-873D-19C4C113EF3C::net8.0::BrokerTest.ArchiveStatusBrokerTests&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;xUnit::F4950670-A4D0-4517-873D-19C4C113EF3C::net8.0::BrokerTest.OrderBrokerServiceTest&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;xUnit::F4950670-A4D0-4517-873D-19C4C113EF3C::net8.0::BrokerTest.ProductVariantBrokerServiceTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::CF5770EA-BC1F-4F03-86D1-FDB6C3986C9F::net8.0::OrderTest.OrderRepositoryTests&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
     &lt;Project Location="C:\Users\Bruger\Desktop\Github\Uni\SEP3\OrderServiceTest" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;OrderServiceTest&amp;gt;" /&gt;&#xD;
     &lt;ProjectFile&gt;692CFB05-70DE-4ADC-8EFE-471150287BE6/f:CartItemItemServiceTests.cs&lt;/ProjectFile&gt;&#xD;
