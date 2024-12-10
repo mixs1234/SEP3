@@ -18,7 +18,7 @@ public class ProductService {
     private final BrandRepo brandService;
 
     public ProductDTO findById(Long id) {
-        Product product = productService.findById(id).orElseThrow(()-> new EntityNotFoundException("product with " + id +  "not found"));
+        Product product = productService.findById(id).orElseThrow(()-> new EntityNotFoundException("product with " + id +  " not found"));
 
         return ProductDTO.mapProductToDTONoVariants(product);
     }
