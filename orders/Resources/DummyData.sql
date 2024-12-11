@@ -5,36 +5,36 @@ DELETE FROM "ShoppingCarts";
 DELETE FROM "Customer";
 
 insert into "Customer" 
-values (1),
-       (2);
+values (1000),
+       (2000);
 
 insert into "ShoppingCarts" 
-values (1),
-       (2);
+values (1000),
+       (2000);
 
 insert into "CartItems"
-values (1,
+values (1000,
         1,
         1,
-        1,
+        1000,
         1,
         'Polyester',
         100,
         'T-Shirt',
         'M'),
-       (2,
+       (2000,
         2,
         1,
-         1,
+         1000,
         1,
         'Polyester',
         100,
         'T-Shirt',
         'S'),
-       (3,
+       (3000,
         1,
         1,
-        2,
+        2000,
         1,
         'Polyester',
         100,
@@ -42,22 +42,22 @@ values (1,
         'M');
 
 insert into "Orders"
-values (1,
+values (1000,
+        1000,
         1,
+        1000),
+       (2000,
+        2000,
         1,
-        1),
-       (2,
-        2,
-        1,
-        2);
+        2000);
 
 
 insert into "StatusHistory"
-values (1,
-        1,
+values (1000,
+        1000,
         1,
         now()),
-       (2,
-        2,
+       (2000,
+        2000,
         1,
         now())
